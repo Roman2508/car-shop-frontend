@@ -8,6 +8,16 @@ import { $mode } from '@/context/mode'
 import { usePopup } from '@/hooks/usePoup'
 import styles from '@/styles/header/index.module.scss'
 
+const nav = [
+  { link: '/shipping-payment', label: 'Доставка та оплата' },
+  { link: '/about', label: 'Про компанію' },
+  { link: '/catalog', label: 'Каталог' },
+  { link: '/contacts', label: 'Контакти' },
+  { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
+  { link: '/wholesale-buyers', label: 'Повідомлення' },
+  { link: '/wholesale-buyers', label: 'Профіль' },
+]
+
 const HeaderTop = () => {
   const isMedia950 = useMediaQuery(950)
   const { toggleOpen, open, closePopup } = usePopup()
@@ -19,73 +29,25 @@ const HeaderTop = () => {
       <div className={`container ${styles.header__top__container}`}>
         {!isMedia950 && <CityButton />}
         {isMedia950 && (
-          <button
-            onClick={toggleOpen}
-            className={`${styles.burger_menu} ${
-              open ? styles.open : ''
-            } ${darkModeClass}`}
-          >
+          <button onClick={toggleOpen} className={`${styles.burger_menu} ${open ? styles.open : ''} ${darkModeClass}`}>
             <span />
             <span />
             <span />
           </button>
         )}
-        <nav
-          className={`${styles.header__nav} ${
-            open ? styles.open : ''
-          } ${darkModeClass}`}
-        >
+
+        <nav className={`${styles.header__nav} ${open ? styles.open : ''} ${darkModeClass}`}>
           <ul className={styles.header__nav__list}>
-            <li className={styles.header__nav__list__item}>
-              <Link href="/shipping-payment" passHref legacyBehavior>
-                <a
-                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
-                  onClick={closePopup}
-                >
-                  Доставка и оплата
-                </a>
-              </Link>
-            </li>
-            <li className={styles.header__nav__list__item}>
-              <Link href="/about" passHref legacyBehavior>
-                <a
-                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
-                  onClick={closePopup}
-                >
-                  О компании
-                </a>
-              </Link>
-            </li>
-            <li className={styles.header__nav__list__item}>
-              <Link href="/catalog" passHref legacyBehavior>
-                <a
-                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
-                  onClick={closePopup}
-                >
-                  Каталог
-                </a>
-              </Link>
-            </li>
-            <li className={styles.header__nav__list__item}>
-              <Link href="/contacts" passHref legacyBehavior>
-                <a
-                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
-                  onClick={closePopup}
-                >
-                  Контакты
-                </a>
-              </Link>
-            </li>
-            <li className={styles.header__nav__list__item}>
-              <Link href="/wholesale-buyers" passHref legacyBehavior>
-                <a
-                  className={`${styles.header__nav__list__item__link} ${darkModeClass}`}
-                  onClick={closePopup}
-                >
-                  Оптовым покупателям
-                </a>
-              </Link>
-            </li>
+            {nav.map((el) => (
+              <li className={styles.header__nav__list__item}>
+                <Link href={el.link} passHref legacyBehavior>
+                  <a className={`${styles.header__nav__list__item__link} ${darkModeClass}`} onClick={closePopup}>
+                    {el.label}
+                  </a>
+                </Link>
+              </li>
+            ))}
+
             {isMedia950 && (
               <li className={styles.header__nav__list__item}>
                 <CityButton />
@@ -98,6 +60,7 @@ const HeaderTop = () => {
             )}
           </ul>
         </nav>
+
         <ProfileDropdown />
       </div>
     </div>

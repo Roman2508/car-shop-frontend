@@ -28,6 +28,7 @@ import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
 import { usePopup } from '@/hooks/usePoup'
 import { checkQueryParams } from '@/utils/catalog'
 import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
+import { boilers } from '../DashboardPage/DashboardPage'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const mode = useStore($mode)
@@ -40,19 +41,12 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)
   const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
   const pagesCount = Math.ceil(boilerParts.count / 20)
-  const isValidOffset =
-    query.offset && !isNaN(+query.offset) && +query.offset > 0
-  const [currentPage, setCurrentPage] = useState(
-    isValidOffset ? +query.offset - 1 : 0
-  )
+  const isValidOffset = query.offset && !isNaN(+query.offset) && +query.offset > 0
+  const [currentPage, setCurrentPage] = useState(isValidOffset ? +query.offset - 1 : 0)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const router = useRouter()
-  const isAnyBoilerManufacturerChecked = boilerManufacturers.some(
-    (item) => item.checked
-  )
-  const isAnyPartsManufacturerChecked = partsManufacturers.some(
-    (item) => item.checked
-  )
+  const isAnyBoilerManufacturerChecked = boilerManufacturers.some((item) => item.checked)
+  const isAnyPartsManufacturerChecked = partsManufacturers.some((item) => item.checked)
   const resetFilterBtnDisabled = !(
     isPriceRangeChanged ||
     isAnyBoilerManufacturerChecked ||
@@ -64,12 +58,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     loadBoilerParts()
   }, [filteredBoilerParts, isFilterInQuery])
 
-  console.log(boilerParts.rows)
-
   const loadBoilerParts = async () => {
     try {
       setSpinner(true)
-      const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+      // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+      const data = boilers
 
       if (!isValidOffset) {
         router.replace({
@@ -96,22 +89,26 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           )
 
           setCurrentPage(0)
-          setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
+          // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
+
+          setBoilerParts(boilers)
           return
         }
 
         const offset = +query.offset - 1
-        const result = await getBoilerPartsFx(
-          `/boiler-parts?limit=20&offset=${offset}`
-        )
+        const result = await getBoilerPartsFx(`/boiler-parts?limit=20&offset=${offset}`)
 
         setCurrentPage(offset)
-        setBoilerParts(isFilterInQuery ? filteredBoilerParts : result)
+        // setBoilerParts(isFilterInQuery ? filteredBoilerParts : result)
+
+        setBoilerParts(boilers)
         return
       }
 
       setCurrentPage(0)
-      setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
+      // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
+
+      setBoilerParts(boilers)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -139,19 +136,12 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         return
       }
 
-      const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } =
-        checkQueryParams(router)
+      const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } = checkQueryParams(router)
 
       const result = await getBoilerPartsFx(
         `/boiler-parts?limit=20&offset=${selected}${
-          isFilterInQuery && isValidBoilerQuery
-            ? `&boiler=${router.query.boiler}`
-            : ''
-        }${
-          isFilterInQuery && isValidPartsQuery
-            ? `&parts=${router.query.parts}`
-            : ''
-        }${
+          isFilterInQuery && isValidBoilerQuery ? `&boiler=${router.query.boiler}` : ''
+        }${isFilterInQuery && isValidPartsQuery ? `&parts=${router.query.parts}` : ''}${
           isFilterInQuery && isValidPriceQuery
             ? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
             : ''
@@ -191,13 +181,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 
       router.push({ query: { ...params } }, undefined, { shallow: true })
 
-      setBoilerManufacturers(
-        boilerManufacturers.map((item) => ({ ...item, checked: false }))
-      )
+      setBoilerManufacturers(boilerManufacturers.map((item) => ({ ...item, checked: false })))
 
-      setPartsManufacturers(
-        partsManufacturers.map((item) => ({ ...item, checked: false }))
-      )
+      setPartsManufacturers(partsManufacturers.map((item) => ({ ...item, checked: false })))
 
       setBoilerParts(data)
       setPriceRange([1000, 9000])
@@ -210,9 +196,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
-        <h2 className={`${styles.catalog__title} ${darkModeClass}`}>
-          Каталог товаров
-        </h2>
+        <h2 className={`${styles.catalog__title} ${darkModeClass}`}>Каталог товаров</h2>
         <div className={`${styles.catalog__top} ${darkModeClass}`}>
           <AnimatePresence>
             {isAnyBoilerManufacturerChecked && (
@@ -240,16 +224,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             >
               Сбросить фильтр
             </button>
-            <button
-              className={styles.catalog__top__mobile_btn}
-              onClick={toggleOpen}
-            >
+            <button className={styles.catalog__top__mobile_btn} onClick={toggleOpen}>
               <span className={styles.catalog__top__mobile_btn__svg}>
                 <FilterSvg />
               </span>
-              <span className={styles.catalog__top__mobile_btn__text}>
-                Фильтр
-              </span>
+              <span className={styles.catalog__top__mobile_btn__text}>Фильтр</span>
             </button>
             <FilterSelect setSpinner={setSpinner} />
           </div>
@@ -284,9 +263,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             ) : (
               <ul className={styles.catalog__list}>
                 {boilerParts.rows?.length ? (
-                  boilerParts.rows.map((item) => (
-                    <CatalogItem item={item} key={item.id} />
-                  ))
+                  boilerParts.rows.map((item) => <CatalogItem item={item} key={item.id} />)
                 ) : (
                   <span>Список товаров пуст...</span>
                 )}
