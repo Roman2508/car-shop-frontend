@@ -33,11 +33,7 @@ const HeaderBottom = () => {
           <Link href="/dashboard" legacyBehavior passHref>
             <a className={styles.header__logo__link}>
               <img src="/img/logo.svg" alt="logo" />
-              <span
-                className={`${styles.header__logo__link__text} ${darkModeClass}`}
-              >
-                Детали для газовых котлов
-              </span>
+              <span className={`${styles.header__logo__link__text} ${darkModeClass}`}>Car Shop</span>
             </a>
           </Link>
         </h1>

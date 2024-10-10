@@ -14,8 +14,8 @@ const nav = [
   { link: '/catalog', label: 'Каталог' },
   { link: '/contacts', label: 'Контакти' },
   { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
-  { link: '/wholesale-buyers', label: 'Повідомлення' },
-  { link: '/wholesale-buyers', label: 'Профіль' },
+  { link: '/profile?tab=messages', label: 'Повідомлення' },
+  { link: '/profile?tab=profile', label: 'Профіль' },
 ]
 
 const HeaderTop = () => {

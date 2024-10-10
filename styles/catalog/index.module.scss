@@ -420,6 +420,12 @@
               color: #4e4c4c;
             }
 
+            span {
+              display: inline-block;
+              text-indent: -35px;
+              padding-left: 35px;
+            }
+
             &.dark_mode label {
               color: #f2f2f2;
             }

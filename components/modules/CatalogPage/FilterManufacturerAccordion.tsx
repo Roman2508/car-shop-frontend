@@ -16,10 +16,7 @@ const FilterManufacturerAccordion = ({
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const isMobile = useMediaQuery(820)
 
-  const chooseAllManufacturers = () =>
-    setManufacturer(
-      manufacturersList.map((item) => ({ ...item, checked: true }))
-    )
+  const chooseAllManufacturers = () => setManufacturer(manufacturersList.map((item) => ({ ...item, checked: true })))
 
   return (
     <Accordion
@@ -30,11 +27,8 @@ const FilterManufacturerAccordion = ({
       hideArrowClass={isMobile ? styles.hide_arrow : ''}
     >
       <div className={styles.filters__manufacturer__inner}>
-        <button
-          className={styles.filters__manufacturer__select_all}
-          onClick={chooseAllManufacturers}
-        >
-          Выбрать все
+        <button className={styles.filters__manufacturer__select_all} onClick={chooseAllManufacturers}>
+          Вибрати все
         </button>
         <ul className={styles.filters__manufacturer__list}>
           {manufacturersList.map((item) => (

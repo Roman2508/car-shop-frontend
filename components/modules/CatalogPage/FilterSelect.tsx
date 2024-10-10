@@ -3,11 +3,7 @@ import { useStore } from 'effector-react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { $mode } from '@/context/mode'
-import {
-  controlStyles,
-  menuStyles,
-  selectStyles,
-} from '@/styles/catalog/select'
+import { controlStyles, menuStyles, selectStyles } from '@/styles/catalog/select'
 import { optionStyles } from '@/styles/searchInput'
 import { IOption, SelectOptionType } from '@/types/common'
 import { createSelectOption } from '@/utils/common'
@@ -20,11 +16,7 @@ import {
 } from '@/context/boilerParts'
 import { useRouter } from 'next/router'
 
-const FilterSelect = ({
-  setSpinner,
-}: {
-  setSpinner: (arg0: boolean) => void
-}) => {
+const FilterSelect = ({ setSpinner }: { setSpinner: (arg0: boolean) => void }) => {
   const mode = useStore($mode)
   const boilerParts = useStore($boilerParts)
   const [categoryOption, setCategoryOption] = useState<SelectOptionType>(null)
@@ -34,27 +26,26 @@ const FilterSelect = ({
     if (boilerParts.rows) {
       switch (router.query.first) {
         case 'cheap':
-          updateCategoryOption('Сначала дешевые')
+          updateCategoryOption('Спочатку дешеві')
           setBoilerPartsCheapFirst()
           break
         case 'expensive':
-          updateCategoryOption('Сначала дорогие')
+          updateCategoryOption('Спочатку дорогі')
           setBoilerPartsExpensiveFirst()
           break
         case 'popular':
-          updateCategoryOption('По популярности')
+          updateCategoryOption('По популярності')
           setBoilerPartsByPopularity()
           break
         default:
-          updateCategoryOption('Сначала дешевые')
+          updateCategoryOption('Спочатку дешеві')
           setBoilerPartsCheapFirst()
           break
       }
     }
   }, [boilerParts.rows, router.query.first])
 
-  const updateCategoryOption = (value: string) =>
-    setCategoryOption({ value, label: value })
+  const updateCategoryOption = (value: string) => setCategoryOption({ value, label: value })
 
   const updateRoteParam = (first: string) =>
     router.push(
@@ -73,15 +64,15 @@ const FilterSelect = ({
     setCategoryOption(selectedOption)
 
     switch ((selectedOption as IOption).value) {
-      case 'Сначала дешевые':
+      case 'Спочатку дешеві':
         setBoilerPartsCheapFirst()
         updateRoteParam('cheap')
         break
-      case 'Сначала дорогие':
+      case 'Спочатку дорогі':
         setBoilerPartsExpensiveFirst()
         updateRoteParam('expensive')
         break
-      case 'По популярности':
+      case 'По популярності':
         setBoilerPartsByPopularity()
         updateRoteParam('popular')
         break
@@ -92,8 +83,8 @@ const FilterSelect = ({
 
   return (
     <Select
-      placeholder="Я ищу..."
-      value={categoryOption || createSelectOption('Сначала дешевые')}
+      placeholder="Я шукаю.."
+      value={categoryOption || createSelectOption('Спочатку дешеві')}
       onChange={handleSortOptionChange}
       styles={{
         ...selectStyles,

@@ -1,7 +1,3 @@
 import { createSelectOption } from './common'
 
-export const categoriesOptions = [
-  'Сначала дешевые',
-  'Сначала дорогие',
-  'По популярности',
-].map(createSelectOption)
+export const categoriesOptions = ['Спочатку дешеві', 'Спочатку дорогі', 'По популярності'].map(createSelectOption)
