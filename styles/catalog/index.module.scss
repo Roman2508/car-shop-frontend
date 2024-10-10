@@ -374,7 +374,7 @@
           list-style-type: none;
           margin: 0;
           padding: 0;
-          height: 302px;
+          max-height: 302px;
           overflow-y: auto;
 
           &::-webkit-scrollbar {
