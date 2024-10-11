@@ -1,28 +1,38 @@
-import { useStore } from 'effector-react'
-import { toast } from 'react-toastify'
 import { useEffect } from 'react'
-import { $boilerPart } from '@/context/boilerPart'
+import { toast } from 'react-toastify'
+import { useStore } from 'effector-react'
+
 import { $mode } from '@/context/mode'
-import PartImagesList from '@/components/modules/PartPage/PartImagesList'
-import { formatPrice } from '@/utils/common'
-import { $shoppingCart } from '@/context/shopping-cart'
-import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
-import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
-import spinnerStyles from '@/styles/spinner/index.module.scss'
-import { toggleCartItem } from '@/utils/shopping-cart'
 import { $user } from '@/context/user'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import PartTabs from '@/components/modules/PartPage/PartTabs'
-import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
-import { getBoilerPartsFx } from '@/app/api/boilerParts'
-import {
-  $boilerParts,
-  setBoilerParts,
-  setBoilerPartsByPopularity,
-} from '@/context/boilerParts'
-import PartAccordion from '@/components/modules/PartPage/PartAccordion'
-import { removeFromCartFx } from '@/app/api/shopping-cart'
+import { formatPrice } from '@/utils/common'
+import { $boilerPart } from '@/context/boilerPart'
 import styles from '@/styles/part/index.module.scss'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { toggleCartItem } from '@/utils/shopping-cart'
+import { $shoppingCart } from '@/context/shopping-cart'
+import { getBoilerPartsFx } from '@/app/api/boilerParts'
+import { removeFromCartFx } from '@/app/api/shopping-cart'
+import PartTabs from '@/components/modules/PartPage/PartTabs'
+import catalogStyles from '@/styles/catalog/index.module.scss'
+import spinnerStyles from '@/styles/spinner/index.module.scss'
+import PartAccordion from '@/components/modules/PartPage/PartAccordion'
+import PartImagesList from '@/components/modules/PartPage/PartImagesList'
+import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
+import SendMessageSvg from '@/components/elements/SendMessageSvg/SendMessageSvg'
+import { $boilerParts, setBoilerParts, setBoilerPartsByPopularity } from '@/context/boilerParts'
+import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
+import EngineSvg from '@/components/elements/EngineSvg/EngineSvg'
+import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
+import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
+import { boilers } from '../DashboardPage/DashboardPage'
+import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
+import EditSvg from '@/components/elements/EditSvg/EditSvg'
+import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
+import MarkerSvg from '@/components/elements/MarkerSvg/MarkerSvg'
+import Edit2Svg from '@/components/elements/EditSvg/Edit2Svg'
+import ConfirmSvg from '@/components/elements/ConfirmSvg/ConfirmSvg'
+// import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
+// import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
 const PartPage = () => {
   const mode = useStore($mode)
@@ -42,7 +52,9 @@ const PartPage = () => {
 
   const loadBoilerPart = async () => {
     try {
-      const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+      // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+
+      const data = boilers
 
       setBoilerParts(data)
       setBoilerPartsByPopularity()
@@ -51,106 +63,122 @@ const PartPage = () => {
     }
   }
 
-  const toggleToCart = () =>
-    toggleCartItem(user.username, boilerPart.id, isInCart)
+  const toggleToCart = () => toggleCartItem(user.username, boilerPart.id, isInCart)
 
   return (
     <section>
       <div className="container">
-        <div className={`${styles.part__top} ${darkModeClass}`}>
-          <h2 className={`${styles.part__title} ${darkModeClass}`}>
-            {boilerPart.name}
-          </h2>
+        <div className={`${styles.part__wrapper} ${darkModeClass}`}>
+          <div className={`${styles.part__top}`}>
+            <h2 className={`${styles.part__title} ${darkModeClass}`}>{boilerPart.name}</h2>
+            <div>
+              <span className={`${styles.part__actions} ${darkModeClass}`}>
+                <span title="Опублікувати оголошення">
+                  <ConfirmSvg darkModeClass={darkModeClass} />
+                </span>
+
+                <span title="Редагувати оголошення">
+                  <Edit2Svg darkModeClass={darkModeClass} />
+                </span>
+
+                <span title="Видалити оголошення">
+                  <GarbageSvg darkModeClass={darkModeClass} />
+                </span>
+              </span>
+            </div>
+          </div>
+
           <div className={styles.part__inner}>
             <PartImagesList />
             <div className={styles.part__info}>
               <span className={`${styles.part__info__price} ${darkModeClass}`}>
-                {formatPrice(boilerPart.price || 0)} P
+                {formatPrice(boilerPart.price || 0)} грн.
               </span>
+
               <span className={styles.part__info__stock}>
                 {boilerPart.in_stock > 0 ? (
-                  <span className={styles.part__info__stock__success}>
-                    Есть на складе
-                  </span>
+                  <span className={styles.part__info__stock__success}>АКТИВНЕ</span>
                 ) : (
-                  <span className={styles.part__info__stock__not}>
-                    Нет на складе
-                  </span>
+                  <span className={styles.part__info__stock__not}>ОЧІКУЄ ПІДТВЕРДЖЕННЯ</span>
                 )}
               </span>
-              <span className={styles.part__info__code}>
-                Артикул: {boilerPart.vendor_code}
-              </span>
+
+              {/* <span className={styles.part__info__code}>Артикул: {boilerPart.vendor_code}</span> */}
+
+              <div style={{ marginBottom: '24px' }}>
+                <span className={catalogStyles.catalog__list__item__code}>
+                  Київ, Шевченківський - 10 жовтня 2024 р.
+                </span>
+
+                <span className={catalogStyles.catalog__list__item__details}>
+                  <SpeedometerSvg />
+                  2020 115 тис.км.
+                </span>
+
+                <span className={catalogStyles.catalog__list__item__details}>
+                  <EngineSvg />
+                  2.50 л.
+                </span>
+
+                <span className={catalogStyles.catalog__list__item__details}>
+                  <GearBoxSvg />
+                  Автоматична
+                </span>
+
+                <span className={catalogStyles.catalog__list__item__details}>
+                  <FuelSvg />
+                  Бензин
+                </span>
+              </div>
+
               <button
-                className={`${styles.part__info__btn} ${
-                  isInCart ? styles.in_cart : ''
-                }`}
                 onClick={toggleToCart}
+                style={{ backgroundColor: '#5acccc' }}
+                className={`${styles.part__info__btn} ${isInCart ? styles.in_cart : ''}`}
               >
                 {spinnerToggleCart ? (
-                  <span
-                    className={spinnerStyles.spinner}
-                    style={{ top: 10, left: '45%' }}
-                  />
+                  <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />
                 ) : (
-                  <>
-                    <span className={styles.part__info__btn__icon}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* <span className={styles.part__info__btn__icon}>
                       {isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}
                     </span>
                     {isInCart ? (
                       <span>Добавлено в карзину</span>
                     ) : (
                       <span>Положить в корзину</span>
-                    )}
-                  </>
+                      )} */}
+
+                    <span style={{ color: '#fff', marginRight: '8px' }}>Зв'язатись з продавцем</span>
+                    <SendMessageSvg />
+                  </div>
                 )}
               </button>
               {!isMobile && <PartTabs />}
             </div>
           </div>
         </div>
+
         {isMobile && (
           <div className={styles.part__accordion}>
             <div className={styles.part__accordion__inner}>
-              <PartAccordion title="Описание">
-                <div
-                  className={`${styles.part__accordion__content} ${darkModeClass}`}
-                >
-                  <h3
-                    className={`${styles.part__tabs__content__title} ${darkModeClass}`}
-                  >
-                    {boilerPart.name}
-                  </h3>
-                  <p
-                    className={`${styles.part__tabs__content__text} ${darkModeClass}`}
-                  >
-                    {boilerPart.description}
-                  </p>
+              <PartAccordion title="Опис">
+                <div className={`${styles.part__accordion__content} ${darkModeClass}`}>
+                  <h3 className={`${styles.part__tabs__content__title} ${darkModeClass}`}>{boilerPart.name}</h3>
+                  <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{boilerPart.description}</p>
                 </div>
               </PartAccordion>
             </div>
-            <PartAccordion title="Совместимость">
-              <div
-                className={`${styles.part__accordion__content} ${darkModeClass}`}
-              >
-                <p
-                  className={`${styles.part__tabs__content__text} ${darkModeClass}`}
-                >
-                  {boilerPart.compatibility}
-                </p>
+            <PartAccordion title="Деталі">
+              <div className={`${styles.part__accordion__content} ${darkModeClass}`}>
+                <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{boilerPart.compatibility}</p>
               </div>
             </PartAccordion>
           </div>
         )}
         <div className={styles.part__bottom}>
-          <h2 className={`${styles.part__title} ${darkModeClass}`}>
-            Вам понравится
-          </h2>
-          <DashboardSlider
-            goToPartPage
-            spinner={spinnerSlider}
-            items={boilerParts.rows || []}
-          />
+          <h2 className={`${styles.part__title} ${darkModeClass}`}>Схожі оголошення</h2>
+          <DashboardSlider goToPartPage spinner={spinnerSlider} items={boilerParts.rows || []} />
         </div>
       </div>
     </section>

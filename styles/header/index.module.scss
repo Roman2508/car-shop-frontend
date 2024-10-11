@@ -127,6 +127,15 @@
             }
           }
         }
+
+        &__link.active {
+          color: #5acccc;
+          transition: color 0.2s ease-in-out;
+
+          &::after {
+            transform: scaleX(1);
+          }
+        }
       }
     }
   }

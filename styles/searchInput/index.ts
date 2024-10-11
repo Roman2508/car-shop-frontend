@@ -1,16 +1,8 @@
 /* eslint-disable prettier/prettier */
-import {
-  StylesConfig,
-  OptionProps,
-  GroupBase,
-  CSSObjectWithLabel,
-} from 'react-select'
+import { StylesConfig, OptionProps, GroupBase, CSSObjectWithLabel } from 'react-select'
 import { IOption } from '../../types/common'
 
-export const controlStyles = (
-  defaultStyles: CSSObjectWithLabel,
-  theme: string
-) => ({
+export const controlStyles = (defaultStyles: CSSObjectWithLabel, theme: string) => ({
   ...defaultStyles,
   cursor: 'pointer',
   backgroundColor: 'transparent',
@@ -29,10 +21,7 @@ export const controlStyles = (
   borderBottomRightRadius: 0,
 })
 
-export const menuStyles = (
-  defaultStyles: CSSObjectWithLabel,
-  theme: string
-) => ({
+export const menuStyles = (defaultStyles: CSSObjectWithLabel, theme: string) => ({
   ...defaultStyles,
   boxShadow: 'none',
   borderRadius: '4px',
@@ -56,61 +45,46 @@ export const optionStyles = (
       ? '#9e9e9e'
       : '#f2f2f2'
     : state.isSelected
-      ? '#f2f2f2'
-      : '#9e9e9e'
+    ? '#f2f2f2'
+    : '#9e9e9e'
 
   const backgroundHoverForDarkMode = state.isSelected
     ? state.isSelected
       ? '#f2f2f2'
       : '#9e9e9e'
     : state.isSelected
-      ? '#9e9e9e'
-      : '#f2f2f2'
+    ? '#9e9e9e'
+    : '#f2f2f2'
 
   const colorHoverForLightMode = state.isSelected
     ? state.isSelected
       ? '#f2f2f2'
       : '#9e9e9e'
     : state.isSelected
-      ? '#9e9e9e'
-      : '#f2f2f2'
+    ? '#9e9e9e'
+    : '#f2f2f2'
 
   const colorHoverForDarkMode = state.isSelected
     ? state.isSelected
       ? '#9e9e9e'
       : '#f2f2f2'
     : state.isSelected
-      ? '#f2f2f2'
-      : '#9e9e9e'
+    ? '#f2f2f2'
+    : '#9e9e9e'
 
   return {
     ...defaultStyles,
     cursor: 'pointer',
+    maxWidth: '500px',
     padding: '6px 12px',
     margin: 0,
     '&:hover': {
-      backgroundColor:
-        theme === 'dark'
-          ? backgroundHoverForDarkMode
-          : backgroundHoverForLightMode,
+      backgroundColor: theme === 'dark' ? backgroundHoverForDarkMode : backgroundHoverForLightMode,
       color: theme === 'dark' ? colorHoverForDarkMode : colorHoverForLightMode,
     },
     backgroundColor:
-      theme === 'dark'
-        ? state.isSelected
-          ? '#ffffff'
-          : '#2d2d2d'
-        : state.isSelected
-          ? '#2d2d2d'
-          : '#ffffff',
-    color:
-      theme === 'dark'
-        ? state.isSelected
-          ? '#222222'
-          : '#f2f2f2'
-        : state.isSelected
-          ? '#f2f2f2'
-          : '#222222',
+      theme === 'dark' ? (state.isSelected ? '#ffffff' : '#2d2d2d') : state.isSelected ? '#2d2d2d' : '#ffffff',
+    color: theme === 'dark' ? (state.isSelected ? '#222222' : '#f2f2f2') : state.isSelected ? '#f2f2f2' : '#222222',
   }
 }
 
@@ -138,7 +112,7 @@ export const inputStyles: StylesConfig<IOption, boolean, GroupBase<IOption>> = {
     },
     '&::-webkit-scrollbar-thumb:hover': {
       background: 'grey',
-    }
+    },
   }),
   placeholder: (defaultStyles) => ({
     ...defaultStyles,

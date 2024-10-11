@@ -20,30 +20,23 @@ const ContactsPage = ({ isWholesaleBuyersPage = false }) => {
           {isWholesaleBuyersPage ? (
             <div className={`${styles.contacts__list} ${darkModeClass}`}>
               <p>
-                <span>
-                  Условия оптовых заказов решаются индивидуально по телефону:{' '}
-                </span>
+                <span>Условия оптовых заказов решаются индивидуально по телефону: </span>
                 <span>+7 (555) 55-55-555</span>
               </p>
-              <p>
-                Либо опишите суть заказа в форме обртной связи и мы с вами
-                свяжемся.
-              </p>
+              <p>Либо опишите суть заказа в форме обртной связи и мы с вами свяжемся.</p>
             </div>
           ) : (
             <ul className={`${styles.contacts__list} ${darkModeClass}`}>
               <li className={styles.contacts__list__title}>
-                <h3 className={darkModeClass}>
-                  Магазин деталей для газовых котлов
-                </h3>
+                <h3 className={darkModeClass}>Магазин деталей для газовых котлов</h3>
               </li>
               <li className={`${styles.contacts__list__item} ${darkModeClass}`}>
                 <span>Офис:</span>
-                <span> г. Москва, ул. ... д....</span>
+                <span> г. Київ, ул. ... д....</span>
               </li>
               <li className={`${styles.contacts__list__item} ${darkModeClass}`}>
                 <span>Склад:</span>
-                <span> г. Москва, ул. ... д....</span>
+                <span> г. Київ, ул. ... д....</span>
               </li>
               <li className={`${styles.contacts__list__item} ${darkModeClass}`}>
                 <span>График работы офиса:</span>
@@ -64,8 +57,7 @@ const ContactsPage = ({ isWholesaleBuyersPage = false }) => {
               <li className={`${styles.contacts__list__item} ${darkModeClass}`}>
                 <span>E-mail:</span>
                 <span className={styles.contacts__list__item__mail}>
-                  {!isMobile560 && <MailSvg />}{' '}
-                  <span>info@zapchasti.com.ru</span>
+                  {!isMobile560 && <MailSvg />} <span>info@zapchasti.com.ru</span>
                 </span>
               </li>
             </ul>

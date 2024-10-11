@@ -1,20 +1,13 @@
 /* eslint-disable prettier/prettier */
-import {
-  StylesConfig,
-  GroupBase,
-  CSSObjectWithLabel,
-} from 'react-select'
+import { StylesConfig, GroupBase, CSSObjectWithLabel } from 'react-select'
 import { IOption } from '../../types/common'
 
-export const controlStyles = (
-  defaultStyles: CSSObjectWithLabel,
-  theme: string
-) => ({
+export const controlStyles = (defaultStyles: CSSObjectWithLabel, theme: string) => ({
   ...defaultStyles,
   cursor: 'pointer',
   backgroundColor: 'transparent',
   border: '1px solid #D5D5D5',
-  width: '241px',
+  width: '340px',
   height: '40px',
   boxShadow: 'none',
   borderRadius: '4px',
@@ -32,10 +25,7 @@ export const controlStyles = (
   },
 })
 
-export const menuStyles = (
-  defaultStyles: CSSObjectWithLabel,
-  theme: string
-) => ({
+export const menuStyles = (defaultStyles: CSSObjectWithLabel, theme: string) => ({
   ...defaultStyles,
   boxShadow: '0 4px 20px rgb(0 0 0 / 7%)',
   borderRadius: '4px',

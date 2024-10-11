@@ -7,18 +7,22 @@ import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import { $mode } from '@/context/mode'
 import { usePopup } from '@/hooks/usePoup'
 import styles from '@/styles/header/index.module.scss'
+import { usePathname } from 'next/navigation'
 
 const nav = [
-  { link: '/shipping-payment', label: 'Доставка та оплата' },
-  { link: '/about', label: 'Про компанію' },
+  // { link: '/shipping-payment', label: 'Доставка та оплата' },
+  // { link: '/about', label: 'Про компанію' },
+  { link: '/dashboard', label: 'Головна' },
   { link: '/catalog', label: 'Каталог' },
-  { link: '/contacts', label: 'Контакти' },
-  { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
+  // { link: '/contacts', label: 'Контакти' },
+  // { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
   { link: '/profile?tab=messages', label: 'Повідомлення' },
   { link: '/profile?tab=profile', label: 'Профіль' },
+  { link: '/create-ad', label: 'Додати оголошення' },
 ]
 
 const HeaderTop = () => {
+  const pathname = usePathname()
   const isMedia950 = useMediaQuery(950)
   const { toggleOpen, open, closePopup } = usePopup()
   const mode = useStore($mode)
@@ -36,12 +40,17 @@ const HeaderTop = () => {
           </button>
         )}
 
-        <nav className={`${styles.header__nav} ${open ? styles.open : ''} ${darkModeClass}`}>
+        <nav className={`${styles.header__nav} ${open ? styles.open : ''}  ${darkModeClass}`}>
           <ul className={styles.header__nav__list}>
             {nav.map((el) => (
               <li className={styles.header__nav__list__item}>
-                <Link href={el.link} passHref legacyBehavior>
-                  <a className={`${styles.header__nav__list__item__link} ${darkModeClass}`} onClick={closePopup}>
+                <Link href={el.link} passHref legacyBehavior >
+                  <a
+                    className={`${styles.header__nav__list__item__link} ${
+                      pathname === el.link.split('?')[0] ? styles.active : ''
+                    } ${darkModeClass}`}
+                    onClick={closePopup}
+                  >
                     {el.label}
                   </a>
                 </Link>

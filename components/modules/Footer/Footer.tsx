@@ -23,9 +23,7 @@ const Footer = () => {
             <div className={styles.footer__top__item}>
               {!isMedia500 && (
                 <>
-                  <h3 className={styles.footer__top__item__title}>
-                    Интернет-магазин
-                  </h3>
+                  <h3 className={styles.footer__top__item__title}>Интернет-магазин</h3>
                   <OnlineStoreContent />
                 </>
               )}
@@ -48,11 +46,7 @@ const Footer = () => {
                 </>
               )}
               {isMedia500 && (
-                <Accordion
-                  title="Компания"
-                  titleClass={styles.footer__top__item__title}
-                  arrowOpenClass={styles.open}
-                >
+                <Accordion title="Компания" titleClass={styles.footer__top__item__title} arrowOpenClass={styles.open}>
                   <CompanyContent />
                   <div style={{ height: 17 }} />
                 </Accordion>
@@ -61,14 +55,12 @@ const Footer = () => {
           </div>
           <div className={styles.footer__top__item}>
             <h3 className={styles.footer__top__item__title}>Контакты</h3>
-            <ul
-              className={`${styles.footer__top__item__list} ${styles.footer__top__item__contacts}`}
-            >
+            <ul className={`${styles.footer__top__item__list} ${styles.footer__top__item__contacts}`}>
               <li className={styles.footer__top__item__list__item}>
                 <Link href="/contacts" passHref legacyBehavior>
                   <a className={styles.footer__top__item__list__item__link}>
                     <span>Наш адрес:</span>
-                    <span>г. Москва, ул. ... д....</span>
+                    <span>г. Київ, ул. ... д....</span>
                     <span>
                       <MarkerSvg />
                     </span>
@@ -76,10 +68,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li className={styles.footer__top__item__list__item}>
-                <a
-                  href="tel:+780955555555"
-                  className={styles.footer__top__item__list__item__link}
-                >
+                <a href="tel:+780955555555" className={styles.footer__top__item__list__item__link}>
                   <span>Наш контактный телефон:</span>
                   <span>+7(8095) 555-55-55</span>
                   <span>
@@ -88,10 +77,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className={styles.footer__top__item__list__item}>
-                <a
-                  href="mailto:info@zapchasti.com.ru"
-                  className={styles.footer__top__item__list__item__link}
-                >
+                <a href="mailto:info@zapchasti.com.ru" className={styles.footer__top__item__list__item__link}>
                   <span>E-mail:</span>
                   <span>info@zapchasti.com.ru</span>
                   <span>
@@ -105,9 +91,7 @@ const Footer = () => {
         <div className={styles.footer__bottom}>
           <div className={styles.footer__bottom__block}>
             <div className={styles.footer__bottom__block__left}>
-              <h3 className={styles.footer__bottom__block__title}>
-                Мы принимаем к оплате:
-              </h3>
+              <h3 className={styles.footer__bottom__block__title}>Мы принимаем к оплате:</h3>
               <ul className={styles.footer__bottom__block__pay}>
                 <li className={styles.footer__bottom__block__pay__item}>
                   <img src="/img/pay.png" alt="apple-pay" />
@@ -124,42 +108,26 @@ const Footer = () => {
               </ul>
             </div>
             <div className={styles.footer__bottom__block__right}>
-              <h3 className={styles.footer__bottom__block__title}>
-                Мы в соцсети:
-              </h3>
+              <h3 className={styles.footer__bottom__block__title}>Мы в соцсети:</h3>
               <ul className={styles.footer__bottom__block__social}>
                 <li className={styles.footer__bottom__block__social__item}>
-                  <a
-                    href="#"
-                    className={styles.footer__bottom__block__social__item_vk}
-                  />
+                  <a href="#" className={styles.footer__bottom__block__social__item_vk} />
                 </li>
                 <li className={styles.footer__bottom__block__social__item}>
-                  <a
-                    href="#"
-                    className={styles.footer__bottom__block__social__item_fb}
-                  />
+                  <a href="#" className={styles.footer__bottom__block__social__item_fb} />
                 </li>
                 <li className={styles.footer__bottom__block__social__item}>
-                  <a
-                    href="#"
-                    className={styles.footer__bottom__block__social__item_inst}
-                  />
+                  <a href="#" className={styles.footer__bottom__block__social__item_inst} />
                 </li>
                 <li className={styles.footer__bottom__block__social__item}>
-                  <a
-                    href="#"
-                    className={styles.footer__bottom__block__social__item_ytb}
-                  />
+                  <a href="#" className={styles.footer__bottom__block__social__item_ytb} />
                 </li>
               </ul>
             </div>
           </div>
           {isMedia750 && <FooterLogo />}
           <div className={styles.footer__bottom__block}>
-            <p className={styles.footer__bottom__block__copyright}>
-              © «Car Shop» 2021.
-            </p>
+            <p className={styles.footer__bottom__block__copyright}>© «Car Shop» 2021.</p>
           </div>
         </div>
       </div>
