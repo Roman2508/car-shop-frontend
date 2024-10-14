@@ -76,31 +76,6 @@ $transition: 1.25s;
   }
 
   /*  */
-  &__form {
-    // display: flex;
-    // flex-direction: column;
-
-    // &__label {
-    //   margin-bottom: 24px;
-    //   position: relative;
-
-    //   span {
-    //     display: block;
-    //     margin-bottom: 4px;
-    //     font-size: 14px;
-    //     color: #4e4c4c;
-    //   }
-
-    //   &.dark_mode span {
-    //     color: #999292;
-    //   }
-
-    //   &.dark_mode input {
-    //     caret-color: #f2f2f2;
-    //     color: #f2f2f2;
-    //   }
-    // }
-  }
 
   &__label {
     span {
@@ -111,7 +86,18 @@ $transition: 1.25s;
     }
 
     &.dark_mode span {
-      color: #999292;
+      // color: #999292;
+      color: #ffffff;
+    }
+
+    &.dark_mode .form__input {
+      border: 1px solid rgb(132, 132, 132);
+      color: #f2f2f2;
+    }
+
+    &.form_error .form__input,
+    &.form_error .form__textarea {
+      border: 1px solid red;
     }
   }
 
@@ -150,6 +136,8 @@ $transition: 1.25s;
     &.dark_mode {
       caret-color: #f2f2f2;
       color: #f2f2f2;
+
+      border: 1px solid rgb(132, 132, 132);
     }
   }
 
@@ -181,64 +169,6 @@ $transition: 1.25s;
   }
 
   /*  */
-
-  //   &__label {
-  //     position: relative;
-
-  //     &.dark_mode .form__input {
-  //       background-color: #2d2d2d;
-  //       color: #f2f2f2;
-  //       box-shadow: inset 2px 2px 4px $black, inset -2px -2px 4px $black;
-  //     }
-
-  //     & span {
-  //       display: block;
-  //       margin-bottom: 4px;
-  //       font-size: 14px;
-  //       color: #4e4c4c;
-  //     }
-
-  //     &.dark_mode span {
-  //       color: #f2f2f2;
-  //     }
-  //   }
-
-  //   &__label:not(:last-child) {
-  //     margin-bottom: 15px;
-  //   }
-
-  //   &__input {
-  //     width: 350px;
-  //     height: 40px;
-  //     margin: 4px 0;
-  //     padding-left: 25px;
-  //     font-size: 16px;
-  //     letter-spacing: 0.15px;
-  //     border: none;
-  //     outline: none;
-  //     background-color: $neu-1;
-  //     transition: 0.25s ease;
-  //     border-radius: 8px;
-  //     box-shadow: inset 2px 2px 4px $neu-2, inset -2px -2px 4px $white;
-
-  //     &:focus {
-  //       box-shadow: inset 4px 4px 4px $neu-2, inset -4px -4px 4px $white;
-  //     }
-
-  //     @media (max-width: 530px) {
-  //       width: 270px;
-  //     }
-
-  //     @media (max-width: 400px) {
-  //       width: 210px;
-  //     }
-  //   }
-
-  //   &.dark_mode &__input {
-  //     background-color: #2d2d2d;
-  //     color: #f2f2f2;
-  //     box-shadow: inset 2px 2px 4px $black, inset -2px -2px 4px $black;
-  //   }
 
   &__span {
     margin-top: 30px;
@@ -543,11 +473,10 @@ $transition: 1.25s;
 }
 
 .error_alert {
-  font-size: 12px;
-  color: red;
-  position: absolute;
-  left: 10px;
-  bottom: -15px;
+  margin-top: 4px;
+  display: inline-block;
+  color: red !important;
+  font-size: 12px !important;
 }
 
 .mode_toggle {

@@ -8,6 +8,7 @@ interface ITextInputProps {
   inputName: string
   darkModeClass: string
 
+  min?: number
   label?: string
   cssStyles?: any
   required?: string
@@ -26,10 +27,11 @@ const TextInput: React.FC<ITextInputProps> = (props) => {
     register,
     inputName,
     darkModeClass,
+    min = 0,
     cssStyles = {},
     required = '',
-    minLength = 0,
-    maxLength = 0,
+    minLength,
+    maxLength,
     type = 'text',
     placeholder = '',
   } = props
@@ -38,30 +40,34 @@ const TextInput: React.FC<ITextInputProps> = (props) => {
     required: required ? required : false,
   }
 
-  if (maxLength) validateOptions.maxLength = maxLength
+  if (type === 'number') validateOptions.min = min
   if (minLength) validateOptions.minLength = minLength
+  if (maxLength) validateOptions.maxLength = maxLength
   if (pattern) validateOptions.pattern = pattern
 
   return (
-    <label className={`${styles.form__label} ${darkModeClass}`} style={cssStyles}>
+    <label
+      style={cssStyles}
+      className={`${styles.form__label} ${darkModeClass} ${errors[inputName] && styles.form_error}`}
+    >
       {label && (
-        <span>
+        <span style={errors[inputName] ? { color: 'red' } : {}}>
           {label} {required && ' *'}
         </span>
       )}
 
       <input
-        {...register(inputName, validateOptions)}
-        className={styles.form__input}
-        placeholder={placeholder}
         type={type}
+        placeholder={placeholder}
+        className={styles.form__input}
+        {...register(inputName, validateOptions)}
       />
 
-      {errors.name && <span className={styles.error_alert}>{errors.name?.message}</span>}
-      {errors.name && errors.name.type === 'minLength' && (
+      {errors[inputName] && <span className={styles.error_alert}>{errors[inputName]?.message}</span>}
+      {errors[inputName] && errors[inputName].type === 'minLength' && (
         <span className={styles.error_alert}>Мін. кількість символів: {minLength}!</span>
       )}
-      {errors.name && errors.name.type === 'maxLength' && (
+      {errors[inputName] && errors[inputName].type === 'maxLength' && (
         <span className={styles.error_alert}>Макс. кількість символів: {maxLength}!</span>
       )}
     </label>

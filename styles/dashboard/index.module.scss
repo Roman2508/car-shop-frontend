@@ -187,7 +187,7 @@
         font-size: 40px;
       }
 
-       @media (max-width: 540px) {
+      @media (max-width: 540px) {
         font-size: 30px;
       }
     }
@@ -208,7 +208,6 @@
       @media (max-width: 840px) {
         font-size: 18px;
       }
-
     }
 
     &_link {
@@ -227,12 +226,16 @@
   &__filter {
     max-width: 1240px;
     margin: 0 auto;
-    background-color: #5acccc;
     // background-color: #f1c40f;
+    // background-color: #5acccc;
     margin-top: -114px;
     padding: 60px 100px 100px;
     position: relative;
     z-index: 1;
+
+    box-shadow: 0px 0px 30px rgba(28, 98, 158, 0.3);
+    border-radius: 4px;
+    background-color: #1c629e;
 
     @media (max-width: 840px) {
       padding: 60px 20px 100px;

@@ -18,10 +18,14 @@ export const controlStyles = (defaultStyles: CSSObjectWithLabel, theme: string) 
     color: theme === 'dark' ? '#f2f2f2' : '#222222',
   },
   '@media (max-width: 820px)': {
-    width: '200px',
+    // width: '200px',
+    width: '100%',
+    maxWidth: '340px',
   },
   '@media (max-width: 560px)': {
-    width: '177px',
+    // width: '177px',
+    width: '100%',
+    maxWidth: '340px',
   },
 })
 

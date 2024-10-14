@@ -35,7 +35,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
   const filteredBoilerParts = useStore($filteredBoilerParts)
-  const boilerParts = useStore($boilerParts)
+  const boilerParts = boilers
+  // const boilerParts = useStore($boilerParts)
   const [spinner, setSpinner] = useState(false)
   const [priceRange, setPriceRange] = useState([1000, 9000])
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)

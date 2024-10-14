@@ -21,13 +21,13 @@ const Textarea: React.FC<ITextareaProps> = (props) => {
     required: required ? required : false,
   }
 
-  if (maxLength) validateOptions.maxLength = maxLength
   if (minLength) validateOptions.minLength = minLength
+  if (maxLength) validateOptions.maxLength = maxLength
 
   return (
-    <label className={`${styles.form__label} ${darkModeClass}`}>
+    <label className={`${styles.form__label} ${errors[inputName] && styles.form_error} ${darkModeClass}`}>
       {label && (
-        <span>
+        <span style={errors[inputName] ? { color: 'red' } : {}}>
           {label} {required && ' *'}
         </span>
       )}
@@ -37,12 +37,12 @@ const Textarea: React.FC<ITextareaProps> = (props) => {
         {...register(inputName, validateOptions)}
         className={`${styles.form__textarea} ${darkModeClass}`}
       />
-      {errors.message && <span className={styles.error_alert}>{errors.message?.message}</span>}
-      {errors.message && errors.message.type === 'minLength' && (
-        <span className={styles.error_alert}>Минимум 20 символов!</span>
+      {errors[inputName] && <span className={styles.error_alert}>{errors[inputName]?.message}</span>}
+      {errors[inputName] && errors[inputName].type === 'minLength' && (
+        <span className={styles.error_alert}>Мінімум {minLength} символів!</span>
       )}
-      {errors.message && errors.message.type === 'maxLength' && (
-        <span className={styles.error_alert}>Не более 300 символов!</span>
+      {errors[inputName] && errors[inputName].type === 'maxLength' && (
+        <span className={styles.error_alert}>Максимум {maxLength} символів!</span>
       )}
     </label>
   )

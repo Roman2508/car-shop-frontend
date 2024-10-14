@@ -5,6 +5,8 @@ import { ToastContainer } from 'react-toastify'
 import NextNProgress from 'nextjs-progressbar'
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
+import { store } from '@/redux/store'
+import { Provider } from 'react-redux'
 
 const enhance = withHydrate()
 
@@ -17,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     mounted && (
-      <>
+      <Provider store={store}>
         <NextNProgress />
         <Component {...pageProps} />
         <ToastContainer
@@ -28,7 +30,7 @@ function App({ Component, pageProps }: AppProps) {
           limit={1}
           theme="light"
         />
-      </>
+      </Provider>
     )
   )
 }

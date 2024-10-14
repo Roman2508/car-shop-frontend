@@ -18,7 +18,7 @@ const nav = [
   // { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
   { link: '/profile?tab=messages', label: 'Повідомлення' },
   { link: '/profile?tab=profile', label: 'Профіль' },
-  { link: '/create-ad', label: 'Додати оголошення' },
+  { link: '/create-ad', label: 'Створити оголошення' },
 ]
 
 const HeaderTop = () => {
@@ -44,7 +44,7 @@ const HeaderTop = () => {
           <ul className={styles.header__nav__list}>
             {nav.map((el) => (
               <li className={styles.header__nav__list__item}>
-                <Link href={el.link} passHref legacyBehavior >
+                <Link href={el.link} passHref legacyBehavior>
                   <a
                     className={`${styles.header__nav__list__item__link} ${
                       pathname === el.link.split('?')[0] ? styles.active : ''

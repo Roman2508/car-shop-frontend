@@ -68,10 +68,9 @@ export const subcategory = [
 
 // Тип автомобіля
 export const carType = [
-  { checked: false, id: '1', title: 'Всі оголошення', event: '' },
-  { checked: false, id: '2', title: 'З пробігом', event: '' },
-  { checked: false, id: '3', title: 'Новий', event: '' },
-  { checked: false, id: '4', title: 'Під пригон (авто не в Україні)', event: '' },
+  { checked: false, id: '1', title: 'З пробігом', event: '' },
+  { checked: false, id: '2', title: 'Новий', event: '' },
+  { checked: false, id: '3', title: 'Під пригон (авто не в Україні)', event: '' },
 ]
 
 // Коробка передач
@@ -249,6 +248,12 @@ export const security = [
   { checked: false, id: '18', title: 'Безключовий доступ', event: '' },
 ]
 
+/* ,
+    "redux": "^5.0.1",
+    "react-redux": "^9.1.0",
+    "@reduxjs/toolkit": "^2.2.1",
+    "socket.io-client": "^4.7.4" */
+
 // Розмитнена
 export const сustomsСleared = [
   { checked: false, id: '1', title: 'Так', event: '' },
@@ -295,4 +300,11 @@ export const filters = [
   { label: 'Безпека', items: security },
   { label: 'Розмитнена', items: сustomsСleared },
   { label: 'Авто пригнано з', items: theCarWasDrivenFrom },
+]
+
+export const createAdFields = [
+  { label: 'Технічний стан', items: technicalCondition },
+  { label: 'Комфорт', items: comfort },
+  { label: 'Мультимедіа', items: multimedia },
+  { label: 'Безпека', items: security },
 ]
