@@ -108,9 +108,12 @@ const CreateAdPage = () => {
       }
 
       setSpinner(true)
-      await dispatch(createAdvertisement({ ...inputValues, ...adDetails, photos: [], user: 1 }))
+      const { data } = await dispatch(createAdvertisement({ ...inputValues, ...adDetails, photos: [], user: 1 }))
 
-      // need to redirect to new advertisement page
+      if (data.id) {
+        router.push(`catalog/${data.id}`)
+      }
+
       // maybe need to clear all input values
     } catch (error) {
       // showAuthError(error)

@@ -19,6 +19,11 @@ const authSlice = createSlice({
     setLoadingStatus(state, action) {
       state.loadingStatus = action.payload
     },
+
+    setUserData(state, action) {
+      state.auth = action.payload
+    },
+
     logout(state) {
       state.auth = null
       window.localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
@@ -38,10 +43,10 @@ const authSlice = createSlice({
     })
 
     /* authMe */
-    builder.addCase(authMe.fulfilled, (state, action: PayloadAction<AuthType>) => {
-      state.auth = action.payload
-      state.loadingStatus = LoadingStatusTypes.SUCCESS
-    })
+    // builder.addCase(authMe.fulfilled, (state, action: PayloadAction<AuthType>) => {
+    //   state.auth = action.payload
+    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
+    // })
 
     // /* updateTutor */
     // builder.addCase(updateTutor.fulfilled, (state, action: PayloadAction<AuthType>) => {
@@ -64,7 +69,7 @@ const authSlice = createSlice({
   },
 })
 
-export const { setLoadingStatus, logout } = authSlice.actions
+export const { setLoadingStatus, setUserData, logout } = authSlice.actions
 
 export default authSlice.reducer
 

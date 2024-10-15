@@ -21,7 +21,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     mounted && (
       <Provider store={store}>
-        <NextNProgress />
+        <NextNProgress color="#1c629e" height={5} />
         <Component {...pageProps} />
 
         <AppAlert />

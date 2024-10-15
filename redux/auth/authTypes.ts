@@ -7,9 +7,10 @@ export type InitialStateType = {
 
 export type AuthType = {
   id: number
-  name: string
-  userRole: 'tutor' | 'student'
+  username: string
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'USER'
   email: string
+  phone: string | null
   avatarUrl: string
   description?: string
   createdAt: Date

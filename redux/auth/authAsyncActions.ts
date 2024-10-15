@@ -69,12 +69,12 @@ export const authRegister = createAsyncThunk('auth/authRegister', async (payload
   }
 })
 
-export const authMe = createAsyncThunk('auth/authMe', async (payload: AuthMeType, thunkAPI) => {
+export const authMe = createAsyncThunk('auth/authMe', async (_: undefined, thunkAPI) => {
   // thunkAPI.dispatch(setAppAlert({ message: 'Завантаження', status: 'info' }))
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
 
   try {
-    const { data } = await authAPI.getMe(payload)
+    const { data } = await authAPI.getMe()
     // thunkAPI.dispatch(setAppAlert({ message: 'Авторизований', status: 'success' }))
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
     return data

@@ -29,6 +29,7 @@ import { DialogType, MessageType } from '../redux/dialogs/dialogsTypes'
 import { ReviewsType, TutorType } from '../redux/tutors/tutorsTypes'
 import { FileType, ReservedLessonType } from '../redux/reservedLessons/reservedLessonsTypes'
 import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
+import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 
 const instanse = axios.create({
   baseURL: 'http://localhost:7777/',
@@ -57,8 +58,15 @@ export const authAPI = {
   register(payload: AuthRegisterType) {
     return instanse.post<AuthResponceType>('/auth/register', payload)
   },
-  getMe(payload: AuthMeType) {
-    return instanse.post<AuthType>('/auth/me', payload)
+  // getMe(payload: AuthMeType) {
+  getMe() {
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+
+    if (!token) {
+      return { data: null }
+    }
+
+    return instanse.post<AuthType>('/auth/me', { token })
   },
 
   // updateTutor(payload: UpdateTutorType) {
