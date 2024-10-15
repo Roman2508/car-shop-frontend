@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { $mode } from '@/context/mode'
 import { useStore } from 'effector-react'
 import { useEffect, useState } from 'react'
@@ -13,29 +13,6 @@ import { getBestsellersOrNewPartsFx } from '@/app/api/boilerParts'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
-
-/* 
-export interface IBoilerPart {
-  id: number
-  boiler_manufacturer: string
-  price: number
-  parts_manufacturer: string
-  vendor_code: string
-  name: string
-  description: string
-  images: string
-  in_stock: number
-  bestseller: boolean
-  new: boolean
-  popularity: number
-  compatibility: string
-}
-
-export interface IBoilerParts {
-  count: number
-  rows: IBoilerPart[]
-}
-*/
 
 export const boilers: IBoilerParts = {
   count: 10,
@@ -261,12 +238,8 @@ const DashboardPage = () => {
         </button>
 
         <Link href="/catalog" className={styles.dashboard__filter_link}>
-          Або переглянути повний каталог
-          <img
-            style={{ marginLeft: '8px' }}
-            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iN3B4IiBoZWlnaHQ9IjEycHgiIHZpZXdCb3g9IjAgMCA3IDEyIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPCEtLSBHZW5lcmF0b3I6IHNrZXRjaHRvb2wgNTMuMiAoNzI2NDMpIC0gaHR0cHM6Ly9za2V0Y2hhcHAuY29tIC0tPgogICAgPHRpdGxlPkZDMUNFODZBLTI0MjQtNDdFNS1CMUQ5LTY2MDY1RUM0RDhCNTwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggc2tldGNodG9vbC48L2Rlc2M+CiAgICA8ZyBpZD0iRGVza3RvcC1TcHJpbnQtMi41IiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iMC4wLUhvbWUtLeKAlC1EZXNrdG9wIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjEzLjAwMDAwMCwgLTI4OTQuMDAwMDAwKSIgZmlsbD0iIzAwMDAwMCI+CiAgICAgICAgICAgIDxnIGlkPSJibGFjay1hcnJvdyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjEyLjAwMDAwMCwgMjg5NC4wMDAwMDApIj4KICAgICAgICAgICAgICAgIDxnIGlkPSJjb250ZW50IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjk5OTQ1MCwgLTAuMDAwMjUwKSI+CiAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTQuNTg2MjUsNi4wMDAyNSBMMC4yOTMyNSwxLjcwNzI1IEMtMC4wOTc3NSwxLjMxNjI1IC0wLjA5Nzc1LDAuNjg0MjUgMC4yOTMyNSwwLjI5MzI1IEMwLjY4NDI1LC0wLjA5Nzc1IDEuMzE2MjUsLTAuMDk3NzUgMS43MDcyNSwwLjI5MzI1IEw2LjcwNzI1LDUuMjkzMjUgQzcuMDk4MjUsNS42ODQyNSA3LjA5ODI1LDYuMzE3MjUgNi43MDcyNSw2LjcwNzI1IEwxLjcwNzI1LDExLjcwNzI1IEMxLjMxNjI1LDEyLjA5ODI1IDAuNjg0MjUsMTIuMDk4MjUgMC4yOTMyNSwxMS43MDcyNSBDLTAuMDk3NzUsMTEuMzE2MjUgLTAuMDk3NzUsMTAuNjg0MjUgMC4yOTMyNSwxMC4yOTMyNSBMNC41ODYyNSw2LjAwMDI1IFoiIGlkPSJGaWxsLTEiPjwvcGF0aD4KICAgICAgICAgICAgICAgIDwvZz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+"
-            alt="icon arrow"
-          />
+          Або переглянути повний каталог{' '}
+          <span style={{ fontSize: '26px', position: 'relative', top: '2px' }}>&#x203A;</span>
         </Link>
       </div>
 

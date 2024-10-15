@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { $mode } from '@/context/mode'
 import { useStore } from 'effector-react'
-import React from 'react'
+import React, { LegacyRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { IBoilerParts } from '@/types/boilerparts'
@@ -27,6 +27,7 @@ import { ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { useAppDispatch } from '@/redux/store'
 import { createAdvertisement } from '@/redux/advertisements/advertisementsAsyncActions'
 import { IFilterCheckboxItem } from '@/types/catalog'
+import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
 
 const CreateAdPage = () => {
   const dispatch = useAppDispatch()
@@ -38,6 +39,10 @@ const CreateAdPage = () => {
   const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
 
   const [checkboxesState, setCheckboxesState] = React.useState(createAdFields)
+
+  const photosRef = React.useRef([])
+
+  const [photos, setPhotos] = React.useState<any[]>(Array(6).fill(null))
 
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const darkModeInputClass = mode === 'dark' ? `${inputStyles.dark_mode}` : ''
@@ -114,6 +119,61 @@ const CreateAdPage = () => {
     }
   }
 
+  const onUploadFile = async (file: File) => {
+    const formData = new FormData()
+    formData.append('photo', file)
+
+    // const { data } = await Axios.post('/upload', formData, {
+    //   headers: { 'Content-Type': 'multipart/form-data' },
+    // })
+    const data = 1
+    return data
+  }
+
+  const removeFile = async (index: number) => {
+    setPhotos((prev) => {
+      return prev.map((el, i) => {
+        if (i === index) {
+          return null
+        }
+        return el
+      })
+    })
+  }
+
+  const handleChangeImage = async (event: Event) => {
+    const target = event.target as HTMLInputElement
+    const file = target.files && target.files[0]
+
+    // @ts-ignore
+    const slotNumber: number = event?.srcElement?.attributes['aria-slot-number']?.value
+
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const { payload } = await dispatch(uploadFile({ file: formData }))
+
+      console.log(payload)
+
+      const imageUrl = URL.createObjectURL(file)
+
+      setPhotos((prev) => {
+        if (Number(slotNumber) >= 0) {
+          return prev.map((el, index) => {
+            if (index === Number(slotNumber)) {
+              return imageUrl
+            }
+            return el
+          })
+        }
+        return prev
+      })
+      // const data = await uploadFile(file)
+      target.value = ''
+    }
+  }
+
   const createSelectInitialData = (items: any[]) => {
     return items.map((el) => ({ value: el.title, label: el.title }))
   }
@@ -126,6 +186,22 @@ const CreateAdPage = () => {
 
     setShowAlert(false)
   }, [shoppingCart.length])
+
+  React.useEffect(() => {
+    photosRef.current.forEach((ref) => {
+      if (!ref) return
+      // @ts-ignore
+      ref.addEventListener('change', handleChangeImage)
+    })
+
+    return () => {
+      photosRef.current.forEach((ref) => {
+        if (!ref) return
+        // @ts-ignore
+        ref.removeEventListener('change', handleChangeImage)
+      })
+    }
+  }, [])
 
   const closeAlert = () => setShowAlert(false)
 
@@ -219,10 +295,25 @@ const CreateAdPage = () => {
             {Array(6)
               .fill(null)
               .map((_, index) => (
-                <div className={`${styles.create__ad__photo} ${darkModeClass}`} key={index}>
-                  <input type="file" style={{ display: 'none' }} />
-                  Додати фото
-                </div>
+                <>
+                  {photos[index] ? (
+                    <div className={styles.create__ad__photo__wrapper} onClick={() => removeFile(index)}>
+                      <img src={photos[index]} />
+                      <span>Видалити фото</span>
+                    </div>
+                  ) : (
+                    <label key={index} className={`${styles.create__ad__photo} ${darkModeClass}`}>
+                      <input
+                        type="file"
+                        style={{ display: 'none' }}
+                        aria-slot-number={index}
+                        // @ts-ignore
+                        ref={(el) => (photosRef.current[index] = el)}
+                      />
+                      Додати фото
+                    </label>
+                  )}
+                </>
               ))}
           </div>
         </div>

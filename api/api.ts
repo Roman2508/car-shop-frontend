@@ -61,14 +61,14 @@ export const authAPI = {
     return instanse.post<AuthType>('/auth/me', payload)
   },
 
-  updateTutor(payload: UpdateTutorType) {
-    const { id, ...data } = payload
-    return instanse.patch(`/tutors/${id}`, data)
-  },
-  updateStudent(payload: UpdateStudentType) {
-    const { id, ...data } = payload
-    return instanse.patch(`/student/${id}`, data)
-  },
+  // updateTutor(payload: UpdateTutorType) {
+  //   const { id, ...data } = payload
+  //   return instanse.patch(`/tutors/${id}`, data)
+  // },
+  // updateStudent(payload: UpdateStudentType) {
+  //   const { id, ...data } = payload
+  //   return instanse.patch(`/student/${id}`, data)
+  // },
 }
 
 export const adAPI = {
@@ -169,9 +169,10 @@ export const reservedLessonsAPI = {
 
 export const filesAPI = {
   upload(payload: UploadFileType) {
-    const { lessonId, file } = payload
+    const { /* adId, */ file } = payload
     const config = { headers: { 'Content-Type': 'multipart/form-data' } }
-    return instanse.post<FileType>(`/files/${lessonId}`, file, config)
+    return instanse.post<FileType>('/files', file, config)
+    // return instanse.post<FileType>(`/files/${adId}`, file, config)
   },
 
   download(filename: string) {

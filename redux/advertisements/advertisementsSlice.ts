@@ -2,7 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { LoadingStatusTypes } from '../appTypes'
 import { RootState } from '../store'
 import { AdvertisementType, InitialStateType } from './advertisementsTypes'
-import { createAdvertisement } from './advertisementsAsyncActions'
+import { createAdvertisement, deleteFile, uploadFile } from './advertisementsAsyncActions'
+import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 const advertisementsInitialState: InitialStateType = {
   advertisements: null,
@@ -34,9 +35,9 @@ const advertisementsSlice = createSlice({
 
     /* createAdvertisement */
     builder.addCase(createAdvertisement.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
-      if (!state.advertisements) return
+      // if (!state.advertisements) return
       //   state.dialogs.push(action.payload)
-      state.loadingStatus = LoadingStatusTypes.SUCCESS
+      // state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
 
     /* deleteDialog */
@@ -44,6 +45,21 @@ const advertisementsSlice = createSlice({
     //   if (!state.dialogs) return
     //   const dialogs = state.dialogs.filter((el) => el.id !== action.payload)
     //   state.dialogs = dialogs
+    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
+    // })
+
+     /* uploadFile */
+    //  builder.addCase(uploadFile.fulfilled, (state, action: PayloadAction<FileType>) => {
+    //   if (!state.fullLesson) return
+    //   state.fullLesson.files.push(action.payload)
+    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
+    // })
+
+    /* deleteFile */
+    // builder.addCase(deleteFile.fulfilled, (state, action: PayloadAction<{ id: number; filename: string }>) => {
+    //   if (!state.fullLesson) return
+    //   const files = state.fullLesson.files.filter((el) => el.id !== action.payload.id)
+    //   state.fullLesson.files = files
     //   state.loadingStatus = LoadingStatusTypes.SUCCESS
     // })
   },

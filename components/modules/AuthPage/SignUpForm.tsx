@@ -1,15 +1,17 @@
-import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useStore } from 'effector-react'
-import NameInput from '@/components/elements/AuthPage/NameInput'
-import { IInputs } from '@/types/auth'
+
 import { $mode } from '@/context/mode'
-import EmailInput from '@/components/elements/AuthPage/EmailInput'
-import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
+import { IInputs } from '@/types/auth'
 import { singUpFx } from '@/app/api/auth'
 import { showAuthError } from '@/utils/errors'
 import styles from '@/styles/auth/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
+import inputsStyles from '@/styles/create-ad/index.module.scss'
+import NameInput from '@/components/elements/AuthPage/NameInput'
+import EmailInput from '@/components/elements/AuthPage/EmailInput'
+import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const [spinner, setSpinner] = useState(false)
@@ -48,20 +50,23 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   }
 
   return (
-    <form
-      className={`${styles.form} ${darkModeClass}`}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <h2 className={`${styles.form__title} ${styles.title} ${darkModeClass}`}>
-        Создать аккаунт
-      </h2>
+    <form className={`${styles.form} ${darkModeClass}`} onSubmit={handleSubmit(onSubmit)}>
+      <h2 className={`${styles.form__title} ${styles.title} ${darkModeClass}`}>Зареєструватись</h2>
       <NameInput register={register} errors={errors} />
       <EmailInput register={register} errors={errors} />
       <PasswordInput register={register} errors={errors} />
+
       <button
-        className={`${styles.form__button} ${styles.button} ${styles.submit} ${darkModeClass}`}
+        className={`${inputsStyles.button} ${darkModeClass}`}
+        style={{ marginTop: '32px', height: '40px', width: '300px' }}
       >
-        {spinner ? <div className={spinnerStyles.spinner} /> : 'SIGN UP'}
+        {spinner ? (
+          <div className={spinnerStyles.spinner}>
+            <div />
+          </div>
+        ) : (
+          'Зареєструватись'
+        )}
       </button>
     </form>
   )

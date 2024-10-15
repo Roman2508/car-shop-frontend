@@ -35,14 +35,7 @@ export type FileType = {
   originalName: string
   size: number
   mimetype: string
-  lesson: {
-    id: number
-    name: string
-  }
-  user: {
-    id: number
-    name: string
-  }
-  authorRole: 'tutor' | 'student'
+  ad: { id: number; name: string }
+  user: { id: number; name: string }
   createdAt: Date
 }

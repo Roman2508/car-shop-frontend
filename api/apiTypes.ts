@@ -6,14 +6,12 @@ import { ReservedLessonType } from '../redux/reservedLessons/reservedLessonsType
 export type AuthLoginType = {
   email: string
   password: string
-  userRole: 'tutor' | 'student'
 }
 
 export type AuthRegisterType = {
   email: string
   password: string
-  name: string
-  userRole: 'tutor' | 'student'
+  username: string
 }
 
 export type AuthMeType = {
@@ -144,7 +142,7 @@ export type CreateReviewsType = {
 
 /* files */
 export type UploadFileType = {
-  lessonId: number
+  // adId: number
   file: FormData
 }
 /* // files */

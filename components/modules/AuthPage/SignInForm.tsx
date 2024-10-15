@@ -1,17 +1,23 @@
-import { useForm } from 'react-hook-form'
 import { useState } from 'react'
-import { useStore } from 'effector-react'
 import { useRouter } from 'next/router'
-import NameInput from '@/components/elements/AuthPage/NameInput'
-import { IInputs } from '@/types/auth'
-import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
-import { singInFx } from '../../../app/api/auth'
-import { showAuthError } from '@/utils/errors'
+import { useForm } from 'react-hook-form'
+import { useStore } from 'effector-react'
+
 import { $mode } from '@/context/mode'
+import { IInputs } from '@/types/auth'
+import { showAuthError } from '@/utils/errors'
+import { singInFx } from '../../../app/api/auth'
 import styles from '@/styles/auth/index.module.scss'
-import spinnerStyles from '@/styles/spinner/index.module.scss'
+import inputStyles from '@/styles/create-ad/index.module.scss'
+import NameInput from '@/components/elements/AuthPage/NameInput'
+import EmailInput from '@/components/elements/AuthPage/EmailInput'
+import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
+import { useAppDispatch } from '@/redux/store'
+import { authLogin } from '@/redux/auth/authAsyncActions'
 
 const SignInForm = () => {
+  const dispatch = useAppDispatch()
+
   const [spinner, setSpinner] = useState(false)
   const {
     register,
@@ -26,15 +32,21 @@ const SignInForm = () => {
   const onSubmit = async (data: IInputs) => {
     try {
       setSpinner(true)
-      await singInFx({
-        url: '/users/login',
-        username: data.name,
-        password: data.password,
-      })
 
-      resetField('name')
-      resetField('password')
-      route.push('/dashboard')
+      const { payload } = await dispatch(authLogin(data))
+
+      if (payload) {
+        resetField('email')
+        resetField('password')
+        route.push('/dashboard')
+      }
+      // console.log(a)
+
+      // await singInFx({
+      //   url: '/users/login',
+      //   username: data.name,
+      //   password: data.password,
+      // })
     } catch (error) {
       showAuthError(error)
     } finally {
@@ -43,19 +55,23 @@ const SignInForm = () => {
   }
 
   return (
-    <form
-      className={`${styles.form} ${darkModeClass}`}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <h2 className={`${styles.form__title} ${styles.title} ${darkModeClass}`}>
-        Войти на сайт
-      </h2>
-      <NameInput register={register} errors={errors} />
+    <form className={`${styles.form} ${darkModeClass}`} onSubmit={handleSubmit(onSubmit)}>
+      <h2 className={`${styles.form__title} ${styles.title} ${darkModeClass}`}>Увійти</h2>
+      <EmailInput register={register} errors={errors} />
       <PasswordInput register={register} errors={errors} />
       <button
-        className={`${styles.form__button} ${styles.button} ${styles.submit} ${darkModeClass}`}
+        disabled={spinner}
+        className={`${inputStyles.button} ${darkModeClass}`}
+        style={{ marginTop: '32px', width: '300px', padding: '11px 50px', height: '40px', position: 'relative' }}
       >
-        {spinner ? <div className={spinnerStyles.spinner} /> : 'SIGN IN'}
+        {/* <button className={`${inputStyles.button} ${styles.button} ${styles.submit} ${darkModeClass}`}> */}
+        {spinner ? (
+          <div className={inputStyles.spinner}>
+            <div />
+          </div>
+        ) : (
+          'Увійти'
+        )}
       </button>
     </form>
   )
