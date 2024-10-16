@@ -70,6 +70,9 @@ const TextInput: React.FC<ITextInputProps> = (props) => {
       {errors[inputName] && errors[inputName].type === 'maxLength' && (
         <span className={styles.error_alert}>Макс. кількість символів: {maxLength}!</span>
       )}
+      {errors[inputName] && errors[inputName].type === 'min' && (
+        <span className={styles.error_alert}>Рік повинен бути більшим ніж: {min}!</span>
+      )}
     </label>
   )
 }

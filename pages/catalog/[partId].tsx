@@ -11,8 +11,16 @@ import { getBoilerPartFx } from '@/app/api/boilerParts'
 import PartPage from '@/components/templates/PartPage/PartPage'
 import Custom404 from '../404'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
+import { useAppDispatch } from '@/redux/store'
+import { getAdvertisementById } from '@/redux/advertisements/advertisementsAsyncActions'
+import { useSelector } from 'react-redux'
+import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
 
 function CatalogPartPage({ query }: { query: IQueryParams }) {
+  const dispatch = useAppDispatch()
+
+ 
+
   const { shouldLoadContent } = useRedirectByUserCheck()
   const boilerPart = useStore($boilerPart)
   const [error, setError] = useState(false)
@@ -34,6 +42,8 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
   const loadBoilerPart = async () => {
     try {
       // const data = await getBoilerPartFx(`/boiler-parts/find/${query.partId}`)
+      
+      await dispatch(getAdvertisementById(query.partId))
 
       // if (!data) {
       //   setError(true)

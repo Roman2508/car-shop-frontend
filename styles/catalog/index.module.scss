@@ -738,11 +738,8 @@
 
       &__code {
         display: block;
-        // margin-bottom: 0px;
         font-size: 14px;
         color: #7b7b7b;
-        // display: inline-flex;
-        // align-items: center;
 
         @media (max-width: 560px) {
           font-size: 13px;
@@ -763,7 +760,7 @@
         margin-top: 16px;
         display: inline-block;
         font-weight: 500;
-        font-size: 20px;
+        font-size: 18px;
         color: #2d2d2d;
 
         @media (max-width: 560px) {

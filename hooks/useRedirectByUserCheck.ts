@@ -7,6 +7,8 @@ import { authAPI } from '@/api/api'
 import { setUserData } from '@/redux/auth/authSlice'
 
 const useRedirectByUserCheck = (isAuthPage = false) => {
+  const dispatch = useAppDispatch()
+
   const [shouldLoadContent, setShouldLoadContent] = React.useState(false)
   const router = useRouter()
   const shouldCheckAuth = React.useRef(true)
@@ -22,7 +24,7 @@ const useRedirectByUserCheck = (isAuthPage = false) => {
     const { data: user } = await authAPI.getMe()
 
     if (user) {
-      setUserData(user)
+      dispatch(setUserData(user))
       setShouldLoadContent(true)
 
       if (router.route === '/') {

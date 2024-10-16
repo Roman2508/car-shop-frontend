@@ -31,10 +31,14 @@ import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
 import MarkerSvg from '@/components/elements/MarkerSvg/MarkerSvg'
 import Edit2Svg from '@/components/elements/EditSvg/Edit2Svg'
 import ConfirmSvg from '@/components/elements/ConfirmSvg/ConfirmSvg'
+import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
+import { useSelector } from 'react-redux'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
 const PartPage = () => {
+  const { fullAdvertisement } = useSelector(advertisementsSelector)
+
   const mode = useStore($mode)
   const user = useStore($user)
   const isMobile = useMediaQuery(850)
@@ -46,31 +50,35 @@ const PartPage = () => {
   const spinnerToggleCart = useStore(removeFromCartFx.pending)
   const spinnerSlider = useStore(getBoilerPartsFx.pending)
 
-  useEffect(() => {
-    loadBoilerPart()
-  }, [])
+  // useEffect(() => {
+  //   loadBoilerPart()
+  // }, [])
 
-  const loadBoilerPart = async () => {
-    try {
-      // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+  // const loadBoilerPart = async () => {
+  //   try {
+  //     // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
 
-      const data = boilers
+  //     const data = boilers
 
-      setBoilerParts(data)
-      setBoilerPartsByPopularity()
-    } catch (error) {
-      toast.error((error as Error).message)
-    }
-  }
+  //     setBoilerParts(data)
+  //     setBoilerPartsByPopularity()
+  //   } catch (error) {
+  //     toast.error((error as Error).message)
+  //   }
+  // }
 
   const toggleToCart = () => toggleCartItem(user.username, boilerPart.id, isInCart)
+
+  if (!fullAdvertisement) return <div></div>
+
+  
 
   return (
     <section>
       <div className="container">
         <div className={`${styles.part__wrapper} ${darkModeClass}`}>
           <div className={`${styles.part__top}`}>
-            <h2 className={`${styles.part__title} ${darkModeClass}`}>{boilerPart.name}</h2>
+            <h2 className={`${styles.part__title} ${darkModeClass}`}>{fullAdvertisement.title}</h2>
             <div>
               <span className={`${styles.part__actions} ${darkModeClass}`}>
                 <span title="Опублікувати оголошення">
@@ -92,11 +100,11 @@ const PartPage = () => {
             <PartImagesList />
             <div className={styles.part__info}>
               <span className={`${styles.part__info__price} ${darkModeClass}`}>
-                {formatPrice(boilerPart.price || 0)} грн.
+                {formatPrice(fullAdvertisement.price || 0)} грн.
               </span>
 
               <span className={styles.part__info__stock}>
-                {boilerPart.in_stock > 0 ? (
+                {fullAdvertisement.status === 'АКТИВНЕ' ? (
                   <span className={styles.part__info__stock__success}>АКТИВНЕ</span>
                 ) : (
                   <span className={styles.part__info__stock__not}>ОЧІКУЄ ПІДТВЕРДЖЕННЯ</span>
@@ -107,27 +115,33 @@ const PartPage = () => {
 
               <div style={{ marginBottom: '24px' }}>
                 <span className={catalogStyles.catalog__list__item__code}>
-                  Київ, Шевченківський - 10 жовтня 2024 р.
+                  {/* Київ, Шевченківський - 10 жовтня 2024 р. */}
+                  1111111111111
+                  {fullAdvertisement.createdAt}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <SpeedometerSvg />
-                  2020 115 тис.км.
+                  {fullAdvertisement.mileage}
+                  {/* 2020 115 тис.км. */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <EngineSvg />
-                  2.50 л.
+                  {fullAdvertisement.engineVolume}
+                  {/* 2.50 л. */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <GearBoxSvg />
-                  Автоматична
+                  {fullAdvertisement.gearbox}
+                  {/* Автоматична */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <FuelSvg />
-                  Бензин
+                  {fullAdvertisement.fuelType}
+                  {/* Бензин */}
                 </span>
               </div>
 
@@ -154,7 +168,7 @@ const PartPage = () => {
                   </div>
                 )}
               </button>
-              {!isMobile && <PartTabs />}
+              {!isMobile && <PartTabs fullAdvertisement={fullAdvertisement} />}
             </div>
           </div>
         </div>
@@ -164,14 +178,17 @@ const PartPage = () => {
             <div className={styles.part__accordion__inner}>
               <PartAccordion title="Опис">
                 <div className={`${styles.part__accordion__content} ${darkModeClass}`}>
-                  <h3 className={`${styles.part__tabs__content__title} ${darkModeClass}`}>{boilerPart.name}</h3>
-                  <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{boilerPart.description}</p>
+                  <h3 className={`${styles.part__tabs__content__title} ${darkModeClass}`}>{fullAdvertisement.title}</h3>
+                  <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>
+                    {fullAdvertisement.description}
+                  </p>
                 </div>
               </PartAccordion>
             </div>
+
             <PartAccordion title="Деталі">
               <div className={`${styles.part__accordion__content} ${darkModeClass}`}>
-                <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{boilerPart.compatibility}</p>
+                <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>1121221</p>
               </div>
             </PartAccordion>
           </div>

@@ -2,11 +2,18 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { LoadingStatusTypes } from '../appTypes'
 import { RootState } from '../store'
 import { AdvertisementType, InitialStateType } from './advertisementsTypes'
-import { createAdvertisement, deleteFile, uploadFile } from './advertisementsAsyncActions'
+import {
+  createAdvertisement,
+  deleteFile,
+  getAdvertisementById,
+  getAdvertisements,
+  uploadFile,
+} from './advertisementsAsyncActions'
 import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 const advertisementsInitialState: InitialStateType = {
   advertisements: null,
+  fullAdvertisement: null,
   newAdvertisements: null,
   popularAdvertisements: null,
   loadingStatus: LoadingStatusTypes.NEVER,
@@ -27,17 +34,16 @@ const advertisementsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    /* getDialogs */
-    // builder.addCase(getDialogs.fulfilled, (state, action: PayloadAction<DialogType[]>) => {
-    //   state.dialogs = action.payload
-    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
-    // })
+    /* getAdvertisements */
+    builder.addCase(getAdvertisements.fulfilled, (state, action: PayloadAction<[AdvertisementType[], number]>) => {
+      state.advertisements = action.payload[0]
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
 
-    /* createAdvertisement */
-    builder.addCase(createAdvertisement.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
-      // if (!state.advertisements) return
-      //   state.dialogs.push(action.payload)
-      // state.loadingStatus = LoadingStatusTypes.SUCCESS
+    /* getAdvertisementById */
+    builder.addCase(getAdvertisementById.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
+      state.fullAdvertisement = action.payload
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
 
     /* deleteDialog */
@@ -48,7 +54,7 @@ const advertisementsSlice = createSlice({
     //   state.loadingStatus = LoadingStatusTypes.SUCCESS
     // })
 
-     /* uploadFile */
+    /* uploadFile */
     //  builder.addCase(uploadFile.fulfilled, (state, action: PayloadAction<FileType>) => {
     //   if (!state.fullLesson) return
     //   state.fullLesson.files.push(action.payload)
@@ -69,4 +75,4 @@ export const { setLoadingStatus, clearAllAdvertisements } = advertisementsSlice.
 
 export default advertisementsSlice.reducer
 
-export const dialogsSelector = (state: RootState) => state.dialogs
+export const advertisementsSelector = (state: RootState) => state.advertisements

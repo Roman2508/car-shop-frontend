@@ -32,7 +32,7 @@ import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/adver
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 
 const instanse = axios.create({
-  baseURL: 'http://localhost:7777/',
+  baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
 })
 
 // Якщо є токен, вшиваю його в конфігурацію axios
@@ -80,8 +80,11 @@ export const authAPI = {
 }
 
 export const adAPI = {
-  get() {
-    return instanse.get<AdvertisementType[]>('/advertisement')
+  get(query: any) {
+    return instanse.get<[AdvertisementType[], number]>('/advertisement', { params: query })
+  },
+  getById(id: string) {
+    return instanse.get<AdvertisementType>(`/advertisement/${id}`)
   },
   create(payload: ICreateAdFields) {
     return instanse.post<AdvertisementType>('/advertisement', payload)

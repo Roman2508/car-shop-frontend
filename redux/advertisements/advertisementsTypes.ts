@@ -1,7 +1,9 @@
 import { LoadingStatusTypes } from '../appTypes'
+import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 export type InitialStateType = {
   advertisements: AdvertisementType[] | null
+  fullAdvertisement: AdvertisementType | null
   newAdvertisements: AdvertisementType[] | null
   popularAdvertisements: AdvertisementType[] | null
   loadingStatus: LoadingStatusTypes
@@ -33,7 +35,7 @@ export type AdvertisementType = {
   comfort?: string[]
   multimedia?: string[]
   security?: string[]
-  photos: string[]
+  photos: FileType[]
   user: number
   createdAt: string
 }

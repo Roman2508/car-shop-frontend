@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import { $mode } from '@/context/mode'
 import { useStore } from 'effector-react'
 import React, { LegacyRef } from 'react'
@@ -23,14 +23,21 @@ import checkboxStyles from '@/styles/catalog/index.module.scss'
 import Checkbox from '@/components/elements/Checkbox/Checkbox'
 import { createAdFields, filters } from '@/constans/filter'
 import { Controller, useForm } from 'react-hook-form'
-import { ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
+import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { useAppDispatch } from '@/redux/store'
-import { createAdvertisement } from '@/redux/advertisements/advertisementsAsyncActions'
+import { createAdvertisement, deleteFile } from '@/redux/advertisements/advertisementsAsyncActions'
 import { IFilterCheckboxItem } from '@/types/catalog'
 import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
+import { useRouter } from 'next/router'
+import { FileType } from '@/redux/reservedLessons/reservedLessonsTypes'
+import { useSelector } from 'react-redux'
+import { authSelector } from '@/redux/auth/authSlice'
 
 const CreateAdPage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
+
+  const { auth } = useSelector(authSelector)
 
   const mode = useStore($mode)
   const shoppingCart = useStore($shoppingCart)
@@ -41,8 +48,9 @@ const CreateAdPage = () => {
   const [checkboxesState, setCheckboxesState] = React.useState(createAdFields)
 
   const photosRef = React.useRef([])
+  const technicalConditionRef = React.useRef(null)
 
-  const [photos, setPhotos] = React.useState<any[]>(Array(6).fill(null))
+  const [photos, setPhotos] = React.useState<any[]>(Array(6).fill({ id: null, filename: null, url: null }))
 
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const darkModeInputClass = mode === 'dark' ? `${inputStyles.dark_mode}` : ''
@@ -78,6 +86,23 @@ const CreateAdPage = () => {
 
   const onSubmit = async (data: ICreateAdFields) => {
     try {
+      if (!auth) return alert('Для того, щоб опублікувати оголошення, спочатку потрібно авторизуватись')
+
+      const isPhotosExist = photos.some((el) => !!el.id)
+
+      if (!isPhotosExist) {
+        toast.error('Завантажте хоча б одне фото')
+        return
+      }
+
+      const technicalCondition = checkboxesState.find((el) => el.label === 'Технічний стан')
+      const isSomeChecked = technicalCondition?.items.some((el) => el.checked)
+
+      if (!isSomeChecked) {
+        toast.error('Вкажіть інформацію про технічний стан')
+        return
+      }
+
       const adDetails = {}
 
       checkboxesState.forEach((el) => {
@@ -108,36 +133,36 @@ const CreateAdPage = () => {
       }
 
       setSpinner(true)
-      const { data } = await dispatch(createAdvertisement({ ...inputValues, ...adDetails, photos: [], user: 1 }))
 
-      if (data.id) {
-        router.push(`catalog/${data.id}`)
+      const photoIds = photos.map((el) => el.id).filter((el) => el)
+
+      const { payload } = await dispatch(
+        createAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id })
+      )
+
+      const advertisement = payload as AdvertisementType
+
+      if (advertisement.id) {
+        router.push(`catalog/${advertisement.id}`)
       }
-
-      // maybe need to clear all input values
-    } catch (error) {
-      // showAuthError(error)
     } finally {
       setSpinner(false)
     }
   }
 
-  const onUploadFile = async (file: File) => {
-    const formData = new FormData()
-    formData.append('photo', file)
+  const removeFile = async (id: number, filename: string) => {
+    if (!window.confirm('Ви дійсно хочете видалити фото?')) return
 
-    // const { data } = await Axios.post('/upload', formData, {
-    //   headers: { 'Content-Type': 'multipart/form-data' },
-    // })
-    const data = 1
-    return data
-  }
+    const { payload } = await dispatch(deleteFile({ fileId: id, filename }))
 
-  const removeFile = async (index: number) => {
+    if (!payload) {
+      toast.error('Помилка видалення фото')
+    }
+
     setPhotos((prev) => {
-      return prev.map((el, i) => {
-        if (i === index) {
-          return null
+      return prev.map((el) => {
+        if (el.id === id) {
+          return { id: null, filename: null, url: null }
         }
         return el
       })
@@ -157,7 +182,9 @@ const CreateAdPage = () => {
 
       const { payload } = await dispatch(uploadFile({ file: formData }))
 
-      console.log(payload)
+      if (!payload) {
+        toast.error('Помилка завантаження')
+      }
 
       const imageUrl = URL.createObjectURL(file)
 
@@ -165,14 +192,14 @@ const CreateAdPage = () => {
         if (Number(slotNumber) >= 0) {
           return prev.map((el, index) => {
             if (index === Number(slotNumber)) {
-              return imageUrl
+              return { id: (payload as FileType).id, filename: (payload as FileType).filename, url: imageUrl }
             }
             return el
           })
         }
         return prev
       })
-      // const data = await uploadFile(file)
+
       target.value = ''
     }
   }
@@ -205,8 +232,6 @@ const CreateAdPage = () => {
       })
     }
   }, [])
-
-  const closeAlert = () => setShowAlert(false)
 
   return (
     <section className={styles.dashboard}>
@@ -295,29 +320,30 @@ const CreateAdPage = () => {
           <p>Перше фото буде на обкладинці оголошення. Перетягніть, щоб змінити порядок фото.</p>
 
           <div className={styles.create__ad__photos__wrapper}>
-            {Array(6)
-              .fill(null)
-              .map((_, index) => (
-                <>
-                  {photos[index] ? (
-                    <div className={styles.create__ad__photo__wrapper} onClick={() => removeFile(index)}>
-                      <img src={photos[index]} />
-                      <span>Видалити фото</span>
-                    </div>
-                  ) : (
-                    <label key={index} className={`${styles.create__ad__photo} ${darkModeClass}`}>
-                      <input
-                        type="file"
-                        style={{ display: 'none' }}
-                        aria-slot-number={index}
-                        // @ts-ignore
-                        ref={(el) => (photosRef.current[index] = el)}
-                      />
-                      Додати фото
-                    </label>
-                  )}
-                </>
-              ))}
+            {photos.map((photo, index) => (
+              <React.Fragment key={index}>
+                {photo.url ? (
+                  <div
+                    className={styles.create__ad__photo__wrapper}
+                    onClick={() => removeFile(photo.id, photo.filename)}
+                  >
+                    <img src={photo.url} />
+                    <span>Видалити фото</span>
+                  </div>
+                ) : (
+                  <label key={index} className={`${styles.create__ad__photo} ${darkModeClass}`}>
+                    <input
+                      type="file"
+                      style={{ display: 'none' }}
+                      aria-slot-number={index}
+                      // @ts-ignore
+                      ref={(el) => (photosRef.current[index] = el)}
+                    />
+                    Додати фото
+                  </label>
+                )}
+              </React.Fragment>
+            ))}
           </div>
         </div>
 
@@ -378,6 +404,7 @@ const CreateAdPage = () => {
             register={register}
             label="Об'єм двигуна"
             inputName="engineVolume"
+            required="Це поле обов'язкове"
             darkModeClass={darkModeInputClass}
             cssStyles={{ display: 'inline-block', marginTop: '32px', width: '100%', maxWidth: '340px' }}
           />
@@ -385,12 +412,10 @@ const CreateAdPage = () => {
           <Controller
             name="theCarWasDrivenFrom"
             control={control}
-            rules={{ required: "Це поле обов'язкове" }}
             render={({ field }) => {
               return (
                 <SelectInput
                   {...field}
-                  required
                   errors={errors}
                   label="Авто пригнано з"
                   styles={{ marginTop: '32px' }}
@@ -416,6 +441,7 @@ const CreateAdPage = () => {
           <br />
 
           <TextInput
+            min={1900}
             type="number"
             minLength={4}
             maxLength={4}
@@ -466,7 +492,11 @@ const CreateAdPage = () => {
         <div className={`${styles.create__ad__block} ${darkModeClass}`}>
           {checkboxesState.map((f) => {
             return (
-              <div style={{ marginBottom: '32px' }} key={f.label}>
+              <div
+                style={{ marginBottom: '32px' }}
+                key={f.label}
+                ref={f.label === 'Технічний стан' ? technicalConditionRef : null}
+              >
                 <p>
                   {f.label}
                   {f.label === 'Технічний стан' && '*'}
@@ -491,7 +521,7 @@ const CreateAdPage = () => {
         </div>
 
         <div className={`${styles.create__ad__block} ${darkModeClass}`}>
-          <button className={styles.button} disabled={!spinner} type="submit">
+          <button className={styles.button} disabled={spinner} type="submit">
             {spinner ? 'Завантаження...' : 'Опублікувати'}
           </button>
         </div>

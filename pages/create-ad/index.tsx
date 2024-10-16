@@ -4,8 +4,10 @@ import Layout from '@/components/layout/Layout'
 import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import CreateAdPage from '@/components/templates/CreateAdPage/CreateAdPage'
+import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 
 function CreateAd() {
+  const { shouldLoadContent } = useRedirectByUserCheck()
   const getDefaultTextGenerator = useCallback(() => 'Контакты', [])
   const getTextGenerator = useCallback((param: string) => ({}[param]), [])
 
@@ -18,13 +20,15 @@ function CreateAd() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
       </Head>
-      <Layout>
-        <main>
-          <Breadcrumbs getDefaultTextGenerator={getDefaultTextGenerator} getTextGenerator={getTextGenerator} />
-          <CreateAdPage />
-          <div className="overlay" />
-        </main>
-      </Layout>
+      {shouldLoadContent && (
+        <Layout>
+          <main>
+            <Breadcrumbs getDefaultTextGenerator={getDefaultTextGenerator} getTextGenerator={getTextGenerator} />
+            <CreateAdPage />
+            <div className="overlay" />
+          </main>
+        </Layout>
+      )}
     </>
   )
 }

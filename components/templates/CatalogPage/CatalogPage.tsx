@@ -29,8 +29,17 @@ import { usePopup } from '@/hooks/usePoup'
 import { checkQueryParams } from '@/utils/catalog'
 import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
 import { boilers } from '../DashboardPage/DashboardPage'
+import { getAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
+import { useAppDispatch } from '@/redux/store'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { useSelector } from 'react-redux'
+import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
+  const dispatch = useAppDispatch()
+
+  const { advertisements } = useSelector(advertisementsSelector)
+
   const mode = useStore($mode)
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
@@ -63,7 +72,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     try {
       setSpinner(true)
       // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-      const data = boilers
+      const { payload } = await dispatch(getAdvertisements(''))
+      const data = payload as any
 
       if (!isValidOffset) {
         router.replace({
@@ -92,7 +102,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           setCurrentPage(0)
           // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
 
-          setBoilerParts(boilers)
+          setBoilerParts(data)
           return
         }
 
@@ -102,14 +112,14 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         setCurrentPage(offset)
         // setBoilerParts(isFilterInQuery ? filteredBoilerParts : result)
 
-        setBoilerParts(boilers)
+        setBoilerParts(data)
         return
       }
 
       setCurrentPage(0)
       // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
 
-      setBoilerParts(boilers)
+      setBoilerParts(data)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -194,6 +204,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
+  console.log(advertisements)
+
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
@@ -238,15 +250,15 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__bottom__inner}>
             <CatalogFilters
               priceRange={priceRange}
-              setIsPriceRangeChanged={setIsPriceRangeChanged}
-              setPriceRange={setPriceRange}
-              resetFilterBtnDisabled={resetFilterBtnDisabled}
-              resetFilters={resetFilters}
-              isPriceRangeChanged={isPriceRangeChanged}
-              currentPage={currentPage}
-              setIsFilterInQuery={setIsFilterInQuery}
               closePopup={closePopup}
               filtersMobileOpen={open}
+              currentPage={currentPage}
+              resetFilters={resetFilters}
+              setPriceRange={setPriceRange}
+              setIsFilterInQuery={setIsFilterInQuery}
+              isPriceRangeChanged={isPriceRangeChanged}
+              resetFilterBtnDisabled={resetFilterBtnDisabled}
+              setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
             {spinner ? (
               <ul className={skeletonStyles.skeleton}>
@@ -263,8 +275,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               </ul>
             ) : (
               <ul className={styles.catalog__list}>
-                {boilerParts.rows?.length ? (
-                  boilerParts.rows.map((item) => <CatalogItem item={item} key={item.id} />)
+                {advertisements?.length ? (
+                  advertisements.map((item) => <CatalogItem item={item} key={item.id} />)
                 ) : (
                   <span>Список товаров пуст...</span>
                 )}

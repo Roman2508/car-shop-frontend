@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import { useStore } from 'effector-react'
-import { motion } from 'framer-motion'
 import React, { useState } from 'react'
-import { $boilerPart } from '@/context/boilerPart'
-import { $mode } from '@/context/mode'
-import styles from '@/styles/part/index.module.scss'
-import { filters } from '@/constans/filter'
+import { motion } from 'framer-motion'
+import { useStore } from 'effector-react'
 
-const PartTabs = () => {
+import { $mode } from '@/context/mode'
+import { filters } from '@/constans/filter'
+import { $boilerPart } from '@/context/boilerPart'
+import styles from '@/styles/part/index.module.scss'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+
+const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType }) => {
   const mode = useStore($mode)
   const boilerPart = useStore($boilerPart)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
@@ -22,6 +24,20 @@ const PartTabs = () => {
   const handleShowCompatibility = () => {
     setShowDescription(false)
     setShowCompatibility(true)
+  }
+
+  const adTags = () => {
+    const res = []
+    for (const key in fullAdvertisement) {
+      const notAllowedKeys = ['title', 'description', 'photos', 'createdAt', 'user']
+
+      if (!notAllowedKeys.some((k) => k === key)) {
+        // @ts-ignore
+        res.push({ label: key, value: fullAdvertisement[key] })
+      }
+    }
+
+    return res
   }
 
   return (
@@ -52,7 +68,7 @@ const PartTabs = () => {
           exit={{ opacity: 0 }}
           className={styles.part__tabs__content}
         >
-          {filters.map((el) => (
+          {adTags().map((el) => (
             <div key={el.label} style={{ marginBottom: '16px' }}>
               <b
                 className={`${styles.part__tabs__content__text} ${darkModeClass}`}
@@ -61,11 +77,15 @@ const PartTabs = () => {
                 {el.label}
               </b>
 
-              {el.items.map((bage) => (
-                <div className={styles.part__info__bage} key={bage.id}>
-                  {bage.title}
-                </div>
-              ))}
+              {typeof el.value === 'string' || typeof el.value === 'number' ? (
+                <div className={styles.part__info__bage}>{el.value}</div>
+              ) : (
+                el.value.map((bage: string | number) => (
+                  <div className={styles.part__info__bage} key={bage}>
+                    {bage}
+                  </div>
+                ))
+              )}
             </div>
           ))}
         </motion.div>

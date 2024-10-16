@@ -6,6 +6,7 @@ import tutorsSlice from './tutors/tutorsSlice'
 import lessonsSlice from './lessons/lessonsSlice'
 import dialogsSlice from './dialogs/dialogsSlice'
 import appStatusSlice from './appStatus/appStatusSlice'
+import advertisementsSlice from './advertisements/advertisementsSlice'
 import reservedLessonsSlice from './reservedLessons/reservedLessonsSlice'
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     reservedLessons: reservedLessonsSlice,
     tutors: tutorsSlice,
     auth: authSlice,
+    advertisements: advertisementsSlice,
   },
 })
 
