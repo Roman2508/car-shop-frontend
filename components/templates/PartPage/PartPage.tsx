@@ -33,6 +33,7 @@ import Edit2Svg from '@/components/elements/EditSvg/Edit2Svg'
 import ConfirmSvg from '@/components/elements/ConfirmSvg/ConfirmSvg'
 import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
 import { useSelector } from 'react-redux'
+import { formatDate } from '@/utils/formatDate'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
@@ -71,8 +72,6 @@ const PartPage = () => {
 
   if (!fullAdvertisement) return <div></div>
 
-  
-
   return (
     <section>
       <div className="container">
@@ -81,7 +80,7 @@ const PartPage = () => {
             <h2 className={`${styles.part__title} ${darkModeClass}`}>{fullAdvertisement.title}</h2>
             <div>
               <span className={`${styles.part__actions} ${darkModeClass}`}>
-                <span title="Опублікувати оголошення">
+                <span title="Опублікувати оголошення" style={{ marginRight: '4px' }}>
                   <ConfirmSvg darkModeClass={darkModeClass} />
                 </span>
 
@@ -97,7 +96,8 @@ const PartPage = () => {
           </div>
 
           <div className={styles.part__inner}>
-            <PartImagesList />
+            <PartImagesList fullAdvertisement={fullAdvertisement} />
+
             <div className={styles.part__info}>
               <span className={`${styles.part__info__price} ${darkModeClass}`}>
                 {formatPrice(fullAdvertisement.price || 0)} грн.
@@ -116,20 +116,19 @@ const PartPage = () => {
               <div style={{ marginBottom: '24px' }}>
                 <span className={catalogStyles.catalog__list__item__code}>
                   {/* Київ, Шевченківський - 10 жовтня 2024 р. */}
-                  1111111111111
-                  {fullAdvertisement.createdAt}
+                  Опубліковано: {formatDate(fullAdvertisement.createdAt)}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <SpeedometerSvg />
-                  {fullAdvertisement.mileage}
+                  {fullAdvertisement.mileage} тис.км.
                   {/* 2020 115 тис.км. */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <EngineSvg />
                   {fullAdvertisement.engineVolume}
-                  {/* 2.50 л. */}
+                  {/* 2.50 л. */} л.
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
@@ -147,8 +146,8 @@ const PartPage = () => {
 
               <button
                 onClick={toggleToCart}
-                style={{ backgroundColor: '#5acccc' }}
                 className={`${styles.part__info__btn} ${isInCart ? styles.in_cart : ''}`}
+                style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
               >
                 {spinnerToggleCart ? (
                   <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />

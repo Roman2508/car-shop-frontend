@@ -1,13 +1,14 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
-import CityButton from '@/components/elements/CityButton/CityButton'
-import ProfileDropdown from './ProfileDropdown'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
+
 import { $mode } from '@/context/mode'
 import { usePopup } from '@/hooks/usePoup'
+import ProfileDropdown from './ProfileDropdown'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/header/index.module.scss'
-import { usePathname } from 'next/navigation'
+import CityButton from '@/components/elements/CityButton/CityButton'
+import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 
 const nav = [
   // { link: '/shipping-payment', label: 'Доставка та оплата' },
@@ -22,7 +23,8 @@ const nav = [
 ]
 
 const HeaderTop = () => {
-  const pathname = usePathname()
+  const router = useRouter()
+
   const isMedia950 = useMediaQuery(950)
   const { toggleOpen, open, closePopup } = usePopup()
   const mode = useStore($mode)
@@ -42,20 +44,26 @@ const HeaderTop = () => {
 
         <nav className={`${styles.header__nav} ${open ? styles.open : ''}  ${darkModeClass}`}>
           <ul className={styles.header__nav__list}>
-            {nav.map((el) => (
-              <li className={styles.header__nav__list__item}>
-                <Link href={el.link} passHref legacyBehavior>
-                  <a
-                    className={`${styles.header__nav__list__item__link} ${
-                      pathname === el.link.split('?')[0] ? styles.active : ''
-                    } ${darkModeClass}`}
-                    onClick={closePopup}
-                  >
-                    {el.label}
-                  </a>
-                </Link>
-              </li>
-            ))}
+            {nav.map((el) => {
+              const isActive =
+                el.label === 'Профіль' && router.asPath.includes('/profile') && !router.asPath.includes('messages')
+                  ? true
+                  : router.asPath === el.link
+
+              return (
+                <li className={styles.header__nav__list__item}>
+                  <Link href={el.link} passHref legacyBehavior>
+                    <a
+                      onClick={closePopup}
+                      className={`${styles.header__nav__list__item__link} 
+                      ${isActive ? styles.active : ''} ${darkModeClass}`}
+                    >
+                      {el.label}
+                    </a>
+                  </Link>
+                </li>
+              )
+            })}
 
             {isMedia950 && (
               <li className={styles.header__nav__list__item}>

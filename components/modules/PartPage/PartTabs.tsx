@@ -9,6 +9,27 @@ import { $boilerPart } from '@/context/boilerPart'
 import styles from '@/styles/part/index.module.scss'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
+const tagKeys = {
+  carType: 'Тип автомобіля',
+  mileage: 'Пробіг (км.)',
+  сustomsСleared: 'Розмитнена',
+  engineVolume: "Об'єм двигуна (л.)",
+  theCarWasDrivenFrom: 'Авто пригнано з',
+  model: 'Модель',
+  yearOfRelease: 'Рік випуску',
+  carBodyType: 'Тип кузова',
+  seatsCount: 'Кількість місць',
+  color: 'Колір',
+  gearbox: 'Коробка передач',
+  driveType: 'Тип приводу',
+  fuelType: 'Тип палива',
+  varnishCoating: 'Лакове покриття',
+  technicalCondition: 'Технічний стан',
+  comfort: 'Комфорт',
+  multimedia: 'Мультимедіа',
+  security: 'Безпека',
+} as { [key: string]: string }
+
 const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType }) => {
   const mode = useStore($mode)
   const boilerPart = useStore($boilerPart)
@@ -29,7 +50,18 @@ const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType 
   const adTags = () => {
     const res = []
     for (const key in fullAdvertisement) {
-      const notAllowedKeys = ['title', 'description', 'photos', 'createdAt', 'user']
+      const notAllowedKeys = [
+        'id',
+        'title',
+        'description',
+        'price',
+        'category',
+        'subcategory',
+        'photos',
+        'createdAt',
+        'user',
+        'status',
+      ]
 
       if (!notAllowedKeys.some((k) => k === key)) {
         // @ts-ignore
@@ -57,10 +89,11 @@ const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType 
           exit={{ opacity: 0 }}
           className={styles.part__tabs__content}
         >
-          <h3 className={`${styles.part__tabs__content__title} ${darkModeClass}`}>{boilerPart.name}</h3>
-          <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{boilerPart.description}</p>
+          <h3 className={`${styles.part__tabs__content__title} ${darkModeClass}`}>{fullAdvertisement.title}</h3>
+          <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>{fullAdvertisement.description}</p>
         </motion.div>
       )}
+
       {showCompatibility && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -74,7 +107,7 @@ const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType 
                 className={`${styles.part__tabs__content__text} ${darkModeClass}`}
                 style={{ fontWeight: 500, display: 'block' }}
               >
-                {el.label}
+                {tagKeys[el.label]}
               </b>
 
               {typeof el.value === 'string' || typeof el.value === 'number' ? (

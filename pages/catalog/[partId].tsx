@@ -19,8 +19,6 @@ import { advertisementsSelector } from '@/redux/advertisements/advertisementsSli
 function CatalogPartPage({ query }: { query: IQueryParams }) {
   const dispatch = useAppDispatch()
 
- 
-
   const { shouldLoadContent } = useRedirectByUserCheck()
   const boilerPart = useStore($boilerPart)
   const [error, setError] = useState(false)
@@ -42,7 +40,7 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
   const loadBoilerPart = async () => {
     try {
       // const data = await getBoilerPartFx(`/boiler-parts/find/${query.partId}`)
-      
+
       await dispatch(getAdvertisementById(query.partId))
 
       // if (!data) {

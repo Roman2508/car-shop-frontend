@@ -22,12 +22,8 @@ const PartSlider = ({ images }: { images: string[] }) => {
   return (
     <Slider {...settings} className={styles.part__slider}>
       {images.map((src, i) => (
-        <div
-          className={styles.part__slide}
-          key={i}
-          style={{ width: isMobile530 ? 228 : isMobile700 ? 350 : 593 }}
-        >
-          <img src={src} alt={`image-${i + 1}`} />
+        <div className={styles.part__slide} key={i} style={{ width: isMobile530 ? 228 : isMobile700 ? 350 : 593 }}>
+          <img src={`${process.env.NEXT_PUBLIC_SERVER_URL}/uploads/${src}`} alt={`image-${i + 1}`} />
         </div>
       ))}
     </Slider>
