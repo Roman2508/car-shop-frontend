@@ -18,12 +18,32 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.footer__container}>
         <div className={styles.footer__top}>
-          {!isMedia750 && <FooterLogo />}
+          {/* {!isMedia750 && <FooterLogo />} */}
+          <div className={styles.footer__bottom__block__right}>
+            <h3 className={styles.footer__top__item__title} style={{ width: 'auto' }}>
+              Мы в соц. мережах:
+            </h3>
+            <ul className={styles.footer__bottom__block__social}>
+              {/* <li className={styles.footer__bottom__block__social__item}>
+                <a href="#" className={styles.footer__bottom__block__social__item_vk} />
+              </li> */}
+              <li className={styles.footer__bottom__block__social__item}>
+                <a href="#" className={styles.footer__bottom__block__social__item_fb} />
+              </li>
+              <li className={styles.footer__bottom__block__social__item}>
+                <a href="#" className={styles.footer__bottom__block__social__item_inst} />
+              </li>
+              <li className={styles.footer__bottom__block__social__item}>
+                <a href="#" className={styles.footer__bottom__block__social__item_ytb} />
+              </li>
+            </ul>
+          </div>
+
           <div className={styles.footer__top__inner}>
             <div className={styles.footer__top__item}>
               {!isMedia500 && (
                 <>
-                  <h3 className={styles.footer__top__item__title}>Интернет-магазин</h3>
+                  <h3 className={styles.footer__top__item__title}>Інтернет-магазин</h3>
                   <OnlineStoreContent />
                 </>
               )}
@@ -38,7 +58,7 @@ const Footer = () => {
                 </Accordion>
               )}
             </div>
-            <div className={styles.footer__top__item}>
+            {/* <div className={styles.footer__top__item}>
               {!isMedia500 && (
                 <>
                   <h3 className={styles.footer__top__item__title}>Компания</h3>
@@ -51,16 +71,16 @@ const Footer = () => {
                   <div style={{ height: 17 }} />
                 </Accordion>
               )}
-            </div>
+            </div> */}
           </div>
           <div className={styles.footer__top__item}>
-            <h3 className={styles.footer__top__item__title}>Контакты</h3>
+            <h3 className={styles.footer__top__item__title}>Контакти</h3>
             <ul className={`${styles.footer__top__item__list} ${styles.footer__top__item__contacts}`}>
               <li className={styles.footer__top__item__list__item}>
                 <Link href="/contacts" passHref legacyBehavior>
                   <a className={styles.footer__top__item__list__item__link}>
-                    <span>Наш адрес:</span>
-                    <span>г. Київ, ул. ... д....</span>
+                    <span>Наша адреса:</span>
+                    <span>м. Київ, вул. Дніпровська, буд. 74</span>
                     <span>
                       <MarkerSvg />
                     </span>
@@ -69,17 +89,17 @@ const Footer = () => {
               </li>
               <li className={styles.footer__top__item__list__item}>
                 <a href="tel:+780955555555" className={styles.footer__top__item__list__item__link}>
-                  <span>Наш контактный телефон:</span>
-                  <span>+7(8095) 555-55-55</span>
+                  <span>Наш контактний телефон:</span>
+                  <span>(+380)65-35-55-555</span>
                   <span>
                     <PhoneSvg />
                   </span>
                 </a>
               </li>
               <li className={styles.footer__top__item__list__item}>
-                <a href="mailto:info@zapchasti.com.ru" className={styles.footer__top__item__list__item__link}>
+                <a href="mailto:info@car.shop.com" className={styles.footer__top__item__list__item__link}>
                   <span>E-mail:</span>
-                  <span>info@zapchasti.com.ru</span>
+                  <span>info@car.shop.com</span>
                   <span>
                     <MailSvg />
                   </span>
@@ -89,7 +109,7 @@ const Footer = () => {
           </div>
         </div>
         <div className={styles.footer__bottom}>
-          <div className={styles.footer__bottom__block}>
+          {/* <div className={styles.footer__bottom__block}>
             <div className={styles.footer__bottom__block__left}>
               <h3 className={styles.footer__bottom__block__title}>Мы принимаем к оплате:</h3>
               <ul className={styles.footer__bottom__block__pay}>
@@ -107,6 +127,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
+
             <div className={styles.footer__bottom__block__right}>
               <h3 className={styles.footer__bottom__block__title}>Мы в соцсети:</h3>
               <ul className={styles.footer__bottom__block__social}>
@@ -124,10 +145,10 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-          </div>
+          </div> */}
           {isMedia750 && <FooterLogo />}
           <div className={styles.footer__bottom__block}>
-            <p className={styles.footer__bottom__block__copyright}>© «Car Shop» 2021.</p>
+            <p className={styles.footer__bottom__block__copyright}>© «Car Shop» 2024.</p>
           </div>
         </div>
       </div>

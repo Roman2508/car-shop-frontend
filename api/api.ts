@@ -89,6 +89,16 @@ export const adAPI = {
   create(payload: ICreateAdFields) {
     return instanse.post<AdvertisementType>('/advertisement', payload)
   },
+  update(payload: ICreateAdFields) {
+    const { id, ...rest } = payload
+    return instanse.patch<AdvertisementType>(`/advertisement/${id}`, rest)
+  },
+  accept(id: number) {
+    return instanse.patch<AdvertisementType>(`/advertisement/accept/${id}`)
+  },
+  delete(id: number) {
+    return instanse.delete<number>(`/advertisement/${id}`)
+  },
 }
 
 export const lessonsAPI = {

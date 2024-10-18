@@ -3,6 +3,7 @@ import { LoadingStatusTypes } from '../appTypes'
 import { RootState } from '../store'
 import { AdvertisementType, InitialStateType } from './advertisementsTypes'
 import {
+  acceptAdvertisement,
   createAdvertisement,
   deleteFile,
   getAdvertisementById,
@@ -32,6 +33,9 @@ const advertisementsSlice = createSlice({
       state.newAdvertisements = null
       state.popularAdvertisements = null
     },
+    clearFullAdvertisements(state) {
+      state.fullAdvertisement = null
+    },
   },
   extraReducers: (builder) => {
     /* getAdvertisements */
@@ -43,6 +47,13 @@ const advertisementsSlice = createSlice({
     /* getAdvertisementById */
     builder.addCase(getAdvertisementById.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
       state.fullAdvertisement = action.payload
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
+
+    /* acceptAdvertisement */
+    builder.addCase(acceptAdvertisement.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
+      if (!state.fullAdvertisement) return
+      state.fullAdvertisement.status = action.payload.status
       state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
 
@@ -71,7 +82,7 @@ const advertisementsSlice = createSlice({
   },
 })
 
-export const { setLoadingStatus, clearAllAdvertisements } = advertisementsSlice.actions
+export const { setLoadingStatus, clearAllAdvertisements, clearFullAdvertisements } = advertisementsSlice.actions
 
 export default advertisementsSlice.reducer
 

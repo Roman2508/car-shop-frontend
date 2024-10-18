@@ -1,4 +1,5 @@
 import { LoadingStatusTypes } from '../appTypes'
+import { AuthType } from '../auth/authTypes'
 import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 export type InitialStateType = {
@@ -36,7 +37,7 @@ export type AdvertisementType = {
   multimedia?: string[]
   security?: string[]
   photos: FileType[]
-  user: number
+  user: AuthType
   createdAt: string
 }
 

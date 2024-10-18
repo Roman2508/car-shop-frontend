@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useStore } from 'effector-react'
 
@@ -31,14 +31,25 @@ import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
 import MarkerSvg from '@/components/elements/MarkerSvg/MarkerSvg'
 import Edit2Svg from '@/components/elements/EditSvg/Edit2Svg'
 import ConfirmSvg from '@/components/elements/ConfirmSvg/ConfirmSvg'
-import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
+import { advertisementsSelector, clearFullAdvertisements } from '@/redux/advertisements/advertisementsSlice'
 import { useSelector } from 'react-redux'
 import { formatDate } from '@/utils/formatDate'
+import { useAppDispatch } from '@/redux/store'
+import { acceptAdvertisement, deleteAdvertisement } from '@/redux/advertisements/advertisementsAsyncActions'
+import { useRouter } from 'next/router'
+import { authSelector } from '@/redux/auth/authSlice'
+import { AuthType } from '@/redux/auth/authTypes'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
 const PartPage = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+
+  const { auth } = useSelector(authSelector)
   const { fullAdvertisement } = useSelector(advertisementsSelector)
+
+  const [isDisabledControllButtons, setIsDisabledControllButtons] = React.useState(false)
 
   const mode = useStore($mode)
   const user = useStore($user)
@@ -55,6 +66,12 @@ const PartPage = () => {
   //   loadBoilerPart()
   // }, [])
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearFullAdvertisements())
+    }
+  }, [])
+
   // const loadBoilerPart = async () => {
   //   try {
   //     // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
@@ -68,9 +85,44 @@ const PartPage = () => {
   //   }
   // }
 
+  const canDeleteAdvertisement = (auth: AuthType | null, advertisementAuthorId: number) => {
+    if (!auth) return
+
+    if (auth.id === advertisementAuthorId) {
+      return true
+    }
+
+    if (auth.role === 'SUPER_ADMIN' || auth.role === 'ADMIN') {
+      return true
+    }
+
+    return false
+  }
+
+  const onDeleteAdvertisement = async (id: number) => {
+    if (!window.confirm('Ви дійсно хочете видалити оголошення?')) return
+
+    const { payload } = await dispatch(deleteAdvertisement(id))
+
+    if (payload) {
+      router.push(`/catalog`)
+    }
+  }
+
+  const changeAdStatus = async (id: number) => {
+    if (!window.confirm('Змінити статус оголошення?')) return
+
+    try {
+      setIsDisabledControllButtons(true)
+      dispatch(acceptAdvertisement(id))
+    } finally {
+      setIsDisabledControllButtons(false)
+    }
+  }
+
   const toggleToCart = () => toggleCartItem(user.username, boilerPart.id, isInCart)
 
-  if (!fullAdvertisement) return <div></div>
+  if (!fullAdvertisement) return <h1 style={{ padding: '100px 0', textAlign: 'center' }}>Loading...</h1>
 
   return (
     <section>
@@ -80,17 +132,27 @@ const PartPage = () => {
             <h2 className={`${styles.part__title} ${darkModeClass}`}>{fullAdvertisement.title}</h2>
             <div>
               <span className={`${styles.part__actions} ${darkModeClass}`}>
-                <span title="Опублікувати оголошення" style={{ marginRight: '4px' }}>
-                  <ConfirmSvg darkModeClass={darkModeClass} />
-                </span>
+                {auth?.role !== 'USER' && (
+                  <span
+                    style={{ marginRight: '4px' }}
+                    title="Змінити статус оголошення"
+                    onClick={() => changeAdStatus(fullAdvertisement.id)}
+                  >
+                    <ConfirmSvg darkModeClass={darkModeClass} />
+                  </span>
+                )}
 
-                <span title="Редагувати оголошення">
-                  <Edit2Svg darkModeClass={darkModeClass} />
-                </span>
+                {auth?.id === fullAdvertisement.user.id && (
+                  <span title="Редагувати оголошення">
+                    <Edit2Svg darkModeClass={darkModeClass} />
+                  </span>
+                )}
 
-                <span title="Видалити оголошення">
-                  <GarbageSvg darkModeClass={darkModeClass} />
-                </span>
+                {canDeleteAdvertisement(auth, fullAdvertisement.user.id) && (
+                  <span title="Видалити оголошення" onClick={() => onDeleteAdvertisement(fullAdvertisement.id)}>
+                    <GarbageSvg darkModeClass={darkModeClass} />
+                  </span>
+                )}
               </span>
             </div>
           </div>
@@ -105,9 +167,9 @@ const PartPage = () => {
 
               <span className={styles.part__info__stock}>
                 {fullAdvertisement.status === 'АКТИВНЕ' ? (
-                  <span className={styles.part__info__stock__success}>АКТИВНЕ</span>
+                  <span className={styles.part__info__stock__success}>{fullAdvertisement.status}</span>
                 ) : (
-                  <span className={styles.part__info__stock__not}>ОЧІКУЄ ПІДТВЕРДЖЕННЯ</span>
+                  <span className={styles.part__info__stock__not}>{fullAdvertisement.status}</span>
                 )}
               </span>
 

@@ -25,15 +25,20 @@ import { createAdFields, filters } from '@/constans/filter'
 import { Controller, useForm } from 'react-hook-form'
 import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { useAppDispatch } from '@/redux/store'
-import { createAdvertisement, deleteFile } from '@/redux/advertisements/advertisementsAsyncActions'
-import { IFilterCheckboxItem } from '@/types/catalog'
+import {
+  createAdvertisement,
+  deleteFile,
+  getAdvertisementById,
+  updateAdvertisement,
+} from '@/redux/advertisements/advertisementsAsyncActions'
+import { IFilterCheckboxItem, IQueryParams } from '@/types/catalog'
 import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
 import { useRouter } from 'next/router'
 import { FileType } from '@/redux/reservedLessons/reservedLessonsTypes'
 import { useSelector } from 'react-redux'
 import { authSelector } from '@/redux/auth/authSlice'
 
-const CreateAdPage = () => {
+const CreateAdPage = ({ query }: { query?: { id: string } }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
@@ -56,8 +61,10 @@ const CreateAdPage = () => {
   const darkModeInputClass = mode === 'dark' ? `${inputStyles.dark_mode}` : ''
 
   const {
+    watch,
     control,
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
     resetField,
@@ -136,14 +143,20 @@ const CreateAdPage = () => {
 
       const photoIds = photos.map((el) => el.id).filter((el) => el)
 
-      const { payload } = await dispatch(
-        createAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id })
-      )
+      if (query && query.id) {
+        const { payload } = await dispatch(
+          updateAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id, id: query.id })
+        )
+        const advertisement = payload as AdvertisementType
+        if (advertisement.id) router.replace(`catalog/${advertisement.id}`)
 
-      const advertisement = payload as AdvertisementType
-
-      if (advertisement.id) {
-        router.push(`catalog/${advertisement.id}`)
+        //
+      } else {
+        const { payload } = await dispatch(
+          createAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id })
+        )
+        const advertisement = payload as AdvertisementType
+        if (advertisement.id) router.push(`catalog/${advertisement.id}`)
       }
     } finally {
       setSpinner(false)
@@ -209,6 +222,71 @@ const CreateAdPage = () => {
   }
 
   React.useEffect(() => {
+    if (!query || !query.id) return
+    const fetchAdData = async () => {
+      const { payload } = await dispatch(getAdvertisementById(query.id))
+      if (!payload) return alert('Помилка завантаження даних')
+      const ad = payload as AdvertisementType
+
+      for (const key in ad) {
+        const checkboxesKeys = [
+          { ru: 'Технічний стан', en: 'technicalCondition' },
+          { ru: 'Комфорт', en: 'comfort' },
+          { ru: 'Мультимедіа', en: 'multimedia' },
+          { ru: 'Безпека', en: 'security' },
+        ]
+
+        const currentKeys = checkboxesKeys.find((el) => el.en === key)
+
+        if (currentKeys) {
+          // @ts-ignore
+          setCheckboxesState((prev) => {
+            return prev.map((el) => {
+              if (el.label === currentKeys.ru) {
+                const items = el.items.map((item) => {
+                  // @ts-ignore
+                  const a = ad[key].some((el) => el === item.title)
+
+                  if (a) {
+                    return { ...item, checked: true }
+                  }
+
+                  return item
+                })
+
+                return { ...el, items }
+              }
+
+              return el
+            })
+          })
+        }
+
+        // @ts-ignore
+        setValue(key, ad[key])
+      }
+
+      setPhotos((prev) => {
+        ad.photos
+
+        return prev.map((el, index) => {
+          if (ad.photos[index]) {
+            return {
+              id: ad.photos[index].id,
+              filename: ad.photos[index].filename,
+              url: `${process.env.NEXT_PUBLIC_SERVER_URL}/uploads/${ad.photos[index].filename}`,
+            }
+          }
+
+          return el
+        })
+      })
+    }
+
+    fetchAdData()
+  }, [query])
+
+  React.useEffect(() => {
     if (shoppingCart.length) {
       setShowAlert(true)
       return
@@ -237,7 +315,7 @@ const CreateAdPage = () => {
     <section className={styles.dashboard}>
       <form className={`container ${styles.dashboard__container}`} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={`${styles.create__ad__main__title} ${darkModeClass}`} style={{ marginTop: '50px' }}>
-          Створити оголошення
+          {query && query.id ? 'Оновити оголошення' : 'Створити оголошення'}
         </h1>
 
         <div className={`${styles.create__ad__block} ${darkModeClass}`}>
@@ -291,6 +369,7 @@ const CreateAdPage = () => {
                   errors={errors}
                   label="Категорія"
                   options={createSelectInitialData(filters[0].items)}
+                  value={query && query.id ? { value: watch('category'), label: watch('category') } : field.value}
                 />
               )
             }}
@@ -309,6 +388,7 @@ const CreateAdPage = () => {
                   label="Виробник"
                   styles={{ marginTop: '32px' }}
                   options={createSelectInitialData(filters[1].items)}
+                  value={query && query.id ? { value: watch('subcategory'), label: watch('subcategory') } : field.value}
                 />
               )
             }}
@@ -362,6 +442,7 @@ const CreateAdPage = () => {
                   errors={errors}
                   label="Тип автомобіля"
                   options={createSelectInitialData(filters[2].items)}
+                  value={query && query.id ? { value: watch('carType'), label: watch('carType') } : field.value}
                 />
               )
             }}
@@ -392,6 +473,9 @@ const CreateAdPage = () => {
                   label="Розмитнена"
                   styles={{ marginTop: '32px' }}
                   options={createSelectInitialData(filters[15].items)}
+                  value={
+                    query && query.id ? { value: watch('сustomsСleared'), label: watch('сustomsСleared') } : field.value
+                  }
                 />
               )
             }}
@@ -420,6 +504,11 @@ const CreateAdPage = () => {
                   label="Авто пригнано з"
                   styles={{ marginTop: '32px' }}
                   options={createSelectInitialData(filters[16].items)}
+                  value={
+                    query && query.id
+                      ? { value: watch('theCarWasDrivenFrom'), label: watch('theCarWasDrivenFrom') }
+                      : field.value
+                  }
                 />
               )
             }}
@@ -482,6 +571,7 @@ const CreateAdPage = () => {
                     required={el.isRequired}
                     styles={{ marginTop: '32px' }}
                     options={createSelectInitialData(options ? options.items : [])}
+                    value={query && query.id ? { value: watch(el.name), label: watch(el.name) } : field.value}
                   />
                 )
               }}
@@ -493,8 +583,8 @@ const CreateAdPage = () => {
           {checkboxesState.map((f) => {
             return (
               <div
-                style={{ marginBottom: '32px' }}
                 key={f.label}
+                style={{ marginBottom: '32px' }}
                 ref={f.label === 'Технічний стан' ? technicalConditionRef : null}
               >
                 <p>
@@ -522,7 +612,7 @@ const CreateAdPage = () => {
 
         <div className={`${styles.create__ad__block} ${darkModeClass}`}>
           <button className={styles.button} disabled={spinner} type="submit">
-            {spinner ? 'Завантаження...' : 'Опублікувати'}
+            {spinner ? 'Завантаження...' : query && query.id ? 'Зберегти зміни' : 'Опублікувати'}
           </button>
         </div>
       </form>

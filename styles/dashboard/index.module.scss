@@ -215,11 +215,16 @@
       padding: 16px;
       color: inherit;
       box-shadow: none;
-      background: #fff;
+      background: #ffffff;
       text-align: center;
       display: inline-block;
       white-space: nowrap;
-      width: auto;
+      font-size: inherit;
+      cursor: pointer;
+      position: relative;
+      width: 180px;
+      height: 50px;
+      border-radius: 25px;
     }
   }
 
@@ -236,7 +241,7 @@
     border-radius: 4px;
     background-color: #1c629e;
     box-shadow: 0px 0px 30px rgba(28, 98, 158, 0.3);
-    
+
     @media (max-width: 840px) {
       padding: 60px 20px 100px;
     }
@@ -585,7 +590,7 @@
 
     &__text {
       margin: 0;
-      font-size: 14px;
+      font-size: 16px;
       max-width: 1076px;
       line-height: 22px;
       color: #4e4c4c;

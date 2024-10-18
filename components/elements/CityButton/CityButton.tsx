@@ -34,8 +34,7 @@ const CityButton = () => {
       }
     }
 
-    const error = (error: GeolocationPositionError) =>
-      toast.error(`${error.code} ${error.message}`)
+    const error = (error: GeolocationPositionError) => toast.error(`${error.code} ${error.message}`)
 
     navigator.geolocation.getCurrentPosition(success, error, options)
   }
@@ -47,14 +46,11 @@ const CityButton = () => {
       </span>
       <span className={`${styles.city__text} ${darkModeClass}`}>
         {spinner ? (
-          <span
-            className={spinnerStyles.spinner}
-            style={{ top: '-10px', left: 10, width: 20, height: 20 }}
-          />
+          <span className={spinnerStyles.spinner} style={{ top: '-10px', left: 10, width: 20, height: 20 }} />
         ) : city.length ? (
           city
         ) : (
-          'Город'
+          'Город (del)'
         )}
       </span>
     </button>

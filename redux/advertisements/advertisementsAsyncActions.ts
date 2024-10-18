@@ -65,6 +65,72 @@ export const createAdvertisement = createAsyncThunk(
   }
 )
 
+export const updateAdvertisement = createAsyncThunk(
+  'advertisements/updateAdvertisement',
+  async (payload: any, thunkAPI) => {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+    const promise = adAPI.update(payload)
+
+    toast.promise(promise, {
+      loading: 'Завантаження...',
+      success: 'Створено нове оголошення',
+      error: (error) => {
+        thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+        return (error as any)?.response?.data?.message || error.message
+      },
+    })
+
+    const { data } = await promise
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  }
+)
+
+export const acceptAdvertisement = createAsyncThunk(
+  'advertisements/acceptAdvertisement',
+  async (id: number, thunkAPI) => {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+    const promise = adAPI.accept(id)
+
+    toast.promise(promise, {
+      loading: 'Завантаження...',
+      success: 'Змінено статус оголошення',
+      error: (error) => {
+        thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+        return (error as any)?.response?.data?.message || error.message
+      },
+    })
+
+    const { data } = await promise
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  }
+)
+
+export const deleteAdvertisement = createAsyncThunk(
+  'advertisements/deleteAdvertisement',
+  async (id: number, thunkAPI) => {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+    const promise = adAPI.delete(id)
+
+    toast.promise(promise, {
+      loading: 'Завантаження...',
+      success: 'Оголошення видалено',
+      error: (error) => {
+        thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+        return (error as any)?.response?.data?.message || error.message
+      },
+    })
+
+    const { data } = await promise
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  }
+)
+
 /* files */
 export const uploadFile = createAsyncThunk('advertisements/uploadFile', async (payload: UploadFileType, thunkAPI) => {
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
