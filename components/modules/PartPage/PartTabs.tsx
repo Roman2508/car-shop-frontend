@@ -101,26 +101,30 @@ const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType 
           exit={{ opacity: 0 }}
           className={styles.part__tabs__content}
         >
-          {adTags().map((el) => (
-            <div key={el.label} style={{ marginBottom: '16px' }}>
-              <b
-                className={`${styles.part__tabs__content__text} ${darkModeClass}`}
-                style={{ fontWeight: 500, display: 'block' }}
-              >
-                {tagKeys[el.label]}
-              </b>
+          {adTags().map((el) => {
+            if (el.value) {
+              return (
+                <div key={el.label} style={{ marginBottom: '16px' }}>
+                  <b
+                    className={`${styles.part__tabs__content__text} ${darkModeClass}`}
+                    style={{ fontWeight: 500, display: 'block' }}
+                  >
+                    {tagKeys[el.label]}
+                  </b>
 
-              {typeof el.value === 'string' || typeof el.value === 'number' ? (
-                <div className={styles.part__info__bage}>{el.value}</div>
-              ) : (
-                el.value.map((bage: string | number) => (
-                  <div className={styles.part__info__bage} key={bage}>
-                    {bage}
-                  </div>
-                ))
-              )}
-            </div>
-          ))}
+                  {typeof el.value === 'string' || typeof el.value === 'number' ? (
+                    <div className={styles.part__info__bage}>{el.value}</div>
+                  ) : (
+                    el.value?.map((bage: string | number) => (
+                      <div className={styles.part__info__bage} key={bage}>
+                        {bage}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )
+            }
+          })}
         </motion.div>
       )}
     </div>

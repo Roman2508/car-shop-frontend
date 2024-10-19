@@ -39,6 +39,8 @@ import { acceptAdvertisement, deleteAdvertisement } from '@/redux/advertisements
 import { useRouter } from 'next/router'
 import { authSelector } from '@/redux/auth/authSlice'
 import { AuthType } from '@/redux/auth/authTypes'
+import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
+import { DialogType } from '@/redux/dialogs/dialogsTypes'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
@@ -49,6 +51,7 @@ const PartPage = () => {
   const { auth } = useSelector(authSelector)
   const { fullAdvertisement } = useSelector(advertisementsSelector)
 
+  const [isDisableContactButton, setIsDisableContactButton] = React.useState(false)
   const [isDisabledControllButtons, setIsDisabledControllButtons] = React.useState(false)
 
   const mode = useStore($mode)
@@ -117,6 +120,23 @@ const PartPage = () => {
       dispatch(acceptAdvertisement(id))
     } finally {
       setIsDisabledControllButtons(false)
+    }
+  }
+
+  const contactToSeller = async () => {
+    try {
+      setIsDisableContactButton(true)
+      if (!auth || !fullAdvertisement) return
+      const data = { members: [auth.id, fullAdvertisement.user.id], advertisement: fullAdvertisement.id }
+
+      const { payload } = await dispatch(createDialog(data))
+      console.log(payload)
+      const dialog = payload as DialogType
+      if (dialog) {
+        router.push(`/profile?tab=messages&id=${dialog.id}`)
+      }
+    } finally {
+      setIsDisableContactButton(false)
     }
   }
 
@@ -206,29 +226,36 @@ const PartPage = () => {
                 </span>
               </div>
 
-              <button
-                onClick={toggleToCart}
-                className={`${styles.part__info__btn} ${isInCart ? styles.in_cart : ''}`}
-                style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
-              >
-                {spinnerToggleCart ? (
-                  <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />
+              <div className={styles.part__user__wrapper}>
+                {fullAdvertisement.user.avatarUrl ? (
+                  <img src={`${process.env.NEXT_PUBLIC_SERVER_URL}/uploads/${fullAdvertisement.user.avatarUrl}`} />
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {/* <span className={styles.part__info__btn__icon}>
-                      {isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}
-                    </span>
-                    {isInCart ? (
-                      <span>Добавлено в карзину</span>
-                    ) : (
-                      <span>Положить в корзину</span>
-                      )} */}
-
-                    <span style={{ color: '#fff', marginRight: '8px' }}>Зв'язатись з продавцем</span>
-                    <SendMessageSvg />
-                  </div>
+                  <div className={styles.part__user__image}>{fullAdvertisement.user.username[0]}</div>
                 )}
-              </button>
+                <div className={`${styles.part__user__inner} ${darkModeClass}`}>
+                  <p>ПРОДАВЕЦЬ:</p>
+                  <span>{fullAdvertisement.user.username}</span>
+                </div>
+              </div>
+
+              {auth?.id !== fullAdvertisement.user.id && (
+                <button
+                  onClick={contactToSeller}
+                  disabled={isDisableContactButton}
+                  className={`${styles.part__info__btn} ${isInCart ? styles.in_cart : ''}`}
+                  style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
+                >
+                  {isDisableContactButton ? (
+                    <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />
+                  ) : (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ color: '#fff', marginRight: '8px' }}>Зв'язатись з продавцем</span>
+                      <SendMessageSvg />
+                    </div>
+                  )}
+                </button>
+              )}
+
               {!isMobile && <PartTabs fullAdvertisement={fullAdvertisement} />}
             </div>
           </div>

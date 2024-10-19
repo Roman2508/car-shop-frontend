@@ -1,15 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { CreateDialogType, CreateMessageType, DeleteDialogType, GetDialogsType } from '../../api/apiTypes'
+import { CreateDialogType, CreateMessageType } from '../../api/apiTypes'
 import { setAppAlert } from '../appStatus/appStatusSlice'
 import { setLoadingStatus } from './dialogsSlice'
 import { LoadingStatusTypes } from '../appTypes'
 import { dialogsAPI, messagesAPI } from '../../api/api'
 
-export const getDialogs = createAsyncThunk('dialogs/getDialogs', async (payload: GetDialogsType, thunkAPI) => {
+export const getDialogs = createAsyncThunk('dialogs/getDialogs', async (id: number, thunkAPI) => {
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
 
   try {
-    const { data } = await dialogsAPI.getAll(payload)
+    const { data } = await dialogsAPI.getAll(id)
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
     return data
   } catch (error: any) {
@@ -34,12 +34,12 @@ export const createDialog = createAsyncThunk('dialogs/createDialog', async (payl
   }
 })
 
-export const deleteDialog = createAsyncThunk('dialogs/deleteDialog', async (payload: DeleteDialogType, thunkAPI) => {
+export const deleteDialog = createAsyncThunk('dialogs/deleteDialog', async (id: number, thunkAPI) => {
   thunkAPI.dispatch(setAppAlert({ message: 'Завантаження', status: 'info' }))
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
 
   try {
-    const { data } = await dialogsAPI.delete(payload)
+    const { data } = await dialogsAPI.delete(id)
     thunkAPI.dispatch(setAppAlert({ message: 'Діалог видалено', status: 'success' }))
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
     return data

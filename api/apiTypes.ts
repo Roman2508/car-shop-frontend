@@ -69,9 +69,7 @@ export type GetLessonsResponce = {
 /* // lessons */
 
 /* dialogs */
-export type GetDialogsType = { id: number; userRole: 'tutor' | 'student' }
-export type DeleteDialogType = GetDialogsType
-export type CreateDialogType = { tutor: number; student: number }
+export type CreateDialogType = { members: number[]; advertisement: number }
 export type CheckIsDialogExistType = CreateDialogType
 /* // dialogs */
 

@@ -3,7 +3,6 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import {
   AuthMeType,
   AuthLoginType,
-  GetDialogsType,
   AuthRegisterType,
   CreateDialogType,
   CreateMessageType,
@@ -124,20 +123,18 @@ export const tutorsAPI = {
 }
 
 export const dialogsAPI = {
-  getAll(payload: GetDialogsType) {
-    const { id, userRole } = payload
-    return instanse.get<DialogType[]>(`/dialogs/${id}/${userRole}`)
+  getAll(id: number) {
+    return instanse.get<DialogType[]>(`/dialogs/${id}`)
   },
-  checkIsExist(payload: CheckIsDialogExistType) {
-    const { tutor, student } = payload
-    return instanse.get<DialogType>(`/dialogs/check-is-exist/${tutor}/${student}`)
-  },
+  // checkIsExist(payload: CheckIsDialogExistType) {
+  //   const { tutor, student } = payload
+  //   return instanse.get<DialogType>(`/dialogs/check-is-exist/${tutor}/${student}`)
+  // },
   create(payload: CreateDialogType) {
     return instanse.post<DialogType>(`/dialogs`, payload)
   },
-  delete(payload: GetDialogsType) {
-    const { id, userRole } = payload
-    return instanse.delete<number>(`/dialogs/${id}/${userRole}`)
+  delete(id: number) {
+    return instanse.delete<number>(`/dialogs/${id}`)
   },
 }
 

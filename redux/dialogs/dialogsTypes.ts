@@ -1,4 +1,5 @@
 import { LoadingStatusTypes } from '../appTypes'
+import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 export type InitialStateType = {
   dialogs: DialogType[] | null
@@ -8,16 +9,8 @@ export type InitialStateType = {
 
 export type DialogType = {
   id: number
-  tutor: {
-    id: number
-    name: string
-    avatarUrl: string
-  }
-  student: {
-    id: number
-    name: string
-    avatarUrl: string
-  }
+  members: { id: number; username: string; avatarUrl: string }[]
+  advertisement: { id: number; title: string; status: true; photos: FileType[]; createdAt: string }
   messages: MessageType[]
 }
 
