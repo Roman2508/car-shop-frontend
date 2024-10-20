@@ -25,7 +25,7 @@ export const getAdvertisements = createAsyncThunk('advertisements/getAdvertiseme
 
 export const getAdvertisementById = createAsyncThunk(
   'advertisements/getAdvertisementById',
-  async (id: string, thunkAPI) => {
+  async (id: number, thunkAPI) => {
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
 
     const promise = adAPI.getById(id)
@@ -42,6 +42,43 @@ export const getAdvertisementById = createAsyncThunk(
     return data
   }
 )
+
+export const getMyAdvertisements = createAsyncThunk(
+  'advertisements/getMyAdvertisements',
+  async (id: number, thunkAPI) => {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+    const promise = adAPI.getMy(id)
+
+    toast.promise(promise, {
+      error: (error) => {
+        thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+        return (error as any)?.response?.data?.message || error.message
+      },
+    })
+
+    const { data } = await promise
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  }
+)
+
+export const getNotAccepted = createAsyncThunk('advertisements/getNotAccepted', async (_, thunkAPI) => {
+  thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+  const promise = adAPI.getNotAccepted()
+
+  toast.promise(promise, {
+    error: (error) => {
+      thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+      return (error as any)?.response?.data?.message || error.message
+    },
+  })
+
+  const { data } = await promise
+  thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+  return data
+})
 
 export const createAdvertisement = createAsyncThunk(
   'advertisements/createAdvertisement',

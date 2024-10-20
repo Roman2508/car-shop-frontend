@@ -19,7 +19,7 @@ const PasswordInput = ({ register, errors }: IAuthPageInput) => (
       />
       {errors.password && <span className={styles.error_alert}>{errors.password?.message}</span>}
       {errors.password && errors.password.type === 'minLength' && (
-        <span className={styles.error_alert}>Минимум 8 символів!</span>
+        <span className={styles.error_alert}>Мінімум 8 символів!</span>
       )}
       {errors.password && errors.password.type === 'maxLength' && (
         <span className={styles.error_alert}>Не более 20 символов!</span>

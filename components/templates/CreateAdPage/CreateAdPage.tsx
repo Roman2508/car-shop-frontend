@@ -21,7 +21,7 @@ import SelectInput from '@/components/elements/SelectInput/SelectInput'
 import FilterCheckboxItem from '@/components/modules/CatalogPage/FilterCheckboxItem'
 import checkboxStyles from '@/styles/catalog/index.module.scss'
 import Checkbox from '@/components/elements/Checkbox/Checkbox'
-import { createAdFields, filters } from '@/constans/filter'
+import { adExamples, createAdFields, filters } from '@/constans/filter'
 import { Controller, useForm } from 'react-hook-form'
 import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { useAppDispatch } from '@/redux/store'
@@ -90,6 +90,14 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
       })
     })
   }
+
+  // const add = () => {
+  //   const a = adExamples
+
+  //   a.map((el, i) => {
+  //     setTimeout(() => dispatch(createAdvertisement(el)), i * 500)
+  //   })
+  // }
 
   const onSubmit = async (data: ICreateAdFields) => {
     try {
@@ -313,6 +321,42 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   return (
     <section className={styles.dashboard}>
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
+      {/* <button onClick={add}>click</button> */}
       <form className={`container ${styles.dashboard__container}`} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={`${styles.create__ad__main__title} ${darkModeClass}`} style={{ marginTop: '50px' }}>
           {query && query.id ? 'Оновити оголошення' : 'Створити оголошення'}

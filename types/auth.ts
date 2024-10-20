@@ -1,7 +1,7 @@
 import { FieldErrors, UseFormRegister } from 'react-hook-form'
 
 export interface IInputs {
-  name: string
+  username: string
   email: string
   password: string
 }

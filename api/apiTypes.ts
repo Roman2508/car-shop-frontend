@@ -12,6 +12,7 @@ export type AuthRegisterType = {
   email: string
   password: string
   username: string
+  role: 'USER'
 }
 
 export type AuthMeType = {

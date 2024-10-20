@@ -54,7 +54,12 @@ export const authRegister = createAsyncThunk('auth/authRegister', async (payload
 
   try {
     const { data } = await authAPI.register(payload)
-    thunkAPI.dispatch(setAppAlert({ message: 'Авторизований', status: 'success' }))
+    thunkAPI.dispatch(
+      setAppAlert({
+        message: 'Обліковий запис успішно створено. Увійдіть під своїми особистими даними',
+        status: 'success',
+      })
+    )
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
     return data
   } catch (error: any) {

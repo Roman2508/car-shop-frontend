@@ -1,28 +1,35 @@
 import React from 'react'
+import { io } from 'socket.io-client'
+import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 
 import { $mode } from '@/context/mode'
+import { useAppDispatch } from '@/redux/store'
+import { formatDate } from '@/utils/formatDate'
+import { authSelector } from '@/redux/auth/authSlice'
+import { createImageUrl } from '@/utils/createImageUrl'
+import { DialogType } from '@/redux/dialogs/dialogsTypes'
 import styles from '@/styles/ProfileForm/index.module.scss'
 import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
-import { useAppDispatch } from '@/redux/store'
-import { getDialogs } from '@/redux/dialogs/dialogsAsyncActions'
-import { useSelector } from 'react-redux'
-import { authSelector } from '@/redux/auth/authSlice'
-import { dialogsSelector } from '@/redux/dialogs/dialogsSlice'
-import { DialogType } from '@/redux/dialogs/dialogsTypes'
-import { formatDate } from '@/utils/formatDate'
-import { createImageUrl } from '@/utils/createImageUrl'
-import { useRouter } from 'next/router'
+import { addMessage, dialogsSelector } from '@/redux/dialogs/dialogsSlice'
+import { deleteDialog, getDialogs, getMessages } from '@/redux/dialogs/dialogsAsyncActions'
 
 const MesagesTab = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
 
+  const ref = React.useRef<HTMLDivElement>(null)
+
   const { auth } = useSelector(authSelector)
-  const { dialogs } = useSelector(dialogsSelector)
+  const { dialogs, messages } = useSelector(dialogsSelector)
 
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
+
+  const [text, setText] = React.useState('')
+
+  const socket = io(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:7777')
 
   const [activeDalog, setActiveDialog] = React.useState<DialogType | null>(null)
 
@@ -37,6 +44,58 @@ const MesagesTab = () => {
       undefined,
       { shallow: true }
     )
+
+  const onDeleteDialog = async () => {
+    if (!activeDalog) return
+    if (!window.confirm('Ви дійсто хочете видалити діалог?\n(діалог буде видалено для всіх учасників)')) return
+    try {
+      await dispatch(deleteDialog(activeDalog.id))
+      setActiveDialog(null)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+    if (!activeDalog) return
+
+    socket.on('connect', () => {
+      dispatch(getMessages(activeDalog.id))
+    })
+
+    return () => {
+      socket.off()
+    }
+  }, [activeDalog])
+
+  React.useEffect(() => {
+    if (messages && messages.length) {
+      ref.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
+    }
+  }, [messages])
+
+  // const sendMessage = (message: any) => {
+  const sendMessage = () => {
+    if (!activeDalog || !auth) return
+    const message = {
+      dialog: activeDalog.id,
+      text: text,
+      sender: auth.id,
+    }
+
+    socket.emit('sendMessage', message)
+    setText('')
+  }
+
+  // Слушаем событие recMessage, чтобы получать сообщения, отправленные пользователями
+  socket.on('recMessage', (message: any) => {
+    if (message.dialog.id !== activeDalog?.id) return
+    // @ts-ignore
+    socket.on('connection', dispatch(addMessage(message)))
+  })
 
   React.useEffect(() => {
     if (!auth) return
@@ -108,7 +167,9 @@ const MesagesTab = () => {
               <p>{activeDalog.members.find((el) => el.id !== auth?.id)?.username}</p>
             </div>
 
-            <GarbageSvg darkModeClass={darkModeClass} />
+            <div onClick={onDeleteDialog}>
+              <GarbageSvg darkModeClass={darkModeClass} />
+            </div>
           </div>
 
           <div className={`${styles.messages__right_col_advertisement} ${darkModeClass}`}>
@@ -137,27 +198,41 @@ const MesagesTab = () => {
           </div>
 
           <div className={styles.messages__right_col_chat}>
-            {Array(15)
-              .fill(null)
-              .map((el, index) => (
+            {(messages || []).map((message) => {
+              const isSelf = message.sender.id === auth?.id
+
+              return (
                 <div
                   className={`${`${styles.messages__right_col_chat_message} ${
-                    index % 2 == 0 ? styles.self : ''
+                    isSelf ? styles.self : ''
                   }`} ${darkModeClass}`}
                 >
-                  <div className={`${styles.messages__right_col_chat_message_body} ${darkModeClass}`}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s.
+                  <div
+                    className={`${styles.messages__right_col_chat_message_body} ${darkModeClass}`}
+                    style={isSelf ? { textAlign: 'right' } : {}}
+                  >
+                    {message.text}
                   </div>
-                  <div className={`${styles.messages__right_col_chat_message_sending_time} ${darkModeClass}`}>
-                    12:45
+                  <div
+                    className={`${styles.messages__right_col_chat_message_sending_time} ${darkModeClass}`}
+                    style={isSelf ? { textAlign: 'right' } : {}}
+                  >
+                    {formatDate(message.sendAt, 'datetime')}
                   </div>
                 </div>
-              ))}
+              )
+            })}
+
+            <div ref={ref} />
           </div>
 
           <div className={`${styles.messages__right_col_actions} ${darkModeClass}`}>
-            <input placeholder="Напишіть повідомлення..." />
+            <input
+              placeholder="Напишіть повідомлення..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => e.code === 'Enter' && sendMessage()}
+            />
           </div>
         </div>
       ) : (

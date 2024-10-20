@@ -21,7 +21,7 @@ const PasswordInput = ({ register, errors, darkModeClass, label = 'Пароль'
       })}
     />
     {errors.name && <span className={styles.error_alert}>{errors.name?.message}</span>}
-    {errors.name && errors.name.type === 'minLength' && <span className={styles.error_alert}>Минимум 6 символів!</span>}
+    {errors.name && errors.name.type === 'minLength' && <span className={styles.error_alert}>Мінімум 6 символів!</span>}
     {errors.name && errors.name.type === 'maxLength' && (
       <span className={styles.error_alert}>Максимум 20 символов!</span>
     )}

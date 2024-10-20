@@ -8,6 +8,8 @@ import {
   deleteFile,
   getAdvertisementById,
   getAdvertisements,
+  getMyAdvertisements,
+  getNotAccepted,
   uploadFile,
 } from './advertisementsAsyncActions'
 import { FileType } from '../reservedLessons/reservedLessonsTypes'
@@ -28,10 +30,8 @@ const advertisementsSlice = createSlice({
       state.loadingStatus = action.payload
     },
 
-    clearAllAdvertisements(state) {
+    clearAdvertisements(state) {
       state.advertisements = null
-      state.newAdvertisements = null
-      state.popularAdvertisements = null
     },
     clearFullAdvertisements(state) {
       state.fullAdvertisement = null
@@ -47,6 +47,18 @@ const advertisementsSlice = createSlice({
     /* getAdvertisementById */
     builder.addCase(getAdvertisementById.fulfilled, (state, action: PayloadAction<AdvertisementType>) => {
       state.fullAdvertisement = action.payload
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
+
+    /* getMyAdvertisements */
+    builder.addCase(getMyAdvertisements.fulfilled, (state, action: PayloadAction<AdvertisementType[]>) => {
+      state.advertisements = action.payload
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
+
+    /* getNotAccepted */
+    builder.addCase(getNotAccepted.fulfilled, (state, action: PayloadAction<AdvertisementType[]>) => {
+      state.advertisements = action.payload
       state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
 
@@ -82,7 +94,7 @@ const advertisementsSlice = createSlice({
   },
 })
 
-export const { setLoadingStatus, clearAllAdvertisements, clearFullAdvertisements } = advertisementsSlice.actions
+export const { setLoadingStatus, clearAdvertisements, clearFullAdvertisements } = advertisementsSlice.actions
 
 export default advertisementsSlice.reducer
 

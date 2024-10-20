@@ -12,8 +12,12 @@ import inputsStyles from '@/styles/create-ad/index.module.scss'
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
+import { authRegister } from '@/redux/auth/authAsyncActions'
+import { useAppDispatch } from '@/redux/store'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
+  const dispatch = useAppDispatch()
+
   const [spinner, setSpinner] = useState(false)
   const {
     register,
@@ -27,19 +31,12 @@ const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const onSubmit = async (data: IInputs) => {
     try {
       setSpinner(true)
-      const userData = await singUpFx({
-        url: '/users/signup',
-        username: data.name,
-        password: data.password,
-        email: data.email,
-      })
+      const { payload } = await dispatch(authRegister({ ...data, role: 'USER' }))
 
-      if (!userData) {
-        return
-      }
+      if (!payload) return
 
       resetField('email')
-      resetField('name')
+      resetField('username')
       resetField('password')
       switchForm()
     } catch (error) {

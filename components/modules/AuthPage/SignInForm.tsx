@@ -40,13 +40,6 @@ const SignInForm = () => {
         resetField('password')
         route.push('/dashboard')
       }
-      // console.log(a)
-
-      // await singInFx({
-      //   url: '/users/login',
-      //   username: data.name,
-      //   password: data.password,
-      // })
     } catch (error) {
       showAuthError(error)
     } finally {

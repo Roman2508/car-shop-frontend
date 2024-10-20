@@ -19,7 +19,7 @@ const NameInput = ({ register, errors, darkModeClass }: IProfileInput) => (
       })}
     />
     {errors.name && <span className={styles.error_alert}>{errors.name?.message}</span>}
-    {errors.name && errors.name.type === 'minLength' && <span className={styles.error_alert}>Минимум 2 символа!</span>}
+    {errors.name && errors.name.type === 'minLength' && <span className={styles.error_alert}>Мінімум 2 символа!</span>}
     {errors.name && errors.name.type === 'maxLength' && (
       <span className={styles.error_alert}>Не более 20 символов!</span>
     )}

@@ -18,23 +18,7 @@ export type MessageType = {
   id: number
   text: string
   isReaded: boolean
-  senderStudent: {
-    id: number
-    name: string
-    avatarUrl: string
-  }
-  senderTutor: {
-    id: number
-    name: string
-    avatarUrl: string
-  }
-  // sender: {
-  //   id: number
-  //   name: string
-  // }
-  userRole: 'tutor' | 'student'
-  dialog: {
-    id: number
-  }
-  sendAt: Date
+  sender: { id: number; name: string; avatarUrl: string }
+  dialog: { id: number }
+  sendAt: string
 }

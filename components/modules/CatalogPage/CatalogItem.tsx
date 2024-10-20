@@ -21,7 +21,7 @@ import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import SendMessageSvg from '@/components/elements/SendMessageSvg/SendMessageSvg'
 import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
 
-const CatalogItem = ({ item }: { item: AdvertisementType }) => {
+const CatalogItem = ({ item, self = false }: { item: AdvertisementType; self?: boolean }) => {
   const mode = useStore($mode)
   const user = useStore($user)
 
@@ -84,22 +84,25 @@ const CatalogItem = ({ item }: { item: AdvertisementType }) => {
         {/* <span className={styles.catalog__list__item__code}>Артикул: {item.vendor_code}</span> */}
         <span className={styles.catalog__list__item__price}>{formatPrice(item.price)} грн.</span>
       </div>
-      <button
-        disabled={spinner}
-        onClick={() => alert(1)}
-        className={`${styles.catalog__list__item__cart} ${isInCart ? styles.added : ''}`}
-      >
-        {spinner ? (
-          <div className={spinnerStyles.spinner} style={{ top: 6, left: 6 }} />
-        ) : (
-          <>
-            <span title="Зв'язатись з продавцем">
-              <SendMessageSvg />
-            </span>
-            {/* <span>{isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}</span> */}
-          </>
-        )}
-      </button>
+
+      {!self && (
+        <button
+          disabled={spinner}
+          onClick={() => alert(1)}
+          className={`${styles.catalog__list__item__cart} ${isInCart ? styles.added : ''}`}
+        >
+          {spinner ? (
+            <div className={spinnerStyles.spinner} style={{ top: 6, left: 6 }} />
+          ) : (
+            <>
+              <span title="Зв'язатись з продавцем">
+                <SendMessageSvg />
+              </span>
+              {/* <span>{isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}</span> */}
+            </>
+          )}
+        </button>
+      )}
     </li>
   )
 }

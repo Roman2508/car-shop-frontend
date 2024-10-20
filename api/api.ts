@@ -82,8 +82,14 @@ export const adAPI = {
   get(query: any) {
     return instanse.get<[AdvertisementType[], number]>('/advertisement', { params: query })
   },
-  getById(id: string) {
+  getById(id: number) {
     return instanse.get<AdvertisementType>(`/advertisement/${id}`)
+  },
+  getMy(id: number) {
+    return instanse.get<AdvertisementType[]>(`/advertisement/my/${id}`)
+  },
+  getNotAccepted() {
+    return instanse.get<AdvertisementType[]>(`/advertisement/get-not-accepted`)
   },
   create(payload: ICreateAdFields) {
     return instanse.post<AdvertisementType>('/advertisement', payload)

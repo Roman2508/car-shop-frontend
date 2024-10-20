@@ -10,6 +10,11 @@ import catalogStyles from '@/styles/catalog/index.module.scss'
 import { usePopup } from '@/hooks/usePoup'
 import FilterSelect from '../CatalogPage/FilterSelect'
 import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
+import { useAppDispatch } from '@/redux/store'
+import { getNotAccepted } from '@/redux/advertisements/advertisementsAsyncActions'
+import { advertisementsSelector, clearAdvertisements } from '@/redux/advertisements/advertisementsSlice'
+import { useSelector } from 'react-redux'
+import CatalogItem from '../CatalogPage/CatalogItem'
 
 export const boilers = {
   count: 10,
@@ -103,6 +108,10 @@ export const boilers = {
 }
 
 const Administration = () => {
+  const dispatch = useAppDispatch()
+
+  const { advertisements } = useSelector(advertisementsSelector)
+
   const isMedia768 = useMediaQuery(768)
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
@@ -115,6 +124,14 @@ const Administration = () => {
   const { toggleOpen, open, closePopup } = usePopup()
 
   const [spinner, setSpinner] = React.useState(false)
+
+  React.useEffect(() => {
+    dispatch(getNotAccepted())
+
+    return () => {
+      dispatch(clearAdvertisements())
+    }
+  }, [])
 
   return (
     <div className={styles.administration}>
@@ -132,25 +149,15 @@ const Administration = () => {
         </div>
       </div>
 
-      {boilers.rows.map((item) => (
-        <div
-          className={`${advStyles.dashboard__slide} ${styles.administration__card} ${darkModeClass}
-          `}
-          key={item.id}
-          style={width}
-        >
-          <img src={JSON.parse(item.images)[0]} alt={item.name} />
-          <div className={advStyles.dashboard__slide__inner}>
-            <Link href={`/catalog/${item.id}`} passHref legacyBehavior>
-              <a href="">
-                <h3 className={advStyles.dashboard__slide__title}>{item.name}</h3>
-              </a>
-            </Link>
-            <span className={advStyles.dashboard__slide__code}>Артикул: {item.vendor_code}</span>
-            <span className={advStyles.dashboard__slide__price}>{'formatPrice(item.price)'} P</span>
-          </div>
+      {advertisements ? (
+        <div className={catalogStyles.catalog__list}>
+          {advertisements.map((item) => (
+            <CatalogItem item={item} key={item.id} self />
+          ))}
         </div>
-      ))}
+      ) : (
+        <h2 style={darkModeClass ? { color: '#fff' } : { color: '#000' }}>Немає що показувати</h2>
+      )}
     </div>
   )
 }

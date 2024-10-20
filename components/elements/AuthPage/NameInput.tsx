@@ -7,7 +7,7 @@ const NameInput = ({ register, errors }: IAuthPageInput) => (
     <span>Ім'я</span>
 
     <input
-      {...register('name', {
+      {...register('username', {
         minLength: 2,
         maxLength: 20,
         required: "Введіть своє ім'я!",
@@ -17,9 +17,11 @@ const NameInput = ({ register, errors }: IAuthPageInput) => (
       placeholder="Ім'я"
       style={{ width: '300px' }}
     />
-    {errors.name && <span className={styles.error_alert}>{errors.name?.message}</span>}
-    {errors.name && errors.name.type === 'minLength' && <span className={styles.error_alert}>Мінімум 2 символа!</span>}
-    {errors.name && errors.name.type === 'maxLength' && (
+    {errors.username && <span className={styles.error_alert}>{errors.username?.message}</span>}
+    {errors.username && errors.username.type === 'minLength' && (
+      <span className={styles.error_alert}>Мінімум 2 символа!</span>
+    )}
+    {errors.username && errors.username.type === 'maxLength' && (
       <span className={styles.error_alert}>Не більше 15 символів!</span>
     )}
   </label>

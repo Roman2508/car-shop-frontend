@@ -22,10 +22,10 @@ const PhoneInput = ({ register, errors, darkModeClass }: IFeedbackInput) => (
       <span className={styles.error_alert}>{errors.phone?.message}</span>
     )}
     {errors.phone && errors.phone.type === 'minLength' && (
-      <span className={styles.error_alert}>Минимум 11 цифр!</span>
+      <span className={styles.error_alert}>Мінімум 11 цифр!</span>
     )}
     {errors.phone && errors.phone.type === 'maxLength' && (
-      <span className={styles.error_alert}>Не более 11 цифр!</span>
+      <span className={styles.error_alert}>Не більше ніж 11 цифр!</span>
     )}
   </label>
 )

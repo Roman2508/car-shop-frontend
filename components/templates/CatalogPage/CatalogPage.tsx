@@ -204,8 +204,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
-  console.log(advertisements)
-
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
