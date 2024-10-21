@@ -2,7 +2,7 @@ import { useStore } from 'effector-react'
 import { $mode } from '@/context/mode'
 import { IFiltersPopupProps } from '@/types/catalog'
 import FiltersPopupTop from './FiltersPopupTop'
-import FilterManufacturerAccordion from './FilterManufacturerAccordion'
+import FilterManufacturerAccordion from './FilterAccordion'
 import styles from '@/styles/catalog/index.module.scss'
 
 const FiltersPopup = ({
@@ -20,11 +20,7 @@ const FiltersPopup = ({
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
-    <div
-      className={`${styles.filters__popup} ${darkModeClass} ${
-        openPopup ? styles.open : ''
-      }`}
-    >
+    <div className={`${styles.filters__popup} ${darkModeClass} ${openPopup ? styles.open : ''}`}>
       <div className={styles.filters__popup__inner}>
         <FiltersPopupTop
           resetBtnText="Сбросить"
@@ -49,10 +45,7 @@ const FiltersPopup = ({
         >
           Показать
         </button>
-        <button
-          className={styles.filters__actions__reset}
-          onClick={handleClosePopup}
-        >
+        <button className={styles.filters__actions__reset} onClick={handleClosePopup}>
           Назад
         </button>
       </div>

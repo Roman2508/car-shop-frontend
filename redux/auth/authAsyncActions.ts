@@ -1,11 +1,11 @@
 import { toast } from 'sonner'
 
+import { setLoadingStatus } from './authSlice'
 import { LoadingStatusTypes } from '../appTypes'
 import { authAPI, filesAPI } from '../../api/api'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 import { setAppAlert } from '../appStatus/appStatusSlice'
-import { setLoadingStatus } from '../lessons/lessonsSlice'
 import { AuthLoginType, AuthMeType, AuthRegisterType } from '../../api/apiTypes'
 
 export const authLogin = createAsyncThunk('auth/authLogin', async (payload: AuthLoginType, thunkAPI) => {

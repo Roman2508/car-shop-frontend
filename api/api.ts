@@ -23,12 +23,9 @@ import {
   CheckIsDialogExistType,
 } from './apiTypes'
 import { AuthType } from '../redux/auth/authTypes'
-import { LessonType } from '../redux/lessons/lessonsType'
-import { DialogType, MessageType } from '../redux/dialogs/dialogsTypes'
-import { ReviewsType, TutorType } from '../redux/tutors/tutorsTypes'
-import { FileType, ReservedLessonType } from '../redux/reservedLessons/reservedLessonsTypes'
-import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
+import { DialogType, MessageType } from '../redux/dialogs/dialogsTypes'
+import { AdvertisementType, FileType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 
 const instanse = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
@@ -106,28 +103,6 @@ export const adAPI = {
   },
 }
 
-export const lessonsAPI = {
-  getAll(payload: LessonsFilterType) {
-    return instanse.post<GetLessonsResponce>('/lessons/get', payload)
-  },
-  create(payload: CreateLessonType) {
-    return instanse.post<LessonType>('/lessons', payload)
-  },
-  update(payload: UpdateLessonType) {
-    const { id, ...rest } = payload
-    return instanse.patch<LessonType>(`/lessons/${id}`, rest)
-  },
-  delete(id: number) {
-    return instanse.delete<number>(`/lessons/${id}`)
-  },
-}
-
-export const tutorsAPI = {
-  getById(id: number) {
-    return instanse.get<TutorType>(`/tutors/${id}`)
-  },
-}
-
 export const dialogsAPI = {
   getAll(id: number) {
     return instanse.get<DialogType[]>(`/dialogs/${id}`)
@@ -156,38 +131,6 @@ export const messagesAPI = {
   },
   delete(id: number) {
     return instanse.delete<number>(`/messages/${id}`)
-  },
-}
-
-export const reviewsAPI = {
-  async create(payload: CreateReviewsType) {
-    return instanse.post<ReviewsType>('/reviews', payload)
-  },
-  remove(id: number) {
-    return instanse.delete<number>(`/reviews/${id}`)
-  },
-}
-
-export const reservedLessonsAPI = {
-  getAll(payload: ReservedLessonsFilterType) {
-    return instanse.post<GetResevedLessonsResponceType>('/reserved-lessons/get', payload)
-  },
-  getOneById(id: number) {
-    return instanse.get<ReservedLessonType>(`/reserved-lessons/${id}`)
-  },
-  // not for frontend
-  create(payload: CreateReservedLessonsType) {
-    return instanse.post<ReservedLessonType>('/reserved-lessons', payload)
-  },
-  update(payload: UpdateReservedLessonsType) {
-    const { id, ...data } = payload
-    return instanse.patch<ReservedLessonType>(`/reserved-lessons/${id}`, data)
-  },
-  payment(payload: CreateReservedLessonsType) {
-    return instanse.post<PaymentResponseType>(`/reserved-lessons/payment`, payload)
-  },
-  delete(id: number) {
-    return instanse.delete<number>(`/reserved-lessons/${id}`)
   },
 }
 

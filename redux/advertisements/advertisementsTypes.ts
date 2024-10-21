@@ -1,7 +1,5 @@
 import { LoadingStatusTypes } from '../appTypes'
 import { AuthType } from '../auth/authTypes'
-import { FileType } from '../reservedLessons/reservedLessonsTypes'
-
 export type InitialStateType = {
   advertisements: AdvertisementType[] | null
   fullAdvertisement: AdvertisementType | null
@@ -39,6 +37,17 @@ export type AdvertisementType = {
   photos: FileType[]
   user: AuthType
   createdAt: string
+}
+
+export type FileType = {
+  id: number
+  filename: string
+  originalName: string
+  size: number
+  mimetype: string
+  ad: { id: number; name: string }
+  user: { id: number; name: string }
+  createdAt: Date
 }
 
 export type ICreateAdFields = Omit<AdvertisementType, 'id' & 'status' & 'createdAt'>

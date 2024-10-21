@@ -1,6 +1,6 @@
 import { getBoilerPartsFx } from '@/app/api/boilerParts'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
-import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
+import ManufacturersBlock from '@/components/modules/CatalogPage/SelectedFilterItems'
 import {
   $boilerManufacturers,
   $boilerParts,
@@ -13,11 +13,12 @@ import {
   updatePartsManufacturer,
 } from '@/context/boilerParts'
 import { $mode } from '@/context/mode'
+import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
 import styles from '@/styles/catalog/index.module.scss'
 import { useStore } from 'effector-react'
 import { AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
 import ReactPaginate from 'react-paginate'
@@ -32,31 +33,36 @@ import { boilers } from '../DashboardPage/DashboardPage'
 import { getAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 import { useAppDispatch } from '@/redux/store'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
-import { useSelector } from 'react-redux'
 import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
+import { IFilter } from '@/redux/filter/FilterTypes'
+import { filtersSelector } from '@/redux/filter/filterSlice'
+import SelectedFilterItems from '@/components/modules/CatalogPage/SelectedFilterItems'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
 
   const { advertisements } = useSelector(advertisementsSelector)
+  const { filters } = useSelector(filtersSelector)
 
   const mode = useStore($mode)
   const boilerManufacturers = useStore($boilerManufacturers)
   const partsManufacturers = useStore($partsManufacturers)
   const filteredBoilerParts = useStore($filteredBoilerParts)
-  const boilerParts = boilers
-  // const boilerParts = useStore($boilerParts)
+
   const [spinner, setSpinner] = useState(false)
   const [priceRange, setPriceRange] = useState([1000, 9000])
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)
   const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
-  const pagesCount = Math.ceil(boilerParts.count / 20)
+
+  const pagesCount = Math.ceil((advertisements ? advertisements.length : 1) / 20)
   const isValidOffset = query.offset && !isNaN(+query.offset) && +query.offset > 0
   const [currentPage, setCurrentPage] = useState(isValidOffset ? +query.offset - 1 : 0)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-  const router = useRouter()
+
   const isAnyBoilerManufacturerChecked = boilerManufacturers.some((item) => item.checked)
   const isAnyPartsManufacturerChecked = partsManufacturers.some((item) => item.checked)
+
   const resetFilterBtnDisabled = !(
     isPriceRangeChanged ||
     isAnyBoilerManufacturerChecked ||
@@ -64,9 +70,23 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   )
   const { toggleOpen, open, closePopup } = usePopup()
 
-  useEffect(() => {
-    loadBoilerParts()
-  }, [filteredBoilerParts, isFilterInQuery])
+  const [selectedFilters, setSelectedFilters] = React.useState<IFilter[]>([])
+
+  const updateRoteParam = (key: string, value: string) =>
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          [key]: value,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
+
+  // useEffect(() => {
+  //   loadBoilerParts()
+  // }, [filteredBoilerParts, isFilterInQuery])
 
   const loadBoilerParts = async () => {
     try {
@@ -204,12 +224,33 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
+  React.useEffect(() => {
+    const filter = filters as IFilter[]
+    const selectedFilters = filter.filter((el) => el.items.some((item) => item.checked))
+    const selectedItems = selectedFilters.map((el) => ({ ...el, items: el.items.filter((el) => el.checked) }))
+    setSelectedFilters(selectedItems)
+  }, [filters])
+
+  React.useEffect(() => {
+    if (selectedFilters.length) {
+      selectedFilters.forEach((el) => {
+        const value = el.items.map((el) => el.title).join(';')
+        updateRoteParam(el.label, value)
+      })
+    }
+  }, [selectedFilters])
+
+  React.useEffect(() => {
+    console.log(router.query)
+    if (!router.query) return
+  }, [])
+
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
         <h2 className={`${styles.catalog__title} ${darkModeClass}`}>Каталог товаров</h2>
         <div className={`${styles.catalog__top} ${darkModeClass}`}>
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {isAnyBoilerManufacturerChecked && (
               <ManufacturersBlock
                 title="Производитель котлов:"
@@ -218,6 +259,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               />
             )}
           </AnimatePresence>
+
           <AnimatePresence>
             {isAnyPartsManufacturerChecked && (
               <ManufacturersBlock
@@ -226,14 +268,24 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
                 manufacturersList={partsManufacturers}
               />
             )}
-          </AnimatePresence>
+          </AnimatePresence> */}
+
+          {Boolean(selectedFilters.length) &&
+            selectedFilters.map((selectedFilter) => (
+              <AnimatePresence>
+                {selectedFilter.items.length && (
+                  <SelectedFilterItems label={selectedFilter.label} selectedItems={selectedFilter.items} />
+                )}
+              </AnimatePresence>
+            ))}
+
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
               disabled={resetFilterBtnDisabled}
               onClick={resetFilters}
             >
-              Сбросить фильтр
+              Скинути фільтр
             </button>
             <button className={styles.catalog__top__mobile_btn} onClick={toggleOpen}>
               <span className={styles.catalog__top__mobile_btn__svg}>
@@ -244,6 +296,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             <FilterSelect setSpinner={setSpinner} />
           </div>
         </div>
+
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
             <CatalogFilters
@@ -258,6 +311,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               resetFilterBtnDisabled={resetFilterBtnDisabled}
               setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
+
             {spinner ? (
               <ul className={skeletonStyles.skeleton}>
                 {Array.from(new Array(20)).map((_, i) => (
@@ -276,11 +330,12 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
                 {advertisements?.length ? (
                   advertisements.map((item) => <CatalogItem item={item} key={item.id} />)
                 ) : (
-                  <span>Список товаров пуст...</span>
+                  <span>Пусто...</span>
                 )}
               </ul>
             )}
           </div>
+
           <ReactPaginate
             containerClassName={styles.catalog__bottom__list}
             pageClassName={styles.catalog__bottom__list__item}

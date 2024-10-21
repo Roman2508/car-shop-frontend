@@ -23,18 +23,19 @@ import checkboxStyles from '@/styles/catalog/index.module.scss'
 import Checkbox from '@/components/elements/Checkbox/Checkbox'
 import { adExamples, createAdFields, filters } from '@/constans/filter'
 import { Controller, useForm } from 'react-hook-form'
-import { AdvertisementType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
+import { AdvertisementType, FileType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { useAppDispatch } from '@/redux/store'
 import {
   createAdvertisement,
   deleteFile,
   getAdvertisementById,
   updateAdvertisement,
+  uploadFile,
 } from '@/redux/advertisements/advertisementsAsyncActions'
 import { IFilterCheckboxItem, IQueryParams } from '@/types/catalog'
-import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
+// import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
 import { useRouter } from 'next/router'
-import { FileType } from '@/redux/reservedLessons/reservedLessonsTypes'
+// import { FileType } from '@/redux/reservedLessons/reservedLessonsTypes'
 import { useSelector } from 'react-redux'
 import { authSelector } from '@/redux/auth/authSlice'
 
@@ -91,13 +92,13 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
     })
   }
 
-  // const add = () => {
-  //   const a = adExamples
+  const add = () => {
+    const a = adExamples
 
-  //   a.map((el, i) => {
-  //     setTimeout(() => dispatch(createAdvertisement(el)), i * 500)
-  //   })
-  // }
+    a.map((el, i) => {
+      setTimeout(() => dispatch(createAdvertisement(el)), i * 500)
+    })
+  }
 
   const onSubmit = async (data: ICreateAdFields) => {
     try {
@@ -232,7 +233,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
   React.useEffect(() => {
     if (!query || !query.id) return
     const fetchAdData = async () => {
-      const { payload } = await dispatch(getAdvertisementById(query.id))
+      const { payload } = await dispatch(getAdvertisementById(Number(query.id)))
       if (!payload) return alert('Помилка завантаження даних')
       const ad = payload as AdvertisementType
 
@@ -321,42 +322,10 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   return (
     <section className={styles.dashboard}>
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
-      {/* <button onClick={add}>click</button> */}
+      <button onClick={add} style={{ padding: '20px 200px', fontSize: '50px', textTransform: 'uppercase' }}>
+        click
+      </button>
+
       <form className={`container ${styles.dashboard__container}`} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={`${styles.create__ad__main__title} ${darkModeClass}`} style={{ marginTop: '50px' }}>
           {query && query.id ? 'Оновити оголошення' : 'Створити оголошення'}

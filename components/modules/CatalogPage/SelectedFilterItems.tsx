@@ -3,16 +3,18 @@ import { $mode } from '@/context/mode'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IManufacturersBlockProps } from '@/types/catalog'
 import styles from '@/styles/catalog/index.module.scss'
-import ManufacturersBlockItem from './ManufacturersBlockItem'
+import { IFilterItem } from '@/redux/filter/FilterTypes'
+import SelectedFilterBlockItem from './SelectedFilterBlockItem'
+import { filterKeys } from '@/utils/getFilterKey'
 
-const ManufacturersBlock = ({
-  title,
-  manufacturersList,
-  event,
-}: IManufacturersBlockProps) => {
+interface ISelectedFilterItemsProps {
+  label: keyof typeof filterKeys
+  selectedItems: IFilterItem[]
+}
+
+const SelectedFilterItems: React.FC<ISelectedFilterItemsProps> = ({ label, selectedItems }) => {
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-  const checkedItems = manufacturersList.filter((item) => item.checked)
 
   return (
     <motion.div
@@ -21,13 +23,11 @@ const ManufacturersBlock = ({
       exit={{ opacity: 0 }}
       className={`${styles.manufacturers} ${darkModeClass}`}
     >
-      <h3 className={`${styles.manufacturers__title} ${darkModeClass}`}>
-        {title}
-      </h3>
+      <h3 className={`${styles.manufacturers__title} ${darkModeClass}`}>{label}</h3>
       <ul className={styles.manufacturers__list}>
         <AnimatePresence>
-          {checkedItems.map((item) => (
-            <ManufacturersBlockItem key={item.id} item={item} event={event} />
+          {selectedItems.map((item) => (
+            <SelectedFilterBlockItem key={item.id} item={item} label={label} />
           ))}
         </AnimatePresence>
       </ul>
@@ -35,4 +35,4 @@ const ManufacturersBlock = ({
   )
 }
 
-export default ManufacturersBlock
+export default SelectedFilterItems

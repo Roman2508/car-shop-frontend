@@ -47,6 +47,10 @@ const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
           container: (defaultStyles) => ({
             ...defaultStyles,
             display: 'inline-block',
+            '@media (max-width: 560px)': {
+              width: '100%',
+              maxWidth: '340px',
+            },
           }),
           control: (defaultStyles, state) => ({
             ...controlStyles(defaultStyles, mode),

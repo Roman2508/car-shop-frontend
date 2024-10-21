@@ -26,10 +26,12 @@
     margin-bottom: 25px;
 
     @media (max-width: 750px) {
+      grid-template-columns: repeat(2, 1fr);
+      grid-row-gap: 40px;
       grid-template-columns: auto;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       display: flex;
       flex-direction: column;
     }
@@ -183,7 +185,7 @@
         grid-column: 1 / 7;
       }
 
-      @media (max-width: 500px) {
+      @media (max-width: 600px) {
         margin-right: 0;
         border-right: 0;
         margin-bottom: 16px;
@@ -210,6 +212,8 @@
       }
 
       .footer__top__item {
+        padding: 0 20px;
+
         @media (max-width: 500px) {
           margin-right: 0;
           border-bottom: 1px solid rgba(205, 203, 203, 0.2);

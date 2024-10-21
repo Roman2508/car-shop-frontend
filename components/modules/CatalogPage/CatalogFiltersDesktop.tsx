@@ -8,13 +8,15 @@ import {
   updatePartsManufacturer,
 } from '@/context/boilerParts'
 import { $mode } from '@/context/mode'
-import FilterManufacturerAccordion from './FilterManufacturerAccordion'
+import FilterManufacturerAccordion from './FilterAccordion'
 import Accordion from '@/components/elements/Accordion/Accordion'
 import PriceRange from './PriceRange'
 import styles from '@/styles/catalog/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import { ICatalogFilterDesktopProps, IFilterCheckboxItem } from '@/types/catalog'
-import { filters } from '@/constans/filter'
+import FilterAccordion from './FilterAccordion'
+import { useSelector } from 'react-redux'
+import { filtersSelector } from '@/redux/filter/filterSlice'
 
 const CatalogFiltersDesktop = ({
   priceRange,
@@ -26,20 +28,21 @@ const CatalogFiltersDesktop = ({
   applyFilters,
 }: ICatalogFilterDesktopProps) => {
   const mode = useStore($mode)
-  const boilerManufacturers = useStore($boilerManufacturers)
-  const partsManufacturers = useStore($partsManufacturers)
+
+  const { filters } = useSelector(filtersSelector)
+
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
     <div className={`${styles.catalog__bottom__filters} ${darkModeClass}`}>
       <h3 className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}>Фильтры</h3>
       <div className={styles.filters__boiler_manufacturers}>
-        <FilterManufacturerAccordion
+        {/* <FilterManufacturerAccordion
           manufacturersList={boilerManufacturers}
           title="Производитель котлов"
           updateManufacturer={updateBoilerManufacturer}
           setManufacturer={setBoilerManufacturers}
-        />
+        /> */}
       </div>
 
       <div className={styles.filters__price}>
@@ -60,22 +63,17 @@ const CatalogFiltersDesktop = ({
       </div>
 
       <div className={styles.filters__boiler_manufacturers}>
-        <FilterManufacturerAccordion
+        {/* <FilterManufacturerAccordion
           manufacturersList={partsManufacturers}
           title="Производитель запчастей"
           updateManufacturer={updatePartsManufacturer}
           setManufacturer={setPartsManufacturers}
-        />
+        /> */}
       </div>
 
       {filters.map((el) => (
-        <div className={styles.filters__boiler_manufacturers}>
-          <FilterManufacturerAccordion
-            title={el.label}
-            manufacturersList={el.items}
-            setManufacturer={setPartsManufacturers}
-            updateManufacturer={updatePartsManufacturer}
-          />
+        <div className={styles.filters__boiler_manufacturers} key={el.label}>
+          <FilterAccordion title={el.label} filterItems={el.items} />
         </div>
       ))}
 

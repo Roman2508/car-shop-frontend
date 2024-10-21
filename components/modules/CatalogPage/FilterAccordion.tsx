@@ -5,18 +5,21 @@ import { IFilterManufacturerAccordionProps } from '@/types/catalog'
 import Accordion from '@/components/elements/Accordion/Accordion'
 import FilterCheckboxItem from './FilterCheckboxItem'
 import styles from '@/styles/catalog/index.module.scss'
+import { IFilter, IFilterItem } from '@/redux/filter/FilterTypes'
 
-const FilterManufacturerAccordion = ({
-  manufacturersList,
-  title,
-  updateManufacturer,
-  setManufacturer,
-}: IFilterManufacturerAccordionProps) => {
+interface IFilterAccordionProps {
+  filterItems: IFilterItem[]
+  title: string | false
+  // setManufacturer: Event<IFilterCheckboxItem[]>
+  // updateManufacturer: Event<IFilterCheckboxItem>
+}
+
+const FilterAccordion: React.FC<IFilterAccordionProps> = ({ filterItems, title }) => {
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const isMobile = useMediaQuery(820)
 
-  const chooseAllManufacturers = () => setManufacturer(manufacturersList.map((item) => ({ ...item, checked: true })))
+  // const chooseAllManufacturers = () => setManufacturer(items.map((item) => ({ ...item, checked: true })))
 
   return (
     <Accordion
@@ -27,18 +30,12 @@ const FilterManufacturerAccordion = ({
       hideArrowClass={isMobile ? styles.hide_arrow : ''}
     >
       <div className={styles.filters__manufacturer__inner}>
-        <button className={styles.filters__manufacturer__select_all} onClick={chooseAllManufacturers}>
+        <button className={styles.filters__manufacturer__select_all} onClick={() => {}}>
           Вибрати все
         </button>
         <ul className={styles.filters__manufacturer__list}>
-          {manufacturersList.map((item) => (
-            <FilterCheckboxItem
-              title={item.title}
-              id={item.id}
-              key={item.id}
-              checked={item.checked}
-              event={updateManufacturer}
-            />
+          {filterItems?.map((item) => (
+            <FilterCheckboxItem title={item.title} label={title} id={item.id} key={item.id} checked={item.checked} />
           ))}
         </ul>
         <div style={{ height: 24 }} />
@@ -47,4 +44,4 @@ const FilterManufacturerAccordion = ({
   )
 }
 
-export default FilterManufacturerAccordion
+export default FilterAccordion

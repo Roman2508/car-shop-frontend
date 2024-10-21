@@ -23,9 +23,6 @@ import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
 
 const CatalogItem = ({ item, self = false }: { item: AdvertisementType; self?: boolean }) => {
   const mode = useStore($mode)
-  const user = useStore($user)
-
-  const { auth } = useSelector(authSelector)
 
   const shoppingCart = useStore($shoppingCart)
   const isInCart = shoppingCart.some((cartItem) => cartItem.partId === item.id)
