@@ -62,14 +62,17 @@ const CatalogFiltersDesktop = ({
         </Accordion>
       </div>
 
-      <div className={styles.filters__boiler_manufacturers}>
-        {/* <FilterManufacturerAccordion
+      <b style={{ display: 'block', marginBottom: '10px', textAlign: 'center', border: '1px solid black' }}>ПРОБІГ</b>
+      <b style={{ display: 'block', marginBottom: '10px', textAlign: 'center', border: '1px solid black' }}>РІК ВИПУСКУ</b>
+
+      {/* <div className={styles.filters__boiler_manufacturers}>
+        <FilterManufacturerAccordion
           manufacturersList={partsManufacturers}
           title="Производитель запчастей"
           updateManufacturer={updatePartsManufacturer}
           setManufacturer={setPartsManufacturers}
-        /> */}
-      </div>
+        /> 
+      </div> */}
 
       {filters.map((el) => (
         <div className={styles.filters__boiler_manufacturers} key={el.label}>

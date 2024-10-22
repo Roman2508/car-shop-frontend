@@ -35,15 +35,16 @@ import { useAppDispatch } from '@/redux/store'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
 import { IFilter } from '@/redux/filter/FilterTypes'
-import { filtersSelector } from '@/redux/filter/filterSlice'
+import { clearFilters, filtersSelector, setFilter } from '@/redux/filter/filterSlice'
 import SelectedFilterItems from '@/components/modules/CatalogPage/SelectedFilterItems'
+import getFilterKey, { filterKeys, getFilterKeyByValue } from '@/utils/getFilterKey'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const { advertisements } = useSelector(advertisementsSelector)
   const { filters } = useSelector(filtersSelector)
+  const { advertisements } = useSelector(advertisementsSelector)
 
   const mode = useStore($mode)
   const boilerManufacturers = useStore($boilerManufacturers)
@@ -199,31 +200,53 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
-  const resetFilters = async () => {
-    try {
-      const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-      const params = router.query
-
-      delete params.boiler
-      delete params.parts
-      delete params.priceFrom
-      delete params.priceTo
-      params.first = 'cheap'
-
-      router.push({ query: { ...params } }, undefined, { shallow: true })
-
-      setBoilerManufacturers(boilerManufacturers.map((item) => ({ ...item, checked: false })))
-
-      setPartsManufacturers(partsManufacturers.map((item) => ({ ...item, checked: false })))
-
-      setBoilerParts(data)
-      setPriceRange([1000, 9000])
-      setIsPriceRangeChanged(false)
-    } catch (error) {
-      toast.error((error as Error).message)
-    }
+  const fetchAdvertisements = () => {
+    dispatch(getAdvertisements(router.query))
   }
 
+  const resetFilters = async () => {
+    setSelectedFilters([])
+    fetchAdvertisements()
+    dispatch(clearFilters())
+
+    // try {
+    //   const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+    //   const params = router.query
+    //   delete params.boiler
+    //   delete params.parts
+    //   delete params.priceFrom
+    //   delete params.priceTo
+    //   params.first = 'cheap'
+    //   router.push({ query: { ...params } }, undefined, { shallow: true })
+    //   setBoilerManufacturers(boilerManufacturers.map((item) => ({ ...item, checked: false })))
+    //   setPartsManufacturers(partsManufacturers.map((item) => ({ ...item, checked: false })))
+    //   setBoilerParts(data)
+    //   setPriceRange([1000, 9000])
+    //   setIsPriceRangeChanged(false)
+    // } catch (error) {
+    //   toast.error((error as Error).message)
+    // }
+  }
+
+  // set filter on first render
+  React.useEffect(() => {
+    if (Object.keys(router.query).length) {
+      for (const _key in router.query) {
+        const key = _key as keyof typeof filterKeys
+        // @ts-ignore
+        const checkedItems = router.query[key].split(';')
+        checkedItems.forEach((title: string) => {
+          // @ts-ignore
+          if (title === '' || key === '') return
+          // @ts-ignore
+          const label = getFilterKeyByValue(key)
+          dispatch(setFilter({ label, title, checked: true }))
+        })
+      }
+    }
+  }, [])
+
+  // get checked items
   React.useEffect(() => {
     const filter = filters as IFilter[]
     const selectedFilters = filter.filter((el) => el.items.some((item) => item.checked))
@@ -231,19 +254,21 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     setSelectedFilters(selectedItems)
   }, [filters])
 
+  // set filter data to query params
   React.useEffect(() => {
     if (selectedFilters.length) {
       selectedFilters.forEach((el) => {
         const value = el.items.map((el) => el.title).join(';')
-        updateRoteParam(el.label, value)
+        updateRoteParam(getFilterKey(el.label), value)
       })
+    } else {
+      router.replace({ query: {} }, undefined, { shallow: true })
     }
   }, [selectedFilters])
 
   React.useEffect(() => {
-    console.log(router.query)
-    if (!router.query) return
-  }, [])
+    fetchAdvertisements()
+  }, [router.query])
 
   return (
     <section className={styles.catalog}>
@@ -282,7 +307,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
-              disabled={resetFilterBtnDisabled}
+              disabled={!selectedFilters.length}
               onClick={resetFilters}
             >
               Скинути фільтр

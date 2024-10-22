@@ -16,14 +16,23 @@ export const filterKeys = {
   Безпека: 'security',
   Розмитнена: 'сustomsСleared',
   'Авто пригнано з': 'theCarWasDrivenFrom',
-}
+} as const
 
-const getFilterKey = (key: keyof typeof filterKeys) => {
+export type FilterKeysType = keyof typeof filterKeys
+export type FilterValuesType = (typeof filterKeys)[keyof typeof filterKeys]
+
+const getFilterKey = (key: FilterKeysType) => {
   if (key in filterKeys) {
     return filterKeys[key]
+  } else {
+    filterKeys
   }
 
   return ''
+}
+
+export const getFilterKeyByValue = (value: FilterValuesType): FilterKeysType => {
+  return Object.entries(filterKeys).find(([key, val]) => val === value)?.[0] as FilterKeysType
 }
 
 export default getFilterKey

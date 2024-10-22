@@ -12,7 +12,6 @@ import {
   getNotAccepted,
   uploadFile,
 } from './advertisementsAsyncActions'
-import { FileType } from '../reservedLessons/reservedLessonsTypes'
 
 const advertisementsInitialState: InitialStateType = {
   advertisements: null,

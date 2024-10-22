@@ -4,15 +4,14 @@ import { Range, getTrackBackground } from 'react-range'
 import styles from '@/styles/catalog/index.module.scss'
 import { IPriceRangeProps } from '@/types/catalog'
 
-const STEP = 0.1
+const STEP = 1000
 const MIN = 0
-const MAX = 10000
+const MAX = 1000000
+// const STEP = 0.1
+// const MIN = 0
+// const MAX = 10000
 
-const PriceRange = ({
-  priceRange,
-  setPriceRange,
-  setIsPriceRangeChanged,
-}: IPriceRangeProps) => {
+const PriceRange = ({ priceRange, setPriceRange, setIsPriceRangeChanged }: IPriceRangeProps) => {
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
@@ -21,12 +20,26 @@ const PriceRange = ({
     setPriceRange(values)
   }
 
+  const handleChangeValue = (type: 'start' | 'end', value: number) => {
+    if (type === 'start') {
+      setPriceRange((prev: number[]) => {
+        return [value, prev[1]]
+      })
+    }
+    if (type === 'end') {
+      setPriceRange((prev: number[]) => {
+        return [prev[0], value]
+      })
+    }
+  }
+
   return (
     <div className={styles.filters__price}>
       <div className={`${styles.filters__price__inputs} ${darkModeClass}`}>
         <input
           type="text"
           value={Math.ceil(priceRange[0])}
+          // onChange={(e) => handleChangeValue('start', Number(e.target.value))}
           placeholder="от 00 000"
           readOnly
         />
@@ -34,6 +47,7 @@ const PriceRange = ({
         <input
           type="text"
           value={Math.ceil(priceRange[1])}
+          // onChange={(e) => handleChangeValue('end', Number(e.target.value))}
           placeholder="до 10 000"
           readOnly
         />
@@ -76,12 +90,7 @@ const PriceRange = ({
           </div>
         )}
         renderThumb={({ props }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-            }}
-          >
+          <div {...props} style={{ ...props.style }}>
             <div
               style={{
                 height: '20px',

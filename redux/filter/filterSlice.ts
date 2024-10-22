@@ -19,12 +19,12 @@ const filtersSlice = createSlice({
       state.loadingStatus = action.payload
     },
 
-    setFilter(state, action: PayloadAction<{ label: keyof typeof filterKeys; title: string }>) {
+    setFilter(state, action: PayloadAction<{ label: keyof typeof filterKeys; title: string; checked?: boolean }>) {
       const filters = state.filters.map((el) => {
         if (el.label === action.payload.label) {
           const items = el.items.map((item) => {
             if (item.title === action.payload.title) {
-              return { ...item, checked: !item.checked }
+              return { ...item, checked: action.payload.checked ? action.payload.checked : !item.checked }
             }
 
             return item
@@ -40,11 +40,19 @@ const filtersSlice = createSlice({
     },
 
     //
+
+    clearFilters(state) {
+      const filters = state.filters.map((el) => {
+        const items = el.items.map((el) => ({ ...el, checked: false }))
+        return { ...el, items }
+      })
+      state.filters = filters
+    },
   },
   extraReducers: (builder) => {},
 })
 
-export const { setLoadingStatus, setFilter } = filtersSlice.actions
+export const { setLoadingStatus, setFilter, clearFilters } = filtersSlice.actions
 
 export default filtersSlice.reducer
 
