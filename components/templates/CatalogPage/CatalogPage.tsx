@@ -1,5 +1,6 @@
 import { getBoilerPartsFx } from '@/app/api/boilerParts'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
+import debounse from 'lodash/debounce'
 import ManufacturersBlock from '@/components/modules/CatalogPage/SelectedFilterItems'
 import {
   $boilerManufacturers,
@@ -38,6 +39,8 @@ import { IFilter } from '@/redux/filter/FilterTypes'
 import { clearFilters, filtersSelector, setFilter } from '@/redux/filter/filterSlice'
 import SelectedFilterItems from '@/components/modules/CatalogPage/SelectedFilterItems'
 import getFilterKey, { filterKeys, getFilterKeyByValue } from '@/utils/getFilterKey'
+import EmptySvg from '@/components/elements/EmptySvg/EmptySvg'
+import Empty from '@/components/elements/EmptySvg/EmptySvg'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -51,8 +54,13 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const partsManufacturers = useStore($partsManufacturers)
   const filteredBoilerParts = useStore($filteredBoilerParts)
 
-  const [spinner, setSpinner] = useState(false)
-  const [priceRange, setPriceRange] = useState([1000, 9000])
+  const [spinner, setSpinner] = useState(true)
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000])
+  const [mileageRange, setMileageRange] = useState<[number, number]>([0, 1000000])
+  const [yearOfReleaseRange, setYearOfReleaseRange] = useState<[number, number]>([1900, new Date().getFullYear()])
+
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)
   const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
 
@@ -200,13 +208,15 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }
 
-  const fetchAdvertisements = () => {
-    dispatch(getAdvertisements(router.query))
-  }
+  // const fetchAdvertisements = () => {
+  //   dispatch(getAdvertisements(router.query))
+  // }
 
   const resetFilters = async () => {
     setSelectedFilters([])
-    fetchAdvertisements()
+    setSpinner(true)
+    await dispatch(getAdvertisements(router.query))
+    setSpinner(false)
     dispatch(clearFilters())
 
     // try {
@@ -231,8 +241,30 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   // set filter on first render
   React.useEffect(() => {
     if (Object.keys(router.query).length) {
-      for (const _key in router.query) {
-        const key = _key as keyof typeof filterKeys
+      for (const key in router.query) {
+        // const key = _key as keyof typeof filterKeys
+
+        if (key === 'priceFrom') {
+          setPriceRange((prev) => [Number(router.query[key]), prev[1]])
+        }
+        if (key === 'priceTo') {
+          setPriceRange((prev) => [prev[0], Number(router.query[key])])
+        }
+
+        if (key === 'mileageFrom') {
+          setMileageRange((prev) => [prev[0], Number(router.query[key])])
+        }
+        if (key === 'mileageTo') {
+          setMileageRange((prev) => [prev[0], Number(router.query[key])])
+        }
+
+        if (key === 'yearOfReleaseStart') {
+          setYearOfReleaseRange((prev) => [prev[0], Number(router.query[key])])
+        }
+        if (key === 'yearOfReleaseEnd') {
+          setYearOfReleaseRange((prev) => [prev[0], Number(router.query[key])])
+        }
+
         // @ts-ignore
         const checkedItems = router.query[key].split(';')
         checkedItems.forEach((title: string) => {
@@ -266,8 +298,29 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }
   }, [selectedFilters])
 
+  const debouncedGetResponce = React.useCallback(
+    debounse((query) => dispatch(getAdvertisements(query)), 1000),
+    []
+  )
+
+  // !first render
   React.useEffect(() => {
-    fetchAdvertisements()
+    if (isFirstRender) return
+    debouncedGetResponce(router.query)
+  }, [router.query])
+
+  // first render
+  React.useEffect(() => {
+    if (!isFirstRender) return
+
+    const fetchData = async () => {
+      setSpinner(true)
+      await dispatch(getAdvertisements(router.query))
+      setIsFirstRender(false)
+      setSpinner(false)
+    }
+
+    fetchData()
   }, [router.query])
 
   return (
@@ -275,26 +328,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       <div className={`container ${styles.catalog__container}`}>
         <h2 className={`${styles.catalog__title} ${darkModeClass}`}>Каталог товаров</h2>
         <div className={`${styles.catalog__top} ${darkModeClass}`}>
-          {/* <AnimatePresence>
-            {isAnyBoilerManufacturerChecked && (
-              <ManufacturersBlock
-                title="Производитель котлов:"
-                event={updateBoilerManufacturer}
-                manufacturersList={boilerManufacturers}
-              />
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence>
-            {isAnyPartsManufacturerChecked && (
-              <ManufacturersBlock
-                title="Производитель запчастей:"
-                event={updatePartsManufacturer}
-                manufacturersList={partsManufacturers}
-              />
-            )}
-          </AnimatePresence> */}
-
           {Boolean(selectedFilters.length) &&
             selectedFilters.map((selectedFilter) => (
               <AnimatePresence>
@@ -326,15 +359,19 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__bottom__inner}>
             <CatalogFilters
               priceRange={priceRange}
-              closePopup={closePopup}
-              filtersMobileOpen={open}
-              currentPage={currentPage}
-              resetFilters={resetFilters}
               setPriceRange={setPriceRange}
-              setIsFilterInQuery={setIsFilterInQuery}
-              isPriceRangeChanged={isPriceRangeChanged}
-              resetFilterBtnDisabled={resetFilterBtnDisabled}
-              setIsPriceRangeChanged={setIsPriceRangeChanged}
+              // closePopup={closePopup}
+              // filtersMobileOpen={open}
+              // currentPage={currentPage}
+              // resetFilters={resetFilters}
+              mileageRange={mileageRange}
+              setMileageRange={setMileageRange}
+              yearOfReleaseRange={yearOfReleaseRange}
+              setYearOfReleaseRange={setYearOfReleaseRange}
+              // setIsFilterInQuery={setIsFilterInQuery}
+              // isPriceRangeChanged={isPriceRangeChanged}
+              // resetFilterBtnDisabled={resetFilterBtnDisabled}
+              // setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
 
             {spinner ? (
@@ -350,14 +387,14 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
                   </li>
                 ))}
               </ul>
-            ) : (
+            ) : advertisements && advertisements?.length ? (
               <ul className={styles.catalog__list}>
-                {advertisements?.length ? (
-                  advertisements.map((item) => <CatalogItem item={item} key={item.id} />)
-                ) : (
-                  <span>Пусто...</span>
-                )}
+                {advertisements.map((item) => (
+                  <CatalogItem item={item} key={item.id} />
+                ))}
               </ul>
+            ) : (
+              <Empty darkModeClass={darkModeClass} />
             )}
           </div>
 

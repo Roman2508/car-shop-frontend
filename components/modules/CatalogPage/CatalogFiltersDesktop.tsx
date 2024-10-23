@@ -13,20 +13,33 @@ import Accordion from '@/components/elements/Accordion/Accordion'
 import PriceRange from './PriceRange'
 import styles from '@/styles/catalog/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
-import { ICatalogFilterDesktopProps, IFilterCheckboxItem } from '@/types/catalog'
+import { IFilterCheckboxItem } from '@/types/catalog'
 import FilterAccordion from './FilterAccordion'
 import { useSelector } from 'react-redux'
 import { filtersSelector } from '@/redux/filter/filterSlice'
+import MileageRange from './MileageRange'
+import YearOfReleaseRange from './YearOfReleaseRange'
 
-const CatalogFiltersDesktop = ({
+interface ICatalogFilterDesktopProps {
+  priceRange: [number, number]
+  mileageRange: [number, number]
+  yearOfReleaseRange: [number, number]
+  setPriceRange: React.Dispatch<React.SetStateAction<[number, number]>>
+  setMileageRange: React.Dispatch<React.SetStateAction<[number, number]>>
+  setYearOfReleaseRange: React.Dispatch<React.SetStateAction<[number, number]>>
+  spinner: boolean
+  // applyFilters: VoidFunction
+}
+
+const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
   priceRange,
   setPriceRange,
-  setIsPriceRangeChanged,
-  resetFilterBtnDisabled,
+  mileageRange,
+  setMileageRange,
+  yearOfReleaseRange,
+  setYearOfReleaseRange,
   spinner,
-  resetFilters,
-  applyFilters,
-}: ICatalogFilterDesktopProps) => {
+}) => {
   const mode = useStore($mode)
 
   const { filters } = useSelector(filtersSelector)
@@ -35,7 +48,7 @@ const CatalogFiltersDesktop = ({
 
   return (
     <div className={`${styles.catalog__bottom__filters} ${darkModeClass}`}>
-      <h3 className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}>Фильтры</h3>
+      <h3 className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}>Фільтри</h3>
       <div className={styles.filters__boiler_manufacturers}>
         {/* <FilterManufacturerAccordion
           manufacturersList={boilerManufacturers}
@@ -47,23 +60,42 @@ const CatalogFiltersDesktop = ({
 
       <div className={styles.filters__price}>
         <Accordion
-          title="Цена"
+          title="Ціна"
           titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
           arrowOpenClass={styles.open}
         >
           <div className={styles.filters__manufacturer__inner}>
-            <PriceRange
-              priceRange={priceRange}
-              setPriceRange={setPriceRange}
-              setIsPriceRangeChanged={setIsPriceRangeChanged}
-            />
+            <PriceRange priceRange={priceRange} setPriceRange={setPriceRange} />
             <div style={{ height: 24 }} />
           </div>
         </Accordion>
       </div>
 
-      <b style={{ display: 'block', marginBottom: '10px', textAlign: 'center', border: '1px solid black' }}>ПРОБІГ</b>
-      <b style={{ display: 'block', marginBottom: '10px', textAlign: 'center', border: '1px solid black' }}>РІК ВИПУСКУ</b>
+      <div className={styles.filters__price}>
+        <Accordion
+          title="Пробіг"
+          titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+          arrowOpenClass={styles.open}
+        >
+          <div className={styles.filters__manufacturer__inner}>
+            <MileageRange mileageRange={mileageRange} setMileageRange={setMileageRange} />
+            <div style={{ height: 24 }} />
+          </div>
+        </Accordion>
+      </div>
+
+      <div className={styles.filters__price}>
+        <Accordion
+          title="Рік випуску"
+          titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
+          arrowOpenClass={styles.open}
+        >
+          <div className={styles.filters__manufacturer__inner}>
+            <YearOfReleaseRange yearOfReleaseRange={yearOfReleaseRange} setYearOfReleaseRange={setYearOfReleaseRange} />
+            <div style={{ height: 24 }} />
+          </div>
+        </Accordion>
+      </div>
 
       {/* <div className={styles.filters__boiler_manufacturers}>
         <FilterManufacturerAccordion
@@ -80,7 +112,7 @@ const CatalogFiltersDesktop = ({
         </div>
       ))}
 
-      <div className={styles.filters__actions}>
+      {/* <div className={styles.filters__actions}>
         <button
           className={styles.filters__actions__show}
           disabled={spinner || resetFilterBtnDisabled}
@@ -91,7 +123,7 @@ const CatalogFiltersDesktop = ({
         <button className={styles.filters__actions__reset} disabled={resetFilterBtnDisabled} onClick={resetFilters}>
           Сбросить
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

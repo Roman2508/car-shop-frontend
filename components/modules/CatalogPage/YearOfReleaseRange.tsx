@@ -1,93 +1,94 @@
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import { Range, getTrackBackground } from 'react-range'
 
 import { $mode } from '@/context/mode'
 import styles from '@/styles/catalog/index.module.scss'
-import React from 'react'
 
-const STEP = 1000
-const MIN = 0
-const MAX = 10000000
-// const STEP = 0.1
-// const MIN = 0
-// const MAX = 10000
+const STEP = 1
+const MIN = 1900
+const MAX = new Date().getFullYear()
 
-interface IPriceRangeProps {
-  priceRange: [number, number]
-  setPriceRange: React.Dispatch<React.SetStateAction<[number, number]>>
+interface IYearOfReleaseRangeProps {
+  yearOfReleaseRange: [number, number]
+  setYearOfReleaseRange: React.Dispatch<React.SetStateAction<[number, number]>>
 }
 
-const PriceRange: React.FC<IPriceRangeProps> = ({ priceRange, setPriceRange }) => {
+const YearOfReleaseRange: React.FC<IYearOfReleaseRangeProps> = ({ yearOfReleaseRange, setYearOfReleaseRange }) => {
   const router = useRouter()
 
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
-  const updateRoteParam = (priceFrom: string, priceTo: string) =>
+  const updateRoteParam = (yearOfReleaseStart: string, yearOfReleaseEnd: string) =>
     router.push(
       {
         query: {
           ...router.query,
-          priceFrom,
-          priceTo,
+          yearOfReleaseStart,
+          yearOfReleaseEnd,
         },
       },
       undefined,
       { shallow: true }
     )
 
-  const handlePriceRangeChange = (_values: number[]) => {
+  const handleYearOfReleaseRangeChange = (_values: number[]) => {
     const values = _values as [number, number]
-    setPriceRange(values)
+    setYearOfReleaseRange(values)
     updateRoteParam(String(values[0]), String(values[1]))
   }
 
-  const handleChangeValue = (type: 'priceFrom' | 'priceTo', value: number) => {
-    if (type === 'priceFrom') {
+  const handleChangeValue = (type: 'yearOfReleaseStart' | 'yearOfReleaseEnd', value: number) => {
+    if (type === 'yearOfReleaseStart') {
       if (value < MIN) return
       // @ts-ignore
-      setPriceRange((prev: number[]) => {
+      setYearOfReleaseRange((prev: number[]) => {
         updateRoteParam(String(value), String(prev[1]))
         return [value, prev[1]]
       })
     }
-    if (type === 'priceTo') {
+    if (type === 'yearOfReleaseEnd') {
       if (value > MAX) return
       // @ts-ignore
-      setPriceRange((prev: number[]) => {
+      setYearOfReleaseRange((prev: number[]) => {
         updateRoteParam(String(prev[0]), String(value))
         return [prev[0], value]
       })
     }
   }
 
+  React.useEffect(() => {
+    setYearOfReleaseRange([MIN, MAX])
+  }, [])
+
   return (
     <div className={styles.filters__price}>
       <div className={`${styles.filters__price__inputs} ${darkModeClass}`}>
         <input
           type="number"
-          value={Math.ceil(priceRange[0])}
-          onChange={(e) => handleChangeValue('priceFrom', Number(e.target.value))}
-          placeholder="від 0"
+          value={Math.ceil(yearOfReleaseRange[0])}
+          onChange={(e) => handleChangeValue('yearOfReleaseStart', Number(e.target.value))}
+          placeholder={`від ${MIN}`}
         />
 
         <span className={styles.filters__price__inputs__border} />
 
         <input
           type="number"
-          value={Math.ceil(priceRange[1])}
-          onChange={(e) => handleChangeValue('priceTo', Number(e.target.value))}
-          placeholder="до 100 000 000"
+          value={Math.ceil(yearOfReleaseRange[1])}
+          onChange={(e) => handleChangeValue('yearOfReleaseEnd', Number(e.target.value))}
+          placeholder={`до ${MAX}`}
         />
       </div>
 
       <Range
-        values={priceRange}
+        values={yearOfReleaseRange}
         step={STEP}
         min={MIN}
         max={MAX}
-        onChange={handlePriceRangeChange}
+        onChange={handleYearOfReleaseRangeChange}
         renderTrack={({ props, children }) => (
           <div
             onMouseDown={props.onMouseDown}
@@ -107,7 +108,7 @@ const PriceRange: React.FC<IPriceRangeProps> = ({ priceRange, setPriceRange }) =
                 width: '100%',
                 borderRadius: '4px',
                 background: getTrackBackground({
-                  values: priceRange,
+                  values: yearOfReleaseRange,
                   colors: ['#B1CEFA', '#247CC8', '#B1CEFA'],
                   min: MIN,
                   max: MAX,
@@ -138,4 +139,4 @@ const PriceRange: React.FC<IPriceRangeProps> = ({ priceRange, setPriceRange }) =
   )
 }
 
-export default PriceRange
+export default YearOfReleaseRange
