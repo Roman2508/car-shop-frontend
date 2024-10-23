@@ -60,10 +60,6 @@ const MileageRange: React.FC<IMileageRangeProps> = ({ mileageRange, setMileageRa
     }
   }
 
-  React.useEffect(() => {
-    setMileageRange([MIN, MAX])
-  }, [])
-
   return (
     <div className={styles.filters__price}>
       <div className={`${styles.filters__price__inputs} ${darkModeClass}`}>

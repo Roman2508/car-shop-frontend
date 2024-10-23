@@ -33,13 +33,13 @@ const FilterSelect = ({ setSpinner }: { setSpinner: (arg0: boolean) => void }) =
           updateCategoryOption('Спочатку дорогі')
           setBoilerPartsExpensiveFirst()
           break
-        case 'popular':
-          updateCategoryOption('По популярності')
-          setBoilerPartsByPopularity()
+        case 'new':
+          updateCategoryOption('Спочатку нові')
+          setBoilerPartsExpensiveFirst()
           break
-        default:
-          updateCategoryOption('Спочатку дешеві')
-          setBoilerPartsCheapFirst()
+        case 'old':
+          updateCategoryOption('Спочатку старі')
+          setBoilerPartsExpensiveFirst()
           break
       }
     }
@@ -72,9 +72,13 @@ const FilterSelect = ({ setSpinner }: { setSpinner: (arg0: boolean) => void }) =
         setBoilerPartsExpensiveFirst()
         updateRoteParam('expensive')
         break
-      case 'По популярності':
+      case 'Спочатку нові':
         setBoilerPartsByPopularity()
-        updateRoteParam('popular')
+        updateRoteParam('new')
+        break
+      case 'Спочатку старі':
+        setBoilerPartsByPopularity()
+        updateRoteParam('old')
         break
     }
 

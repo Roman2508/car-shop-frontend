@@ -7,21 +7,48 @@ import styles from '@/styles/catalog/index.module.scss'
 import React from 'react'
 import { useAppDispatch } from '@/redux/store'
 import { setFilter } from '@/redux/filter/filterSlice'
-import { filterKeys } from '@/utils/getFilterKey'
+import getFilterKey, { filterKeys } from '@/utils/getFilterKey'
+import { useRouter } from 'next/router'
+import { IFilter } from '@/redux/filter/FilterTypes'
 
 interface ISelectedFilterBlockItemProps {
+  setSelectedFilters: React.Dispatch<React.SetStateAction<IFilter[]>>
   label: keyof typeof filterKeys
   item: any
 }
 
-const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item, label }) => {
+const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item, label, setSelectedFilters }) => {
+  const router = useRouter()
+
   const dispatch = useAppDispatch()
 
   const mode = useStore($mode)
 
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
-  const removeFilter = () => dispatch(setFilter({ label, title: item.title }))
+  const removeFilter = () => {
+    dispatch(setFilter({ label, title: item.title }))
+
+    setSelectedFilters((prev) => {
+      const newFilters = prev.map((el) => {
+        if (el.label === label) {
+          const items = el.items.filter((i) => i.title !== item.title)
+
+          if (!items.length) {
+            const query = router.query
+            delete query[getFilterKey(el.label)]
+            router.push({ query: { ...query } }, undefined, { shallow: true })
+            return
+          }
+
+          return { ...el, items }
+        }
+        return el
+      })
+
+      return newFilters.filter((el) => !!el)
+    })
+  }
 
   return (
     <motion.li

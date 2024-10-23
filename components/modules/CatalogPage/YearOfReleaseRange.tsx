@@ -59,10 +59,6 @@ const YearOfReleaseRange: React.FC<IYearOfReleaseRangeProps> = ({ yearOfReleaseR
     }
   }
 
-  React.useEffect(() => {
-    setYearOfReleaseRange([MIN, MAX])
-  }, [])
-
   return (
     <div className={styles.filters__price}>
       <div className={`${styles.filters__price__inputs} ${darkModeClass}`}>
