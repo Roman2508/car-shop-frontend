@@ -11,12 +11,22 @@ import { IDashboardSlider } from '@/types/dashboard'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { formatPrice } from '@/utils/common'
 import styles from '@/styles/dashboard/index.module.scss'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import emptyImage from '../../../assets/empty-upscaled.jpeg'
+import Image from 'next/image'
+import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
+import EngineSvg from '@/components/elements/EngineSvg/EngineSvg'
+import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
+import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
+import { formatDate } from '@/utils/formatDate'
 
-const DashboardSlider = ({
-  items,
-  spinner,
-  goToPartPage,
-}: IDashboardSlider) => {
+interface IDashboardSliderProps {
+  items: AdvertisementType[]
+  spinner: boolean
+  goToPartPage?: boolean
+}
+
+const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goToPartPage }) => {
   const isMedia768 = useMediaQuery(768)
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
@@ -30,7 +40,7 @@ const DashboardSlider = ({
     slider.forEach((item) => {
       const list = item.querySelector('.slick-list') as HTMLElement
 
-      list.style.height = isMedia560 ? '276px' : '390px'
+      list.style.height = isMedia560 ? '276px' : '410px'
       list.style.padding = '0 5px'
       list.style.marginRight = isMedia560 ? '-8px' : isMedia800 ? '-15px' : '0'
     })
@@ -55,9 +65,7 @@ const DashboardSlider = ({
       {spinner ? (
         [...Array(8)].map((_, i) => (
           <div
-            className={`${skeletonStyles.skeleton__item} ${
-              mode === 'dark' ? `${skeletonStyles.dark_mode}` : ''
-            }`}
+            className={`${skeletonStyles.skeleton__item} ${mode === 'dark' ? `${skeletonStyles.dark_mode}` : ''}`}
             key={i}
             style={width}
           >
@@ -66,35 +74,55 @@ const DashboardSlider = ({
         ))
       ) : items.length ? (
         items.map((item) => (
-          <div
-            className={`${styles.dashboard__slide} ${darkModeClass}`}
-            key={item.id}
-            style={width}
-          >
-            <img src={JSON.parse(item.images)[0]} alt={item.name} />
+          <div className={`${styles.dashboard__slide} ${darkModeClass}`} key={item.id} style={width}>
+            <Link href={goToPartPage ? `/catalog/${item.id}` : '/catalog'}>
+              {item.photos.length ? (
+                <img src={item.photos[0]?.filename} alt={'car photo'} />
+              ) : (
+                <Image src={emptyImage} width={500} height={500} alt="Picture of the author" />
+              )}
+            </Link>
             <div className={styles.dashboard__slide__inner}>
-              <Link
-                href={goToPartPage ? `/catalog/${item.id}` : '/catalog'}
-                passHref
-                legacyBehavior
-              >
+              <Link href={goToPartPage ? `/catalog/${item.id}` : '/catalog'} passHref legacyBehavior>
                 <a href="">
-                  <h3 className={styles.dashboard__slide__title}>
-                    {item.name}
-                  </h3>
+                  <h3 className={styles.dashboard__slide__title}>{item.title}</h3>
                 </a>
               </Link>
-              <span className={styles.dashboard__slide__code}>
-                Артикул: {item.vendor_code}
-              </span>
-              <span className={styles.dashboard__slide__price}>
-                {formatPrice(item.price)} P
-              </span>
+
+              <p style={{ fontSize: '14px', marginBottom: '12px' }}>{formatDate(item.createdAt)}</p>
+
+              <div className={styles.dashboard__slide__description__wrapper}>
+                <span className={styles.dashboard__slide__description}>
+                  <SpeedometerSvg />
+                  {item.mileage}
+                  {/* 2020 115 тис.км. */}
+                </span>
+
+                <span className={styles.dashboard__slide__description}>
+                  <EngineSvg />
+                  {item.engineVolume}
+                  {/* 2.50 л. */}
+                </span>
+
+                <span className={styles.dashboard__slide__description}>
+                  <GearBoxSvg />
+                  {/* Автоматична */}
+                  {item.gearbox}
+                </span>
+
+                <span className={styles.dashboard__slide__description}>
+                  <FuelSvg />
+                  {/* Бензин */}
+                  {item.fuelType}
+                </span>
+              </div>
+
+              <span className={styles.dashboard__slide__price}>{formatPrice(item.price)} P</span>
             </div>
           </div>
         ))
       ) : (
-        <span>Список товаров пуст....</span>
+        <span>Список оголошень пустий....</span>
       )}
     </Slider>
   )

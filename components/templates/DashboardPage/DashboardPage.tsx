@@ -5,6 +5,7 @@ import { useStore } from 'effector-react'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
+import { useAppDispatch } from '@/redux/store'
 import { IBoilerParts } from '@/types/boilerparts'
 import { $shoppingCart } from '@/context/shopping-cart'
 import authStyles from '@/styles/auth/index.module.scss'
@@ -13,6 +14,8 @@ import { getBestsellersOrNewPartsFx } from '@/app/api/boilerParts'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
+import { getBestsellers, getNewAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
 export const boilers: IBoilerParts = {
   count: 10,
@@ -124,13 +127,16 @@ const popularFilters = [
 ]
 
 const DashboardPage = () => {
+  const dispatch = useAppDispatch()
+
   const mode = useStore($mode)
   const shoppingCart = useStore($shoppingCart)
 
   const [spinner, setSpinner] = useState(false)
   const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
-  const [newParts, setNewParts] = useState<IBoilerParts>({} as IBoilerParts)
-  const [bestsellers, setBestsellers] = useState<IBoilerParts>({} as IBoilerParts)
+
+  const [newParts, setNewParts] = useState<AdvertisementType[]>([])
+  const [bestsellers, setBestsellers] = useState<AdvertisementType[]>([])
 
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
@@ -164,13 +170,16 @@ const DashboardPage = () => {
   const loadBoilerParts = async () => {
     try {
       setSpinner(true)
-      const bestsellers = await getBestsellersOrNewPartsFx('/boiler-parts/bestsellers')
-      const newParts = await getBestsellersOrNewPartsFx('/boiler-parts/new')
-
-      setBestsellers(boilers)
-      setNewParts(boilers)
+      // const bestsellers = await getBestsellersOrNewPartsFx('/boiler-parts/bestsellers')
+      // const newParts = await getBestsellersOrNewPartsFx('/boiler-parts/new')
       // setBestsellers(bestsellers)
       // setNewParts(newParts)
+
+      const { payload: bestsellers }: { payload: any } = await dispatch(getBestsellers())
+      const { payload: newAdvertisements }: { payload: any } = await dispatch(getNewAdvertisements())
+
+      setBestsellers(bestsellers[0])
+      setNewParts(newAdvertisements[0])
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -270,19 +279,25 @@ const DashboardPage = () => {
           {/* <h2 className={`${styles.dashboard__title} ${darkModeClass}`} style={{ marginTop: '100px' }}>
             Наші партнери
           </h2> */}
-          <DashboardSlider items={bestsellers.rows || []} spinner={spinner} />
+          <DashboardSlider items={bestsellers} spinner={spinner} goToPartPage />
         </div>
 
         <div className={styles.dashboard__parts}>
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>Нові оголошення</h3>
-          <DashboardSlider items={newParts.rows || []} spinner={spinner} />
+          <DashboardSlider items={newParts} spinner={spinner} goToPartPage />
         </div>
 
         <div className={styles.dashboard__about}>
-          <h3 className={`${styles.dashboard__parts__title} ${styles.dashboard__about__title} ${darkModeClass}`}>
+          <h3
+            style={{ textAlign: 'center' }}
+            className={`${styles.dashboard__parts__title} ${styles.dashboard__about__title} ${darkModeClass}`}
+          >
             Про компанію
           </h3>
-          <p className={`${styles.dashboard__about__text} ${darkModeClass}`}>
+          <p
+            style={{ textAlign: 'center', margin: '0 auto', fontSize: '20px', lineHeight: '1.3' }}
+            className={`${styles.dashboard__about__text} ${darkModeClass}`}
+          >
             Наш сайт пропонує широкий вибір автомобілів різних марок і моделей для покупки. Ми допомагаємо вам легко та
             зручно підібрати автомобіль, виходячи з ваших уподобань та бюджету. Вся інформація про транспортні засоби
             представлена з детальними описами та характеристиками, що дозволить вам зробити обґрунтований вибір. Ми
