@@ -156,7 +156,7 @@ const Administration = () => {
           ))}
         </div>
       ) : (
-        <h2 style={darkModeClass ? { color: '#fff' } : { color: '#000' }}>Немає що показувати</h2>
+        <h2 style={darkModeClass ? { color: '#fff' } : { color: '#000' }}>Нових оголошень</h2>
       )}
     </div>
   )

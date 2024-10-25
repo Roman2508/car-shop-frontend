@@ -8,7 +8,7 @@ import styles from '@/styles/profile/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
 import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
-import Advertisements from '@/components/modules/ProfilePage/Advertisements'
+import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
 import Administration from '@/components/modules/ProfilePage/Administration'
 
 const tabs = [
@@ -95,7 +95,7 @@ const ProfilePage = () => {
 
               {activeTab === tabs[1].label && <MesagesTab />}
 
-              {activeTab === tabs[2].label && <Advertisements />}
+              {activeTab === tabs[2].label && <MyAdvertisements />}
 
               {activeTab === tabs[3].label && <Administration />}
             </>

@@ -25,7 +25,7 @@
     }
 
     &.active {
-      color: #5acccc;
+      color: #1c629e;
       cursor: default;
 
       &::after {
@@ -43,13 +43,13 @@
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: #5acccc;
+      background-color: #1c629e;
       transform: scaleX(0);
       transition: transform 0.3s ease-in-out;
     }
 
     &:hover {
-      color: #5acccc;
+      color: #1c629e;
       transition: color 0.2s ease-in-out;
 
       &::after {
