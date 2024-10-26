@@ -24,7 +24,6 @@ import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
 import EngineSvg from '@/components/elements/EngineSvg/EngineSvg'
 import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
 import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
-import { boilers } from '../DashboardPage/DashboardPage'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import EditSvg from '@/components/elements/EditSvg/EditSvg'
 import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
@@ -46,6 +45,7 @@ import { AuthType } from '@/redux/auth/authTypes'
 import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
 import { DialogType } from '@/redux/dialogs/dialogsTypes'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { createImageUrl } from '@/utils/createImageUrl'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
@@ -176,7 +176,7 @@ const PartPage = () => {
                 )}
 
                 {auth?.id === fullAdvertisement.user.id && (
-                  <span title="Редагувати оголошення">
+                  <span title="Редагувати оголошення" onClick={() => router.push(`/create-ad/${fullAdvertisement.id}`)}>
                     <Edit2Svg darkModeClass={darkModeClass} />
                   </span>
                 )}
@@ -239,7 +239,7 @@ const PartPage = () => {
 
               <div className={styles.part__user__wrapper}>
                 {fullAdvertisement.user.avatarUrl ? (
-                  <img src={`${process.env.NEXT_PUBLIC_SERVER_URL}/uploads/${fullAdvertisement.user.avatarUrl}`} />
+                  <img src={createImageUrl(fullAdvertisement.user.avatarUrl)} alt="user avatar" />
                 ) : (
                   <div className={styles.part__user__image}>{fullAdvertisement.user.username[0]}</div>
                 )}

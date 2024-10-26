@@ -8,6 +8,7 @@ import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import { useStore } from 'effector-react'
 import { $mode } from '@/context/mode'
 import { toast } from 'sonner'
+import Header from '@/components/modules/Header/Header'
 
 const AuthPage = () => {
   const isMedia800 = useMediaQuery(800)
@@ -38,60 +39,67 @@ const AuthPage = () => {
   }
 
   return (
-    <div className={`${styles.main} ${darkModeClass}`}>
-      <div className={styles.mode_toggle}>
-        <ModeToggler />
-      </div>
-      <div className={`${styles.container} ${styles.a_container} ${darkModeClass}`} id="a-container" ref={aContainer}>
-        <div className={styles.container__inner}>
-          <SignUpForm switchForm={switchForm} />
+    <>
+      <Header isAuthPage />
+
+      <div className={`${styles.main} ${darkModeClass}`}>
+        <div className={styles.mode_toggle}>
+          <ModeToggler />
+        </div>
+        <div className={`${styles.container} ${styles.a_container} ${darkModeClass}`} id="a-container" ref={aContainer}>
+          <div className={styles.container__inner}>
+            <SignUpForm switchForm={switchForm} />
+          </div>
+        </div>
+        <div className={`${styles.container} ${styles.b_container} ${darkModeClass}`} id="b-container" ref={bContainer}>
+          <div className={styles.container__inner}>
+            <SignInForm />
+          </div>
+        </div>
+        <div className={`${styles.switch} ${darkModeClass}`} id="switch-cnt" ref={switchCtn}>
+          <div className={`${styles.switch__circle} ${darkModeClass}`} ref={switchCircle1} />
+          <div
+            className={`${styles.switch__circle} ${styles.switch__circle__t} ${darkModeClass}`}
+            ref={switchCircle2}
+          />
+          <div className={styles.switch__container} id="switch-c1" ref={switchC1}>
+            {!isMedia800 && (
+              <>
+                <h2 className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}>Ласкаво просимо!</h2>
+                <p className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}>
+                  Щоб залишатися на зв'язку з нами, будь ласка, увійдіть під своєю особистою інформацією
+                </p>
+              </>
+            )}
+            <button
+              onClick={switchForm}
+              style={{ height: '40px', marginTop: '16px' }}
+              className={`${inputsStyles.button} ${darkModeClass}`}
+            >
+              Увійти
+            </button>
+          </div>
+          <div className={`${styles.switch__container} ${styles.is_hidden}`} id="switch-c2" ref={switchC2}>
+            {!isMedia800 && (
+              <>
+                <h2 className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}>Привіт, друже!</h2>
+                <p className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}>
+                  Введіть свої особисті дані та почніть
+                  <br /> подорож з нами
+                </p>
+              </>
+            )}
+            <button
+              onClick={switchForm}
+              style={{ height: '40px', marginTop: '16px' }}
+              className={`${inputsStyles.button} ${darkModeClass}`}
+            >
+              Зареєструватись
+            </button>
+          </div>
         </div>
       </div>
-      <div className={`${styles.container} ${styles.b_container} ${darkModeClass}`} id="b-container" ref={bContainer}>
-        <div className={styles.container__inner}>
-          <SignInForm />
-        </div>
-      </div>
-      <div className={`${styles.switch} ${darkModeClass}`} id="switch-cnt" ref={switchCtn}>
-        <div className={`${styles.switch__circle} ${darkModeClass}`} ref={switchCircle1} />
-        <div className={`${styles.switch__circle} ${styles.switch__circle__t} ${darkModeClass}`} ref={switchCircle2} />
-        <div className={styles.switch__container} id="switch-c1" ref={switchC1}>
-          {!isMedia800 && (
-            <>
-              <h2 className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}>Ласкаво просимо!</h2>
-              <p className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}>
-                Щоб залишатися на зв'язку з нами, будь ласка, увійдіть під своєю особистою інформацією
-              </p>
-            </>
-          )}
-          <button
-            onClick={switchForm}
-            style={{ height: '40px', marginTop: '16px' }}
-            className={`${inputsStyles.button} ${darkModeClass}`}
-          >
-            Увійти
-          </button>
-        </div>
-        <div className={`${styles.switch__container} ${styles.is_hidden}`} id="switch-c2" ref={switchC2}>
-          {!isMedia800 && (
-            <>
-              <h2 className={`${styles.switch__title} ${styles.title} ${darkModeClass}`}>Привіт, друже!</h2>
-              <p className={`${styles.switch__description} ${styles.description} ${darkModeClass}`}>
-                Введіть свої особисті дані та почніть
-                <br /> подорож з нами
-              </p>
-            </>
-          )}
-          <button
-            onClick={switchForm}
-            style={{ height: '40px', marginTop: '16px' }}
-            className={`${inputsStyles.button} ${darkModeClass}`}
-          >
-            Зареєструватись
-          </button>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
 

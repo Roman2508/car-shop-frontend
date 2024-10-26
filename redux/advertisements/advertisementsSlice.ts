@@ -76,13 +76,6 @@ const advertisementsSlice = createSlice({
     //   state.loadingStatus = LoadingStatusTypes.SUCCESS
     // })
 
-    /* uploadFile */
-    //  builder.addCase(uploadFile.fulfilled, (state, action: PayloadAction<FileType>) => {
-    //   if (!state.fullLesson) return
-    //   state.fullLesson.files.push(action.payload)
-    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
-    // })
-
     /* deleteFile */
     // builder.addCase(deleteFile.fulfilled, (state, action: PayloadAction<{ id: number; filename: string }>) => {
     //   if (!state.fullLesson) return

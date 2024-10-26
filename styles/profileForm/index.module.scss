@@ -102,7 +102,7 @@
 
       button {
         height: 40px;
-        width: 255px;
+        width: 100%;
         position: relative;
         padding: 8px 32px;
         // background-color: #1c629e;
@@ -115,10 +115,6 @@
 
         &.dark_mode {
           color: black;
-        }
-
-        @media (max-width: 1170px) {
-          width: 100%;
         }
       }
     }

@@ -1,3 +1,4 @@
+import { IProfileInputs } from '@/components/modules/ProfilePage/ProfileForm'
 import { FieldErrorsImpl, UseFormRegister } from 'react-hook-form'
 
 export type ProfileInputs = {
@@ -6,7 +7,7 @@ export type ProfileInputs = {
   password: string
 }
 
-export interface IProfileInput {
+export type IProfileInput = {
   register: UseFormRegister<ProfileInputs>
   errors: Partial<FieldErrorsImpl<ProfileInputs>>
   darkModeClass?: string

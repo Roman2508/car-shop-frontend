@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../store'
+import { InitialStateType } from './authTypes'
 import { LoadingStatusTypes } from '../appTypes'
-import { AuthType, InitialStateType } from './authTypes'
-import { authLogin, authMe, authRegister, uploadAvatar } from './authAsyncActions'
-import { AuthResponceType } from '../../api/apiTypes'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
+import { AuthResponceType } from '../../api/apiTypes'
+import { authLogin, authRegister, uploadAvatar } from './authAsyncActions'
 
 const authInitialState: InitialStateType = {
   auth: null,
@@ -41,24 +41,6 @@ const authSlice = createSlice({
       state.auth = action.payload.user
       state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
-
-    /* authMe */
-    // builder.addCase(authMe.fulfilled, (state, action: PayloadAction<AuthType>) => {
-    //   state.auth = action.payload
-    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
-    // })
-
-    // /* updateTutor */
-    // builder.addCase(updateTutor.fulfilled, (state, action: PayloadAction<AuthType>) => {
-    //   state.auth = action.payload
-    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
-    // })
-
-    // /* updateStudent */
-    // builder.addCase(updateStudent.fulfilled, (state, action: PayloadAction<AuthType>) => {
-    //   state.auth = action.payload
-    //   state.loadingStatus = LoadingStatusTypes.SUCCESS
-    // })
 
     /* uploadAvatar */
     builder.addCase(uploadAvatar.fulfilled, (state, action: PayloadAction<{ avatarUrl: string }>) => {

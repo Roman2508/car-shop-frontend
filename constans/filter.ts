@@ -159,7 +159,7 @@ export const color = [
   { checked: false, id: '20', title: 'Інший', event: '' },
 ] as unknown as IFilterCheckboxItem[]
 
-// Лакове покриття
+// Лакофарбове покриття
 export const varnishCoating = [
   { checked: false, id: '1', title: 'Як нове, без видимих слідів експлуатації', event: '' },
   { checked: false, id: '2', title: 'Професійно відремонтоварі сліди експлуатації', event: '' },
@@ -288,7 +288,7 @@ export const filters = [
   { label: 'Тип приводу', items: driveType },
   { label: "Об'єм двигуна", items: engineVolume },
   { label: 'Колір', items: color },
-  { label: 'Лакове покриття', items: varnishCoating },
+  { label: 'Лакофарбове покриття', items: varnishCoating },
   { label: 'Технічний стан', items: technicalCondition },
   { label: 'Комфорт', items: comfort },
   { label: 'Мультимедіа', items: multimedia },

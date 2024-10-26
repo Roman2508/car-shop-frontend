@@ -175,8 +175,8 @@ const MesagesTab = () => {
           <div className={`${styles.messages__right_col_advertisement} ${darkModeClass}`}>
             <div className={`${styles.messages__chats_list_item} ${darkModeClass}`}>
               <img
-                src="https://m.atcdn.co.uk/ect/media/%7Bresize%7D/4b14ab0c7868451baf5912779f112f40.jpg"
-                alt="advertisement avatar"
+                src={createImageUrl(activeDalog.advertisement?.photos[0]?.filename)}
+                alt="advertisement"
               />
 
               <div>

@@ -68,7 +68,6 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
     setValue,
     formState: { errors },
     handleSubmit,
-    resetField,
   } = useForm<ICreateAdFields>({ mode: 'onChange' })
 
   const setCheckboxValue = (groupKey: string, key: string) => {
@@ -157,7 +156,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
           updateAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id, id: query.id })
         )
         const advertisement = payload as AdvertisementType
-        if (advertisement.id) router.replace(`catalog/${advertisement.id}`)
+        if (advertisement.id) router.replace(`/catalog/${advertisement.id}`)
 
         //
       } else {
@@ -165,7 +164,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
           createAdvertisement({ ...inputValues, ...adDetails, photos: photoIds, user: auth.id })
         )
         const advertisement = payload as AdvertisementType
-        if (advertisement.id) router.push(`catalog/${advertisement.id}`)
+        if (advertisement.id) router.replace(`/catalog/${advertisement.id}`)
       }
     } finally {
       setSpinner(false)
@@ -234,7 +233,13 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
     if (!query || !query.id) return
     const fetchAdData = async () => {
       const { payload } = await dispatch(getAdvertisementById(Number(query.id)))
-      if (!payload) return alert('Помилка завантаження даних')
+
+      if (!payload) {
+        toast.error('Не вдалось знайти оголошення')
+        router.replace('/catalog')
+        return
+      }
+
       const ad = payload as AdvertisementType
 
       for (const key in ad) {
@@ -322,7 +327,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   return (
     <section className={styles.dashboard}>
-      <button onClick={add} style={{ padding: '20px 200px', fontSize: '50px', textTransform: 'uppercase' }}>
+      <button onClick={add} style={{ padding: '20px 100px', fontSize: '50px', textTransform: 'uppercase' }}>
         click
       </button>
 
@@ -422,6 +427,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
                   >
                     <img src={photo.url} />
                     <span>Видалити фото</span>
+                    <span>????????????????????????</span>
                   </div>
                 ) : (
                   <label key={index} className={`${styles.create__ad__photo} ${darkModeClass}`}>
@@ -565,7 +571,7 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
               { label: 'Коробка передач', name: 'gearbox', isRequired: true },
               { label: 'Тип приводу', name: 'driveType', isRequired: true },
               { label: 'Тип палива', name: 'fuelType', isRequired: true },
-              { label: 'Лакове покриття', name: 'varnishCoating', isRequired: true },
+              { label: 'Лакофарбове покриття', name: 'varnishCoating', isRequired: true },
             ] as const
           ).map((el) => (
             <Controller

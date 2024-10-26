@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { $mode } from '@/context/mode'
+import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -10,129 +11,44 @@ import { IBoilerParts } from '@/types/boilerparts'
 import { $shoppingCart } from '@/context/shopping-cart'
 import authStyles from '@/styles/auth/index.module.scss'
 import styles from '@/styles/dashboard/index.module.scss'
+import { MAX_PRICE, MIN_PRICE } from '../CatalogPage/CatalogPage'
 import { getBestsellersOrNewPartsFx } from '@/app/api/boilerParts'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
 import { getBestsellers, getNewAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
-import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
-export const boilers: IBoilerParts = {
-  count: 10,
-  rows: [
-    {
-      id: 1,
-      boiler_manufacturer: 'Bosch',
-      price: 299.99,
-      parts_manufacturer: 'Siemens',
-      vendor_code: 'BOS-001',
-      name: 'Heat Exchanger',
-      description: 'High-efficiency heat exchanger for Bosch boilers.',
-      images: JSON.stringify([
-        'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-      ]),
-      in_stock: 50,
-      bestseller: true,
-      new: false,
-      popularity: 85,
-      compatibility: 'Bosch Series 5000',
-    },
-    {
-      id: 2,
-      boiler_manufacturer: 'Vaillant',
-      price: 179.49,
-      parts_manufacturer: 'Honeywell',
-      vendor_code: 'VAL-002',
-      name: 'Thermostat',
-      description: 'Advanced programmable thermostat for Vaillant boilers.',
-      images: JSON.stringify([
-        'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-      ]),
-      in_stock: 120,
-      bestseller: true,
-      new: true,
-      popularity: 95,
-      compatibility: 'Vaillant EcoTEC Plus',
-    },
-    {
-      id: 3,
-      boiler_manufacturer: 'Viessmann',
-      price: 399.99,
-      parts_manufacturer: 'Grundfos',
-      vendor_code: 'VIE-003',
-      name: 'Pump',
-      description: 'High-performance pump compatible with Viessmann boilers.',
-      images: JSON.stringify([
-        'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-      ]),
-      in_stock: 30,
-      bestseller: false,
-      new: false,
-      popularity: 70,
-      compatibility: 'Viessmann Vitodens 200',
-    },
-    {
-      id: 4,
-      boiler_manufacturer: 'Baxi',
-      price: 249.0,
-      parts_manufacturer: 'Danfoss',
-      vendor_code: 'BAX-004',
-      name: 'Valve',
-      description: 'Pressure release valve for Baxi boilers.',
-      images: JSON.stringify([
-        'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-      ]),
-      in_stock: 200,
-      bestseller: true,
-      new: false,
-      popularity: 88,
-      compatibility: 'Baxi Duo-Tec',
-    },
-    {
-      id: 5,
-      boiler_manufacturer: 'Worcester',
-      price: 129.99,
-      parts_manufacturer: 'Siemens',
-      vendor_code: 'WOR-005',
-      name: 'Ignition System',
-      description: 'Reliable ignition system for Worcester boilers.',
-      images: JSON.stringify([
-        'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-      ]),
-      in_stock: 75,
-      bestseller: false,
-      new: true,
-      popularity: 90,
-      compatibility: 'Worcester Greenstar 8000',
-    },
-  ],
-}
+const popularFilters = {
+  'Нові моделі': 'first=new',
+  'Старі моделі': 'first=old',
+  'Ціна (менше 100 000 грн)': `priceFrom=${MIN_PRICE}&priceTo=100000`,
+  'Ціна (100 000 грн - 500 000 грн)': `priceFrom=100000&priceTo=500000`,
+  'Ціна (понад 500 000 грн)': `priceFrom=500000&priceTo=${MAX_PRICE}`,
+  Седан: 'carBodyType=Седан',
+  Купе: 'carBodyType=Купе',
+  Позашляховик: 'carBodyType=Позашляховик',
+  Універсал: 'carBodyType=Універсал',
+  Електричний: 'fuelType=Електро',
+  Дизель: 'fuelType=Дизель',
+  Бензин: 'fuelType=Бензин',
+  Повнопривідний: 'driveType=Повний',
+  Передньопривідний: 'driveType=Передній',
+  Задньопривідний: 'driveType=Задній',
+} as const
 
-const popularFilters = [
-  'Нові моделі',
-  'Старі моделі',
-  'Ціна (менше $15,000)',
-  'Ціна ($10,000 - $25,000)',
-  'Ціна (понад $25,000)',
-  'Седан',
-  'Кросовер',
-  'Позашляховик',
-  'Електричний',
-  'Гібрид',
-  'Дизель',
-  'Бензин',
-  'Повнопривідний',
-  'Передньопривідний',
-  'Задньопривідний',
-]
+type FilterKeys = keyof typeof popularFilters
+type FilterValues = (typeof popularFilters)[FilterKeys]
 
 const DashboardPage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
 
   const mode = useStore($mode)
   const shoppingCart = useStore($shoppingCart)
 
   const [search, setSearch] = React.useState('')
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
   const [spinner, setSpinner] = useState(false)
   const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
@@ -140,20 +56,88 @@ const DashboardPage = () => {
   const [newParts, setNewParts] = useState<AdvertisementType[]>([])
   const [bestsellers, setBestsellers] = useState<AdvertisementType[]>([])
 
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([])
-
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
-  const handleChangeFilters = (filter: string) => {
+  const handleChangeFilters = (filter: FilterValues) => {
     setSelectedFilters((prev) => {
       const isExist = prev.find((el) => el === filter)
 
       if (isExist) {
         return prev.filter((el) => el !== filter)
-      } else {
-        return [...prev, filter]
+      }
+
+      if (filter === 'first=old') {
+        const filters = prev.filter((el) => el !== 'first=new')
+        return [...filters, filter]
+      }
+      if (filter === 'first=new') {
+        const filters = prev.filter((el) => el !== 'first=old')
+        return [...filters, filter]
+      }
+
+      return [...prev, filter]
+    })
+  }
+
+  const onFilterAdvertisements = () => {
+    let str = ''
+
+    let first: string = ''
+    const prices: string[] = []
+    const carBodyType: string[] = []
+    const fuelType: string[] = []
+    const driveType: string[] = []
+
+    selectedFilters.forEach((filter) => {
+      const res = filter.split(/[=&]/)
+
+      switch (res[0]) {
+        case 'carBodyType':
+          carBodyType.push(res[1])
+          break
+        case 'fuelType':
+          fuelType.push(res[1])
+          break
+        case 'driveType':
+          driveType.push(res[1])
+          break
+        case 'priceFrom':
+          prices.push(res[1])
+          prices.push(res[3])
+          break
+        case 'first':
+          first = res[1]
+          break
       }
     })
+
+    if (first) {
+      str = `?first=${first}`
+    }
+
+    if (search) {
+      str = str ? `${str}&title=${search}` : `?&title=${search}`
+    }
+
+    if (prices.length) {
+      const minPrice = Math.min(...prices.map((el) => Number(el)))
+      const maxPrice = Math.max(...prices.map((el) => Number(el)))
+      str = str ? `${str}&priceFrom=${minPrice}&priceTo=${maxPrice}` : `?priceFrom=${minPrice}&priceTo=${maxPrice}`
+    }
+
+    if (carBodyType.length) {
+      str = str ? `${str}&carBodyType=${carBodyType.join(';')}` : `?carBodyType=${carBodyType.join(';')}`
+    }
+
+    if (fuelType.length) {
+      str = str ? `${str}&fuelType=${fuelType.join(';')}` : `?fuelType=${fuelType.join(';')}`
+    }
+
+    if (driveType.length) {
+      str = str ? `${str}&driveType=${driveType.join(';')}` : `?driveType=${driveType.join(';')}`
+    }
+
+    router.replace(`/catalog${str}`)
   }
 
   useEffect(() => {
@@ -172,11 +156,6 @@ const DashboardPage = () => {
   const loadBoilerParts = async () => {
     try {
       setSpinner(true)
-      // const bestsellers = await getBestsellersOrNewPartsFx('/boiler-parts/bestsellers')
-      // const newParts = await getBestsellersOrNewPartsFx('/boiler-parts/new')
-      // setBestsellers(bestsellers)
-      // setNewParts(newParts)
-
       const { payload: bestsellers }: { payload: any } = await dispatch(getBestsellers())
       const { payload: newAdvertisements }: { payload: any } = await dispatch(getNewAdvertisements())
 
@@ -227,13 +206,13 @@ const DashboardPage = () => {
         <h4>Пошук по фільтрам:</h4>
 
         <div>
-          {popularFilters.map((filter) => {
-            const isSelected = selectedFilters.find((el) => el === filter)
+          {(Object.keys(popularFilters) as FilterKeys[]).map((filter: FilterKeys) => {
+            const isSelected = selectedFilters.find((el) => el === popularFilters[filter])
 
             return (
               <div
                 key={filter}
-                onClick={() => handleChangeFilters(filter)}
+                onClick={() => handleChangeFilters(popularFilters[filter])}
                 className={`${styles.dashboard__filter_bage} ${isSelected ? styles.selected : ''}`}
               >
                 {filter}
@@ -243,6 +222,7 @@ const DashboardPage = () => {
         </div>
 
         <button
+          onClick={onFilterAdvertisements}
           disabled={!selectedFilters.length && !search}
           style={{ boxShadow: 'none', background: '#000', color: '#fff', marginTop: '50px', marginRight: '16px' }}
           className={`${authStyles.switch__button} ${authStyles.button} ${authStyles.switch__btn} ${styles.dashboard__button} ${darkModeClass}`}
@@ -283,9 +263,6 @@ const DashboardPage = () => {
 
         <div className={styles.dashboard__parts}>
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>Популярні оголошення</h3>
-          {/* <h2 className={`${styles.dashboard__title} ${darkModeClass}`} style={{ marginTop: '100px' }}>
-            Наші партнери
-          </h2> */}
           <DashboardSlider items={bestsellers} spinner={spinner} goToPartPage />
         </div>
 

@@ -10,6 +10,8 @@ import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
 import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
 import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
 import Administration from '@/components/modules/ProfilePage/Administration'
+import { useSelector } from 'react-redux'
+import { authSelector } from '@/redux/auth/authSlice'
 
 const tabs = [
   { link: 'profile', label: 'Профіль' },
@@ -20,6 +22,8 @@ const tabs = [
 
 const ProfilePage = () => {
   const router = useRouter()
+
+  const { auth } = useSelector(authSelector)
 
   const mode = useStore($mode)
   const isMobile560 = useMediaQuery(560)
@@ -66,18 +70,26 @@ const ProfilePage = () => {
           <h2 className={`${styles.profile__title} ${darkModeClass}`}>{activeTab}</h2>
 
           <ul className={styles.profile__tabs}>
-            {tabs.map((el) => (
-              <li
-                className={`${styles.profile__tab} ${activeTab === el.label ? styles.active : ''} ${darkModeClass}`}
-                key={el.link}
-                onClick={() => {
-                  updateRoteParam(el.link)
-                  setActiveTab(el.label)
-                }}
-              >
-                {el.label}
-              </li>
-            ))}
+            {tabs.map((el) => {
+              const isAdmin = auth?.role === 'ADMIN'
+
+              if (!isAdmin && el.link === 'admin') {
+                return
+              }
+
+              return (
+                <li
+                  className={`${styles.profile__tab} ${activeTab === el.label ? styles.active : ''} ${darkModeClass}`}
+                  key={el.link}
+                  onClick={() => {
+                    updateRoteParam(el.link)
+                    setActiveTab(el.label)
+                  }}
+                >
+                  {el.label}
+                </li>
+              )
+            })}
           </ul>
         </div>
 

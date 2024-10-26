@@ -1,5 +1,6 @@
 .header {
   position: relative;
+  z-index: 1;
 
   &__top {
     padding-top: 13px;
@@ -93,7 +94,7 @@
           font-weight: 500;
           font-size: 16px;
           color: #fafbfc;
-          transition: color 0.2s ease-in-out;
+          transition: all 0.3s ease-in-out;
           position: relative;
 
           &::after {
@@ -107,16 +108,17 @@
             // background-color: #1c629e;
             background-color: #ffffff;
             transform: scaleX(0);
-            transition: transform 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
           }
 
           &:hover {
-            // color: #ffc540;
+            color: #ffc540 !important;
             // color: #5acccc;
             // color: #1c629e;
             transition: color 0.2s ease-in-out;
 
             &::after {
+              background-color: #ffc540;
               transform: scaleX(1);
             }
           }

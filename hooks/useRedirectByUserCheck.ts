@@ -34,7 +34,7 @@ const useRedirectByUserCheck = (isAuthPage = false) => {
     }
 
     if (!user) {
-      if (router.route === '/profile' || router.route === '/create-ad') {
+      if (router.asPath.includes('/profile') || router.route === '/create-ad') {
         router.push('/')
       }
 

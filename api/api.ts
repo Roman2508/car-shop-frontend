@@ -1,47 +1,30 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios, { InternalAxiosRequestConfig } from 'axios'
 
 import {
-  AuthMeType,
   AuthLoginType,
+  UploadFileType,
+  UpdateUserType,
   AuthRegisterType,
+  AuthResponceType,
   CreateDialogType,
   CreateMessageType,
-  CreateReviewsType,
-  LessonsFilterType,
-  ReservedLessonsFilterType,
-  UpdateReservedLessonsType,
-  CreateReservedLessonsType,
-  CreateLessonType,
-  UpdateLessonType,
-  GetLessonsResponce,
-  UpdateTutorType,
-  UpdateStudentType,
-  AuthResponceType,
-  GetResevedLessonsResponceType,
-  UploadFileType,
-  PaymentResponseType,
-  CheckIsDialogExistType,
 } from './apiTypes'
 import { AuthType } from '../redux/auth/authTypes'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 import { DialogType, MessageType } from '../redux/dialogs/dialogsTypes'
 import { AdvertisementType, FileType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 
+export const TOKEN_NAME = 'car-app-token'
+
 const instanse = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
 })
 
-// Якщо є токен, вшиваю його в конфігурацію axios
-// @ts-ignore
 instanse.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  // const token = window.localStorage.getItem('car-app-token')
-
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzI4OTI5NTA3LCJleHAiOjE3MzE1MjE1MDd9.IiCgv2pNNfE3GdCVYdrpD7epnb26duB-bVRiENrUc4I'
+  const token = window.localStorage.getItem(TOKEN_NAME)
 
   if (config.headers && token) {
     config.headers.Authorization = String(`Bearer ${token}`)
-    // config.headers.Authorization = String(window.localStorage.getItem('token'))
   }
 
   return config
@@ -54,25 +37,17 @@ export const authAPI = {
   register(payload: AuthRegisterType) {
     return instanse.post<AuthResponceType>('/auth/register', payload)
   },
-  // getMe(payload: AuthMeType) {
   getMe() {
     const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
-
     if (!token) {
       return { data: null }
     }
-
     return instanse.post<AuthType>('/auth/me', { token })
   },
-
-  // updateTutor(payload: UpdateTutorType) {
-  //   const { id, ...data } = payload
-  //   return instanse.patch(`/tutors/${id}`, data)
-  // },
-  // updateStudent(payload: UpdateStudentType) {
-  //   const { id, ...data } = payload
-  //   return instanse.patch(`/student/${id}`, data)
-  // },
+  update(payload: UpdateUserType) {
+    const { id, ...data } = payload
+    return instanse.patch(`/user/${id}`, data)
+  },
 }
 
 export const adAPI = {
@@ -162,7 +137,7 @@ export const filesAPI = {
     return instanse.post<{ avatarUrl: string }>(`/files/avatar`, file, config)
   },
 
-  delete(payload: { filename: string; fileId: number }) {
+  delete(payload: { filename: string; fileId?: number }) {
     return instanse.delete<{ id: number; filename: string }>(`/files/${payload.filename}/${payload.fileId}`)
   },
 }

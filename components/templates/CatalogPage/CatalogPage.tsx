@@ -30,7 +30,6 @@ import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
 import { usePopup } from '@/hooks/usePoup'
 import { checkQueryParams } from '@/utils/catalog'
 import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
-import { boilers } from '../DashboardPage/DashboardPage'
 import { getAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 import { useAppDispatch } from '@/redux/store'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
@@ -42,16 +41,23 @@ import getFilterKey, { filterKeys, FilterValuesType, getFilterKeyByValue } from 
 import EmptySvg from '@/components/elements/EmptySvg/EmptySvg'
 import Empty from '@/components/elements/EmptySvg/EmptySvg'
 import { ParsedUrlQuery } from 'querystring'
-import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import { RangeFilterBlockItem } from '@/components/modules/CatalogPage/RangeFilterBlockItem'
 import { correctFilterKeys } from '@/constans/correctFilterKeys'
 
-const MIN_PRICE = 0
-const MAX_PRICE = 10000000
+export const MIN_PRICE = 0
+export const MAX_PRICE = 10000000
 const MIN_MILEAGE = 0
 const MAX_MILEAGE = 1000000
 const MIN_YEAR_OF_RELEASE = 1900
 const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
+
+// todo:
+// 1. При створенні оголошення коли користувач завантажив фото і покидає сторінку (не опублікувавши) треба попереджати і видаляти фото
+// 2. Розподіл ролей на сторінці profile
+// 3. pagination
+// 4. повторний вибір фото (reset target.value для input type file)
+// 5. 
+// 6. 
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -468,7 +474,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             ) : advertisements && advertisements?.length ? (
               <ul className={styles.catalog__list}>
                 {advertisements.map((item) => (
-                  <CatalogItem item={item} key={item.id} />
+                  <CatalogItem item={item} key={item.id} self />
                 ))}
               </ul>
             ) : (

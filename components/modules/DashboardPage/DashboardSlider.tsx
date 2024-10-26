@@ -19,6 +19,8 @@ import EngineSvg from '@/components/elements/EngineSvg/EngineSvg'
 import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
 import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
 import { formatDate } from '@/utils/formatDate'
+import Empty from '@/components/elements/EmptySvg/EmptySvg'
+import { createImageUrl } from '@/utils/createImageUrl'
 
 interface IDashboardSliderProps {
   items: AdvertisementType[]
@@ -72,12 +74,12 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goTo
             <div className={skeletonStyles.skeleton__item__light} />
           </div>
         ))
-      ) : items.length ? (
+      ) : items && items.length ? (
         items.map((item) => (
           <div className={`${styles.dashboard__slide} ${darkModeClass}`} key={item.id} style={width}>
             <Link href={goToPartPage ? `/catalog/${item.id}` : '/catalog'}>
               {item.photos.length ? (
-                <img src={item.photos[0]?.filename} alt={'car photo'} />
+                <img src={createImageUrl(item.photos[0]?.filename)} alt={'car photo'} />
               ) : (
                 <Image src={emptyImage} width={500} height={500} alt="Picture of the author" />
               )}
@@ -95,24 +97,20 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goTo
                 <span className={styles.dashboard__slide__description}>
                   <SpeedometerSvg />
                   {item.mileage}
-                  {/* 2020 115 тис.км. */}
                 </span>
 
                 <span className={styles.dashboard__slide__description}>
                   <EngineSvg />
                   {item.engineVolume}
-                  {/* 2.50 л. */}
                 </span>
 
                 <span className={styles.dashboard__slide__description}>
                   <GearBoxSvg />
-                  {/* Автоматична */}
                   {item.gearbox}
                 </span>
 
                 <span className={styles.dashboard__slide__description}>
                   <FuelSvg />
-                  {/* Бензин */}
                   {item.fuelType}
                 </span>
               </div>
@@ -122,7 +120,9 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goTo
           </div>
         ))
       ) : (
-        <span>Список оголошень пустий....</span>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Empty darkModeClass={darkModeClass} />
+        </div>
       )}
     </Slider>
   )

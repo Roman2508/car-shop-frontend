@@ -1,4 +1,5 @@
 export const correctFilterKeys = [
+  'title',
   'first',
   'priceFrom',
   'priceTo',

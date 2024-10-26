@@ -23,7 +23,7 @@ const tagKeys = {
   gearbox: 'Коробка передач',
   driveType: 'Тип приводу',
   fuelType: 'Тип палива',
-  varnishCoating: 'Лакове покриття',
+  varnishCoating: 'Лакофарбове покриття',
   technicalCondition: 'Технічний стан',
   comfort: 'Комфорт',
   multimedia: 'Мультимедіа',

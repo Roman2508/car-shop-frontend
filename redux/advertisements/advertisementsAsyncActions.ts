@@ -235,7 +235,7 @@ export const uploadFile = createAsyncThunk('advertisements/uploadFile', async (p
 
 export const deleteFile = createAsyncThunk(
   'advertisements/deleteFile',
-  async (payload: { filename: string; fileId: number }, thunkAPI) => {
+  async (payload: { filename: string; fileId?: number }, thunkAPI) => {
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
     const promise = filesAPI.delete(payload)
 

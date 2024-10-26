@@ -15,6 +15,8 @@ import { getNotAccepted } from '@/redux/advertisements/advertisementsAsyncAction
 import { advertisementsSelector, clearAdvertisements } from '@/redux/advertisements/advertisementsSlice'
 import { useSelector } from 'react-redux'
 import CatalogItem from '../CatalogPage/CatalogItem'
+import { useRouter } from 'next/router'
+import { authSelector } from '@/redux/auth/authSlice'
 
 export const boilers = {
   count: 10,
@@ -110,6 +112,9 @@ export const boilers = {
 const Administration = () => {
   const dispatch = useAppDispatch()
 
+  const router = useRouter()
+
+  const { auth } = useSelector(authSelector)
   const { advertisements } = useSelector(advertisementsSelector)
 
   const isMedia768 = useMediaQuery(768)
@@ -126,6 +131,12 @@ const Administration = () => {
   const [spinner, setSpinner] = React.useState(false)
 
   React.useEffect(() => {
+    const isAdmin = auth?.role === 'ADMIN'
+    if (!isAdmin) {
+      router.replace('/profile')
+      return
+    }
+
     dispatch(getNotAccepted())
 
     return () => {

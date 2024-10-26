@@ -11,9 +11,13 @@ import { $user } from '@/context/user'
 import { logoutFx } from '@/app/api/auth'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import { authSelector } from '@/redux/auth/authSlice'
+import { authSelector, logout } from '@/redux/auth/authSlice'
+import { TOKEN_NAME } from '@/api/api'
+import { useAppDispatch } from '@/redux/store'
 
 const ProfileDropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(({ open, setOpen }, ref) => {
+  const dispatch = useAppDispatch()
+
   const mode = useStore($mode)
   const router = useRouter()
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
@@ -23,7 +27,8 @@ const ProfileDropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(({ op
   const toggleProfileDropDown = () => setOpen(!open)
 
   const handleLogout = async () => {
-    await logoutFx('/users/logout')
+    if (!window.confirm('Ви дійсно хочете вийти?')) return
+    dispatch(logout())
     router.push('/')
   }
 

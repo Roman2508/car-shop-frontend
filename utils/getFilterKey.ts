@@ -9,7 +9,7 @@ export const filterKeys = {
   'Тип приводу': 'driveType',
   "Об'єм двигуна": 'engineVolume',
   Колір: 'color',
-  'Лакове покриття': 'varnishCoating',
+  'Лакофарбове покриття': 'varnishCoating',
   'Технічний стан': 'technicalCondition',
   Комфорт: 'comfort',
   Мультимедіа: 'multimedia',

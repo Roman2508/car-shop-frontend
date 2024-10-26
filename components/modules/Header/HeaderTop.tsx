@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 
 import { $mode } from '@/context/mode'
 import { usePopup } from '@/hooks/usePoup'
 import ProfileDropdown from './ProfileDropdown'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/header/index.module.scss'
+import { authSelector } from '@/redux/auth/authSlice'
 import CityButton from '@/components/elements/CityButton/CityButton'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 
@@ -20,10 +22,13 @@ const nav = [
   { link: '/profile?tab=messages', label: 'Повідомлення' },
   { link: '/profile?tab=profile', label: 'Профіль' },
   { link: '/create-ad', label: 'Створити оголошення' },
+  { link: '/', label: 'Авторизація' },
 ]
 
 const HeaderTop = () => {
   const router = useRouter()
+
+  const { auth } = useSelector(authSelector)
 
   const isMedia950 = useMediaQuery(950)
   const { toggleOpen, open, closePopup } = usePopup()
@@ -49,6 +54,16 @@ const HeaderTop = () => {
                 el.label === 'Профіль' && router.asPath.includes('/profile') && !router.asPath.includes('messages')
                   ? true
                   : router.asPath === el.link
+
+              const availableTabs = ['/profile?tab=messages', '/profile?tab=profile', '/create-ad']
+
+              if (!auth && availableTabs.some((a) => a === el.link)) {
+                return
+              }
+
+              if (auth && auth.id && el.link === '/') {
+                return
+              }
 
               return (
                 <li className={styles.header__nav__list__item}>

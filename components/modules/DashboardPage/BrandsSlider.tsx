@@ -34,7 +34,7 @@ const BrandsSlider = () => {
     { id: 4, img: 'https://logos-world.net/wp-content/uploads/2021/06/Porsche-Logo.png', alt: 'brand-4' },
     {
       id: 5,
-      img: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Lamborghini_Logo.svg/1200px-Lamborghini_Logo.svg.png',
+      img: 'https://car-logos.net/wp-content/uploads/2023/03/lamborghini-logo-1998-present-scaled.webp',
       alt: 'brand-5',
     },
     {
