@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { $mode } from '@/context/mode'
 import { useStore } from 'effector-react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { IBoilerParts } from '@/types/boilerparts'
@@ -127,6 +127,8 @@ const DashboardPage = () => {
   const mode = useStore($mode)
   const shoppingCart = useStore($shoppingCart)
 
+  const [search, setSearch] = React.useState('')
+
   const [spinner, setSpinner] = useState(false)
   const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
   const [newParts, setNewParts] = useState<IBoilerParts>({} as IBoilerParts)
@@ -206,7 +208,12 @@ const DashboardPage = () => {
           Ознайомтеся з понад 1,000 автомобілями на нашому сайті.
         </h2>
 
-        <input className={`${styles.dashboard__filter_search} ${darkModeClass}`} placeholder="Що шукаєте?" />
+        <input
+          value={search}
+          placeholder="Що шукаєте?"
+          onChange={(e) => setSearch(e.target.value)}
+          className={`${styles.dashboard__filter_search} ${darkModeClass}`}
+        />
 
         <h4>Пошук по фільтрам:</h4>
 
@@ -227,7 +234,7 @@ const DashboardPage = () => {
         </div>
 
         <button
-          disabled={!selectedFilters.length}
+          disabled={!selectedFilters.length && !search}
           style={{ boxShadow: 'none', background: '#000', color: '#fff', marginTop: '50px', marginRight: '16px' }}
           className={`${authStyles.switch__button} ${authStyles.button} ${authStyles.switch__btn} ${styles.dashboard__button} ${darkModeClass}`}
         >
