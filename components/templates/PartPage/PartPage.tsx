@@ -35,12 +35,17 @@ import { advertisementsSelector, clearFullAdvertisements } from '@/redux/adverti
 import { useSelector } from 'react-redux'
 import { formatDate } from '@/utils/formatDate'
 import { useAppDispatch } from '@/redux/store'
-import { acceptAdvertisement, deleteAdvertisement } from '@/redux/advertisements/advertisementsAsyncActions'
+import {
+  acceptAdvertisement,
+  deleteAdvertisement,
+  getBestsellers,
+} from '@/redux/advertisements/advertisementsAsyncActions'
 import { useRouter } from 'next/router'
 import { authSelector } from '@/redux/auth/authSlice'
 import { AuthType } from '@/redux/auth/authTypes'
 import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
 import { DialogType } from '@/redux/dialogs/dialogsTypes'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 // import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 // import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
 
@@ -65,9 +70,17 @@ const PartPage = () => {
   const spinnerToggleCart = useStore(removeFromCartFx.pending)
   const spinnerSlider = useStore(getBoilerPartsFx.pending)
 
-  // useEffect(() => {
-  //   loadBoilerPart()
-  // }, [])
+  const [advertisements, setAdvertisements] = React.useState<AdvertisementType[]>([])
+
+  useEffect(() => {
+    // loadBoilerPart()
+
+    const fetchData = async () => {
+      const { payload }: { payload: any } = await dispatch(getBestsellers())
+      setAdvertisements(payload[0])
+    }
+    fetchData()
+  }, [router.asPath])
 
   useEffect(() => {
     return () => {
@@ -193,8 +206,6 @@ const PartPage = () => {
                 )}
               </span>
 
-              {/* <span className={styles.part__info__code}>Артикул: {boilerPart.vendor_code}</span> */}
-
               <div style={{ marginBottom: '24px' }}>
                 <span className={catalogStyles.catalog__list__item__code}>
                   {/* Київ, Шевченківський - 10 жовтня 2024 р. */}
@@ -283,7 +294,7 @@ const PartPage = () => {
         )}
         <div className={styles.part__bottom}>
           <h2 className={`${styles.part__title} ${darkModeClass}`}>Схожі оголошення</h2>
-          <DashboardSlider goToPartPage spinner={spinnerSlider} items={boilerParts.rows || []} />
+          <DashboardSlider goToPartPage spinner={spinnerSlider} items={advertisements} />
         </div>
       </div>
     </section>

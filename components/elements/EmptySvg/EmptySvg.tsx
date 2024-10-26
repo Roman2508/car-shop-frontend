@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Empty = ({ darkModeClass }: { darkModeClass: string }) => {
+const Empty = ({ darkModeClass, text = 'Пусто...' }: { darkModeClass: string; text?: string }) => {
   return (
     <div
       style={{
@@ -53,7 +53,7 @@ const Empty = ({ darkModeClass }: { darkModeClass: string }) => {
           />
         </g>
       </svg>
-      <h4 style={{ fontSize: '24px' }}>Пусто...</h4>
+      <h4 style={{ fontSize: '24px', fontWeight: 500 }}>{text}</h4>
     </div>
   )
 }

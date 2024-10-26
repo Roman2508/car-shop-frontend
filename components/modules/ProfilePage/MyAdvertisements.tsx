@@ -12,8 +12,9 @@ import { useSelector } from 'react-redux'
 import { authSelector } from '@/redux/auth/authSlice'
 import { advertisementsSelector, clearAdvertisements } from '@/redux/advertisements/advertisementsSlice'
 import CatalogItem from '../CatalogPage/CatalogItem'
+import Empty from '@/components/elements/EmptySvg/EmptySvg'
 
-const Advertisements = () => {
+const MyAdvertisements = () => {
   const dispatch = useAppDispatch()
 
   const { auth } = useSelector(authSelector)
@@ -62,18 +63,22 @@ const Advertisements = () => {
   }
 
   return (
-    <div className={styles.advertisements}>
-      {advertisements ? (
-        <div className={catalogStyles.catalog__list}>
-          {advertisements.map((item) => (
-            <CatalogItem item={item} key={item.id} self />
-          ))}
+    <>
+      {advertisements && advertisements.length ? (
+        <div className={styles.advertisements}>
+          <div className={catalogStyles.catalog__list}>
+            {advertisements.map((item) => (
+              <CatalogItem item={item} key={item.id} self />
+            ))}
+          </div>
         </div>
       ) : (
-        <h2 style={darkModeClass ? { color: '#fff' } : { color: '#000' }}>Немає що показувати</h2>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Empty darkModeClass={darkModeClass} text="У вас поки немає оголошень" />
+        </div>
       )}
-    </div>
+    </>
   )
 }
 
-export default Advertisements
+export default MyAdvertisements

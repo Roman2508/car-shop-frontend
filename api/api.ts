@@ -82,6 +82,15 @@ export const adAPI = {
   getById(id: number) {
     return instanse.get<AdvertisementType>(`/advertisement/${id}`)
   },
+  getNew() {
+    return instanse.get<[AdvertisementType[], number]>(`/advertisement/new`)
+  },
+  getBestsellers() {
+    return instanse.get<[AdvertisementType[], number]>(`/advertisement/bestsellers`)
+  },
+  search(title: string) {
+    return instanse.get<AdvertisementType[]>(`/advertisement/search/${title}`)
+  },
   getMy(id: number) {
     return instanse.get<AdvertisementType[]>(`/advertisement/my/${id}`)
   },

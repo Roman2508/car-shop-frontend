@@ -5,12 +5,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { $mode } from '@/context/mode'
 import { IOption, SelectOptionType } from '../../../types/common'
-import {
-  controlStyles,
-  inputStyles,
-  menuStyles,
-  optionStyles,
-} from '@/styles/searchInput'
+import { controlStyles, inputStyles, menuStyles, optionStyles } from '@/styles/searchInput'
 import {
   createSelectOption,
   removeClassNamesForOverlayAndBody,
@@ -21,13 +16,15 @@ import SearchSvg from '../SearchSvg/SearchSvg'
 import { useDebounceCallback } from '@/hooks/useDebounceCallback'
 import { getPartByNameFx, searchPartsFx } from '@/app/api/boilerParts'
 import { IBoilerPart } from '@/types/boilerparts'
-import {
-  NoOptionsMessage,
-  NoOptionsSpinner,
-} from '../SelectOptionsMessage/SelectOptionsMessage'
+import { NoOptionsMessage, NoOptionsSpinner } from '../SelectOptionsMessage/SelectOptionsMessage'
 import styles from '@/styles/header/index.module.scss'
+import { getAdvertisementById, searchAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
+import { useAppDispatch } from '@/redux/store'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
 const SearchInput = () => {
+  const dispatch = useAppDispatch()
+
   const mode = useStore($mode)
   const zIndex = useStore($searchInputZIndex)
   const [searchOption, setSearchOption] = useState<SelectOptionType>(null)
@@ -36,7 +33,7 @@ const SearchInput = () => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const btnRef = useRef() as MutableRefObject<HTMLButtonElement>
   const borderRef = useRef() as MutableRefObject<HTMLSpanElement>
-  const [options, setOptions] = useState([])
+  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
   const [inputValue, setInputValue] = useState('')
   const delayCallback = useDebounceCallback(1000)
   const spinner = useStore(searchPartsFx.pending)
@@ -48,10 +45,10 @@ const SearchInput = () => {
       return
     }
 
-    const name = (selectedOption as IOption)?.value as string
+    const id = (selectedOption as IOption)?.value as string
 
-    if (name) {
-      getPartAndRedirect(name)
+    if (id) {
+      getPartAndRedirect(Number(id))
     }
 
     setSearchOption(selectedOption)
@@ -64,43 +61,49 @@ const SearchInput = () => {
   }
 
   const handleSearchClick = async () => {
-    if (!inputValue) {
-      return
-    }
-
-    getPartAndRedirect(inputValue)
+    if (!inputValue) return
+    getPartAndRedirect(Number(inputValue))
   }
 
   const searchPart = async (search: string) => {
     try {
+      if (!search) return
+
       setInputValue(search)
-      const data = await searchPartsFx({
-        url: '/boiler-parts/search',
-        search,
-      })
 
-      const names = data
-        .map((item: IBoilerPart) => item.name)
-        .map(createSelectOption)
+      // const data = await searchPartsFx({
+      //   url: '/boiler-parts/search',
+      //   search,
+      // })
 
+      const { payload } = await dispatch(searchAdvertisements(search))
+
+      const advertisements = payload as [AdvertisementType[], number]
+      const names = advertisements[0].map((item) => ({ label: item.title, value: item.id }))
+
+      // @ts-ignore
       setOptions(names)
     } catch (error) {
       toast.error((error as Error).message)
     }
   }
 
-  const getPartAndRedirect = async (name: string) => {
-    const part = await getPartByNameFx({
-      url: '/boiler-parts/name',
-      name,
-    })
+  const getPartAndRedirect = async (id: number) => {
+    // const part = await getPartByNameFx({
+    //   url: '/boiler-parts/name',
+    //   name,
+    // })
 
-    if (!part.id) {
+    const { payload } = await dispatch(getAdvertisementById(id))
+
+    const advertisement = payload as AdvertisementType
+
+    if (!advertisement) {
       toast.warning('Товар не найден.')
       return
     }
 
-    router.push(`/catalog/${part.id}`)
+    router.push(`/catalog/${advertisement.id}`)
   }
 
   const onSearchInputChange = (text: string) => {
@@ -147,7 +150,7 @@ const SearchInput = () => {
           components={{
             NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
           }}
-          placeholder="Я ищу..."
+          placeholder="Я шукаю..."
           value={searchOption}
           onChange={handleSearchOptionChange}
           styles={{

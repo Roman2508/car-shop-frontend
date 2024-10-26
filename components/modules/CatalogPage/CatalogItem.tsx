@@ -20,6 +20,7 @@ import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import SendMessageSvg from '@/components/elements/SendMessageSvg/SendMessageSvg'
 import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
+import { formatDate } from '@/utils/formatDate'
 
 const CatalogItem = ({ item, self = false }: { item: AdvertisementType; self?: boolean }) => {
   const mode = useStore($mode)
@@ -50,9 +51,9 @@ const CatalogItem = ({ item, self = false }: { item: AdvertisementType; self?: b
           </h3>
         </Link>
 
-        <span className={styles.catalog__list__item__code}>!!!!!!!Київ, Шевченківський</span>
+        {/* <span className={styles.catalog__list__item__code}>!!!!!!!Київ, Шевченківський</span> */}
         {/* <span className={styles.catalog__list__item__code}>10 жовтня 2024 р.</span> */}
-        <span className={styles.catalog__list__item__code}>{item.createdAt}</span>
+        <span className={styles.catalog__list__item__code}>{formatDate(item.createdAt)}</span>
 
         <span className={styles.catalog__list__item__details}>
           <SpeedometerSvg />
