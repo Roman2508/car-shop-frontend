@@ -6,7 +6,7 @@ import { useStore } from 'effector-react'
 import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import { IQueryParams } from '@/types/catalog'
-import { $boilerPart, setBoilerPart } from '@/context/boilerPart'
+// import { $boilerPart, setBoilerPart } from '@/context/boilerPart'
 import { getBoilerPartFx } from '@/app/api/boilerParts'
 import PartPage from '@/components/templates/PartPage/PartPage'
 import Custom404 from '../404'
@@ -15,12 +15,15 @@ import { useAppDispatch } from '@/redux/store'
 import { getAdvertisementById } from '@/redux/advertisements/advertisementsAsyncActions'
 import { useSelector } from 'react-redux'
 import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
 function CatalogPartPage({ query }: { query: IQueryParams }) {
   const dispatch = useAppDispatch()
 
+  const { fullAdvertisement } = useSelector(advertisementsSelector)
+
   const { shouldLoadContent } = useRedirectByUserCheck()
-  const boilerPart = useStore($boilerPart)
+  // const boilerPart = useStore($boilerPart)
   const [error, setError] = useState(false)
   const router = useRouter()
   const getDefaultTextGenerator = useCallback((subpath: string) => subpath.replace('catalog', 'Каталог'), [])
@@ -32,47 +35,23 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
   }, [router.asPath])
 
   useEffect(() => {
+    if (!fullAdvertisement) return
+
     if (lastCrumb) {
-      lastCrumb.textContent = boilerPart.name
+      lastCrumb.textContent = fullAdvertisement.title
     }
-  }, [lastCrumb, boilerPart])
+  }, [lastCrumb, fullAdvertisement])
 
   const loadBoilerPart = async () => {
     try {
       // const data = await getBoilerPartFx(`/boiler-parts/find/${query.partId}`)
 
-      await dispatch(getAdvertisementById(query.partId))
+      const { payload } = await dispatch(getAdvertisementById(Number(query.partId)))
 
-      // if (!data) {
-      //   setError(true)
-      //   return
-      // }
-
-      const data = {
-        id: 1,
-        boiler_manufacturer: 'Bosch',
-        price: 299.99,
-        parts_manufacturer: 'Siemens',
-        vendor_code: 'BOS-001',
-        name: 'Heat Exchanger',
-        description:
-          'High-efficiency heat exchanger for Bosch boilers. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis debitis quisquam nemo eaque? Consequatur eius repellat aut vel fugit iusto adipisci. Voluptatibus recusandae velit nobis cumque cupiditate laudantium mollitia in.',
-        images: JSON.stringify([
-          'https://el.kz/storage/storage/element/2023/12/04/mainphoto/79454/1200xauto_KLC4GWu2jz6bzzQMIyUkCySKs6nDBsKzZX8A6uP1.jpg',
-          'https://upload.wikimedia.org/wikipedia/commons/c/ce/Cybertruck-fremont-cropped.jpg',
-          'https://www.topgear.com/sites/default/files/cars-car/image/2023/11/1-Tesla-Cybertruck-review.jpg?w=1280&h=720',
-          'https://cdn.geekwire.com/wp-content/uploads/2024/03/cybertruck1.jpeg',
-          'https://nextcar.ua/images/blog/568/tesla-cybertruck__1_.jpg',
-          'https://autopark.ua/photos/8/Statti/stattya0801-1.jpg',
-        ]),
-        in_stock: 50,
-        bestseller: true,
-        new: false,
-        popularity: 85,
-        compatibility: 'Bosch Series 5000',
+      if (!payload) {
+        setError(true)
+        return
       }
-
-      setBoilerPart(data)
     } catch (error) {
       toast.error((error as Error).message)
     }
@@ -81,11 +60,14 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
   return (
     <>
       <Head>
-        <title>Car Shop | {shouldLoadContent ? boilerPart.name : ''}</title>
+        <title>Car Shop | {shouldLoadContent && fullAdvertisement ? fullAdvertisement.title : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png" />
+        <link rel="manifest" href="/img/favicon/site.webmanifest"></link>
       </Head>
       {error ? (
         <Custom404 />

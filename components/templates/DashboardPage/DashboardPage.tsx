@@ -190,7 +190,7 @@ const DashboardPage = () => {
 
       <div className={`container ${styles.dashboard__filter}`}>
         <h2
-          className={`${styles.dashboard__title} ${mode !== 'dark' ? `${styles.dark_mode}` : ''}`}
+          className={`${styles.dashboard__filter__title} ${mode === 'dark' ? `${styles.dark_mode}` : ''}`}
           style={{ fontWeight: 700, fontSize: '36px', textAlign: 'center' }}
         >
           Ознайомтеся з понад 1,000 автомобілями на нашому сайті.

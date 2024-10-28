@@ -1,5 +1,7 @@
 export const correctFilterKeys = [
   'title',
+  'offset',
+  'limit',
   'first',
   'priceFrom',
   'priceTo',

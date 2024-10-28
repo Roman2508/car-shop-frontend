@@ -41,7 +41,7 @@ const CityButton = () => {
 
   return (
     <button className={styles.city} onClick={getCity}>
-      <span className={`${styles.city__span} ${darkModeClass}`}>
+      {/* <span className={`${styles.city__span} ${darkModeClass}`}>
         <LocationSvg />
       </span>
       <span className={`${styles.city__text} ${darkModeClass}`}>
@@ -52,7 +52,7 @@ const CityButton = () => {
         ) : (
           'Город (del)'
         )}
-      </span>
+      </span> */}
     </button>
   )
 }

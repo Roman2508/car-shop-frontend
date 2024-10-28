@@ -78,10 +78,10 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
                 {shoppingCart.length}
               </span>
             )}
-            <span className={styles.cart__svg}>
+            {/* <span className={styles.cart__svg}>
               <ShoppingCartSvg />
             </span>
-            <span className={styles.cart__text}>Корзина</span>
+            <span className={styles.cart__text}>Корзина</span> */}
           </button>
         )}
         <AnimatePresence>

@@ -250,21 +250,21 @@ const CatalogFilters: React.FC<ICatalogFilterProps> = ({
     <>
       {isMobile ? (
         <>
-          {/* <CatalogFiltersMobile
-            closePopup={closePopup}
+          <CatalogFiltersMobile
+            // closePopup={closePopup}
             spinner={spinner}
-            applyFilters={applyFilters}
+            // applyFilters={applyFilters}
             priceRange={priceRange}
-            setIsPriceRangeChanged={setIsPriceRangeChanged}
+            // setIsPriceRangeChanged={setIsPriceRangeChanged}
             yearOfReleaseRange={yearOfReleaseRange}
             setYearOfReleaseRange={setYearOfReleaseRange}
-            setPriceRange={setPriceRange}
+            // setPriceRange={setPriceRange}
             mileageRange={mileageRange}
             setMileageRange={setMileageRange}
-            resetFilterBtnDisabled={resetFilterBtnDisabled}
-            resetFilters={resetFilters}
-            filtersMobileOpen={filtersMobileOpen}
-          /> */}
+            // resetFilterBtnDisabled={resetFilterBtnDisabled}
+            // resetFilters={resetFilters}
+            // filtersMobileOpen={filtersMobileOpen}
+          />
         </>
       ) : (
         <CatalogFiltersDesktop

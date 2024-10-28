@@ -327,9 +327,9 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   return (
     <section className={styles.dashboard}>
-      <button onClick={add} style={{ padding: '20px 100px', fontSize: '50px', textTransform: 'uppercase' }}>
+      {/* <button onClick={add} style={{ padding: '20px 100px', fontSize: '50px', textTransform: 'uppercase' }}>
         click
-      </button>
+      </button> */}
 
       <form className={`container ${styles.dashboard__container}`} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={`${styles.create__ad__main__title} ${darkModeClass}`} style={{ marginTop: '50px' }}>

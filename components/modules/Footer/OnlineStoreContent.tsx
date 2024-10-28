@@ -8,11 +8,11 @@ const OnlineStoreContent = () => (
         <a className={styles.footer__top__item__list__item__link}>Каталог</a>
       </Link>
     </li>
-    <li className={styles.footer__top__item__list__item}>
+    {/* <li className={styles.footer__top__item__list__item}>
       <Link href="/shipping-payment" passHref legacyBehavior>
         <a className={styles.footer__top__item__list__item__link}>Доставка и оплата (del)</a>
       </Link>
-    </li>
+    </li> */}
     {/*  */}
     <li className={styles.footer__top__item__list__item}>
       <Link href="/about" passHref legacyBehavior>
@@ -24,11 +24,11 @@ const OnlineStoreContent = () => (
         <a className={styles.footer__top__item__list__item__link}>Зворотній зв'язок</a>
       </Link>
     </li>
-    <li className={styles.footer__top__item__list__item}>
+    {/* <li className={styles.footer__top__item__list__item}>
       <Link href="/wholesale-buyers" passHref legacyBehavior>
         <a className={styles.footer__top__item__list__item__link}>Оптовым покупателям (del)</a>
       </Link>
-    </li>
+    </li> */}
     <li className={styles.footer__top__item__list__item}>
       <Link href="/contacts" passHref legacyBehavior>
         <a className={styles.footer__top__item__list__item__link}>Контакти</a>

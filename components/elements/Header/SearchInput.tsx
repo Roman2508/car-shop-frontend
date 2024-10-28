@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import { MutableRefObject, useRef, useState } from 'react'
+import React, { MutableRefObject, useRef, useState } from 'react'
 import Select from 'react-select'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
@@ -38,6 +38,10 @@ const SearchInput = () => {
   const delayCallback = useDebounceCallback(1000)
   const spinner = useStore(searchPartsFx.pending)
   const router = useRouter()
+
+  // const [zIndex] = React.useState(0)
+
+  console.log(zIndex)
 
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
     if (!selectedOption) {

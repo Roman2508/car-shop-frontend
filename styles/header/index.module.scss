@@ -104,8 +104,6 @@
             left: 0;
             width: 100%;
             height: 2px;
-            // background-color: #5acccc;
-            // background-color: #1c629e;
             background-color: #ffffff;
             transform: scaleX(0);
             transition: all 0.3s ease-in-out;
@@ -113,8 +111,6 @@
 
           &:hover {
             color: #ffc540 !important;
-            // color: #5acccc;
-            // color: #1c629e;
             transition: color 0.2s ease-in-out;
 
             &::after {
@@ -134,13 +130,12 @@
         }
 
         &__link.active {
-          // color: #5acccc;
-          // color: #1c629e;
-          color: #ffffff;
+          color: #ffc540 !important;
 
           transition: color 0.2s ease-in-out;
 
           &::after {
+            background-color: #ffc540 !important;
             transform: scaleX(1);
           }
         }
@@ -169,11 +164,11 @@
     }
 
     @media (max-width: 580px) {
-      grid-column: auto;
-      position: absolute;
-      top: 7px;
-      left: 50%;
-      transform: translateX(-50%);
+      // grid-column: auto;
+      // position: absolute;
+      // top: 7px;
+      // left: 50%;
+      // transform: translateX(-50%);
     }
 
     &__link {
@@ -184,12 +179,13 @@
       align-items: center;
 
       @media (max-width: 580px) {
-        position: initial;
-        width: 176px;
+        // position: initial;
+        width: 90px;
       }
 
       & img {
         margin-right: 9px;
+        width: 34px;
       }
 
       &__text.dark_mode {
@@ -206,8 +202,8 @@
 
         @media (max-width: 580px) {
           position: initial;
-          width: 176px;
-          color: #fafbfc;
+          width: 34px;
+          // color: #fafbfc;
         }
       }
     }
@@ -219,17 +215,22 @@
     display: grid;
     grid-template-columns: 92% 5%;
 
+    @media (max-width: 950px) {
+      grid-column: 5 / 13;
+    }
+
     @media (max-width: 770px) {
-      grid-column: 5 / 11;
+      grid-column: 5 / 12;
     }
 
     @media (max-width: 580px) {
-      grid-column: 1 / 10;
+      // grid-column: 1 / 10;
+      grid-column: 5 / 12;
       padding-left: 0;
     }
 
     @media (max-width: 370px) {
-      grid-column: 1 / 9;
+      // grid-column: 1 / 9;
     }
 
     &__inner {
@@ -280,9 +281,6 @@
   }
 
   &__shopping_cart {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     grid-column: 11 / 13;
     padding-left: 50px;
 

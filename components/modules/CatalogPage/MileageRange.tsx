@@ -9,7 +9,7 @@ import styles from '@/styles/catalog/index.module.scss'
 
 const STEP = 1
 const MIN = 0
-const MAX = 1000000
+const MAX = 1000
 
 interface IMileageRangeProps {
   mileageRange: [number, number]

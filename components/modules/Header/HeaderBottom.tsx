@@ -32,7 +32,8 @@ const HeaderBottom = () => {
         <h1 className={styles.header__logo}>
           <Link href="/dashboard" legacyBehavior passHref>
             <a className={styles.header__logo__link}>
-              <img src="/img/logo.svg" alt="logo" />
+              <img src="/img/favicon/android-chrome-192x192.png" alt="logo" />
+
               <span className={`${styles.header__logo__link__text} ${darkModeClass}`}>Car Shop</span>
             </a>
           </Link>

@@ -131,7 +131,7 @@ const Administration = () => {
   const [spinner, setSpinner] = React.useState(false)
 
   React.useEffect(() => {
-    const isAdmin = auth?.role === 'ADMIN'
+    const isAdmin = auth?.role === 'ADMIN' || auth?.role === 'SUPER_ADMIN'
     if (!isAdmin) {
       router.replace('/profile')
       return
@@ -167,7 +167,15 @@ const Administration = () => {
           ))}
         </div>
       ) : (
-        <h2 style={darkModeClass ? { color: '#fff' } : { color: '#000' }}>Нових оголошень</h2>
+        <h2
+          style={
+            darkModeClass
+              ? { color: '#fff', fontWeight: 500, width: '100%', textAlign: 'center', padding: '40px 0' }
+              : { color: '#000', fontWeight: 500, width: '100%', textAlign: 'center', padding: '40px 0' }
+          }
+        >
+          Немає нових оголошень
+        </h2>
       )}
     </div>
   )

@@ -23,7 +23,12 @@ export const controlStyles = (defaultStyles: CSSObjectWithLabel, theme: string) 
   //   maxWidth: '340px',
   // },
   '@media (max-width: 560px)': {
-    // width: '177px',
+    width: '240px',
+    minWidth: '100%',
+    maxWidth: '100%',
+  },
+  '@media (max-width: 400px)': {
+    width: '200px',
     minWidth: '100%',
     maxWidth: '100%',
   },

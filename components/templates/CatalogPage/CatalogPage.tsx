@@ -46,8 +46,9 @@ import { correctFilterKeys } from '@/constans/correctFilterKeys'
 
 export const MIN_PRICE = 0
 export const MAX_PRICE = 10000000
+
 const MIN_MILEAGE = 0
-const MAX_MILEAGE = 1000000
+const MAX_MILEAGE = 1000
 const MIN_YEAR_OF_RELEASE = 1900
 const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 
@@ -56,8 +57,11 @@ const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 // 2. Розподіл ролей на сторінці profile
 // 3. pagination
 // 4. повторний вибір фото (reset target.value для input type file)
-// 5. 
-// 6. 
+// 5. на сторінці адміністрування треба зробити фільтр та поправити відображення тексту коли нових оголошень немає
+//    також треба показувати на сторінці адміністрування оголошення які мають статус неактивно
+// 6. Catalog filter mobile
+
+export const ITEMS_PER_PAGE = 1
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -84,9 +88,12 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)
   const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
 
-  const pagesCount = Math.ceil((advertisements ? advertisements.length : 1) / 20)
+  const pagesCount = Math.ceil((advertisements ? advertisements.length : 1) / ITEMS_PER_PAGE)
+
   const isValidOffset = query.offset && !isNaN(+query.offset) && +query.offset > 0
+
   const [currentPage, setCurrentPage] = useState(isValidOffset ? +query.offset - 1 : 0)
+
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const isAnyBoilerManufacturerChecked = boilerManufacturers.some((item) => item.checked)
@@ -176,6 +183,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   //   }
   // }
 
+  console.log(pagesCount)
+
   const debouncedGetResponce = React.useCallback(
     debounse((query: ParsedUrlQuery) => dispatch(getAdvertisements(query)), 1000),
     []
@@ -189,35 +198,42 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
       setSpinner(true)
-      const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
+      // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
 
-      if (selected > pagesCount) {
-        resetPagination(isFilterInQuery ? filteredBoilerParts : data)
-        return
-      }
+      // const _query = { ...query, limit: ITEMS_PER_PAGE, offset: selected }
 
-      if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
-        resetPagination(isFilterInQuery ? filteredBoilerParts : data)
-        return
-      }
+      // const { payload } = await dispatch(getAdvertisements(_query))
 
-      const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } = checkQueryParams(router)
+      // console.log(payload)
 
-      const result = await getBoilerPartsFx(
-        `/boiler-parts?limit=20&offset=${selected}${
-          isFilterInQuery && isValidBoilerQuery ? `&boiler=${router.query.boiler}` : ''
-        }${isFilterInQuery && isValidPartsQuery ? `&parts=${router.query.parts}` : ''}${
-          isFilterInQuery && isValidPriceQuery
-            ? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
-            : ''
-        }`
-      )
+      // if (selected > pagesCount) {
+      //   resetPagination(isFilterInQuery ? filteredBoilerParts : data)
+      //   return
+      // }
+
+      // if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
+      //   resetPagination(isFilterInQuery ? filteredBoilerParts : data)
+      //   return
+      // }
+
+      // const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } = checkQueryParams(router)
+
+      // const result = await getBoilerPartsFx(
+      //   `/boiler-parts?limit=20&offset=${selected}${
+      //     isFilterInQuery && isValidBoilerQuery ? `&boiler=${router.query.boiler}` : ''
+      //   }${isFilterInQuery && isValidPartsQuery ? `&parts=${router.query.parts}` : ''}${
+      //     isFilterInQuery && isValidPriceQuery
+      //       ? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
+      //       : ''
+      //   }`
+      // )
 
       router.push(
         {
           query: {
             ...router.query,
             offset: selected + 1,
+            limit: ITEMS_PER_PAGE,
           },
         },
         undefined,
@@ -225,7 +241,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       )
 
       setCurrentPage(selected)
-      setBoilerParts(result)
+      // setBoilerParts(result)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -348,6 +364,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       }
 
       await dispatch(getAdvertisements(router.query))
+
       setIsFirstRender(false)
       setSpinner(false)
     }

@@ -71,7 +71,7 @@ const ProfilePage = () => {
 
           <ul className={styles.profile__tabs}>
             {tabs.map((el) => {
-              const isAdmin = auth?.role === 'ADMIN'
+              const isAdmin = auth?.role === 'ADMIN' || auth?.role === 'SUPER_ADMIN'
 
               if (!isAdmin && el.link === 'admin') {
                 return
@@ -82,6 +82,7 @@ const ProfilePage = () => {
                   className={`${styles.profile__tab} ${activeTab === el.label ? styles.active : ''} ${darkModeClass}`}
                   key={el.link}
                   onClick={() => {
+                    console.log('click')
                     updateRoteParam(el.link)
                     setActiveTab(el.label)
                   }}
