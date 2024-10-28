@@ -114,35 +114,39 @@ const MesagesTab = () => {
       <div className={`${styles.messages__left_col} ${darkModeClass}`}>
         {/*  */}
         {dialogs ? (
-          dialogs.map((el) => (
-            <div
-              className={`${styles.messages__chats_list_item} ${
-                activeDalog?.id === el.id ? styles.active : ''
-              } ${darkModeClass}`}
-              onClick={() => {
-                updateRoteParam(String(el.id))
-                setActiveDialog(el)
-              }}
-            >
-              <img src={createImageUrl(el.advertisement?.photos[0]?.filename)} alt="advertisement image" />
+          dialogs.map((el) => {
+            return (
+              <div
+                className={`${styles.messages__chats_list_item} ${
+                  activeDalog?.id === el.id ? styles.active : ''
+                } ${darkModeClass}`}
+                onClick={() => {
+                  updateRoteParam(String(el.id))
+                  setActiveDialog(el)
+                }}
+              >
+                <img src={createImageUrl(el.advertisement?.photos[0]?.filename)} alt="advertisement image" />
 
-              <div>
-                <div className={styles.messages__chats_top}>
-                  <p className={styles.messages__chats_nickname}>
-                    {el.members.find((el) => el.id !== auth?.id)?.username}
-                  </p>
+                <div>
+                  <div className={styles.messages__chats_top}>
+                    <p className={styles.messages__chats_nickname}>
+                      {el.members.find((el) => el.id !== auth?.id)?.username}
+                    </p>
 
-                  <p className={styles.messages__chats_sending_time}>{formatDate(el.advertisement.createdAt)}</p>
+                    <p className={styles.messages__chats_sending_time}>{formatDate(el.advertisement.createdAt)}</p>
+                  </div>
+                  <div className={styles.messages__chats_bottom}>
+                    <p>{el.advertisement.status}</p>
+                  </div>
+                  <div className={styles.messages__chats_bottom}>
+                    <h6>{el.advertisement.title}</h6>
+                  </div>
+
+                  {/* <p className={styles.messages__chats_message_body}>message message message message message message</p> */}
                 </div>
-                <div className={styles.messages__chats_bottom}>
-                  <p>{el.advertisement.status}</p>
-                  <h6>{el.advertisement.title}</h6>
-                </div>
-
-                <p className={styles.messages__chats_message_body}>message message message message message message</p>
               </div>
-            </div>
-          ))
+            )
+          })
         ) : (
           <div style={{ padding: '40px 20px', textAlign: 'center' }}>У Вас поки немає діалогів</div>
         )}
@@ -174,10 +178,7 @@ const MesagesTab = () => {
 
           <div className={`${styles.messages__right_col_advertisement} ${darkModeClass}`}>
             <div className={`${styles.messages__chats_list_item} ${darkModeClass}`}>
-              <img
-                src={createImageUrl(activeDalog.advertisement?.photos[0]?.filename)}
-                alt="advertisement"
-              />
+              <img src={createImageUrl(activeDalog.advertisement?.photos[0]?.filename)} alt="advertisement" />
 
               <div>
                 <div className={styles.messages__chats_top}>

@@ -24,6 +24,10 @@ interface ICatalogFilterProps {
   setYearOfReleaseRange: React.Dispatch<React.SetStateAction<[number, number]>>
   // spinner: boolean
   // applyFilters: VoidFunction
+  filtersMobileOpen: boolean
+  closePopup: VoidFunction
+  resetFilterBtnDisabled: boolean
+  resetFilters: VoidFunction
 }
 
 const CatalogFilters: React.FC<ICatalogFilterProps> = ({
@@ -34,13 +38,13 @@ const CatalogFilters: React.FC<ICatalogFilterProps> = ({
   yearOfReleaseRange,
   setYearOfReleaseRange,
   // setIsPriceRangeChanged,
-  // resetFilterBtnDisabled,
-  // resetFilters,
+  resetFilterBtnDisabled,
+  resetFilters,
   // isPriceRangeChanged,
   // currentPage,
   // setIsFilterInQuery,
-  // closePopup,
-  // filtersMobileOpen,
+  closePopup,
+  filtersMobileOpen,
 }) => {
   const isMobile = useMediaQuery(820)
   const [spinner, setSpinner] = useState(false)
@@ -251,19 +255,20 @@ const CatalogFilters: React.FC<ICatalogFilterProps> = ({
       {isMobile ? (
         <>
           <CatalogFiltersMobile
-            // closePopup={closePopup}
+            closePopup={closePopup}
             spinner={spinner}
             // applyFilters={applyFilters}
             priceRange={priceRange}
+            setPriceRange={setPriceRange}
             // setIsPriceRangeChanged={setIsPriceRangeChanged}
             yearOfReleaseRange={yearOfReleaseRange}
             setYearOfReleaseRange={setYearOfReleaseRange}
-            // setPriceRange={setPriceRange}
             mileageRange={mileageRange}
             setMileageRange={setMileageRange}
-            // resetFilterBtnDisabled={resetFilterBtnDisabled}
-            // resetFilters={resetFilters}
-            // filtersMobileOpen={filtersMobileOpen}
+            resetFilterBtnDisabled={resetFilterBtnDisabled}
+            resetFilters={resetFilters}
+
+            filtersMobileOpen={filtersMobileOpen}
           />
         </>
       ) : (

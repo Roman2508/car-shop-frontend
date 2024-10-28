@@ -53,6 +53,8 @@ const HeaderTop = () => {
               const isActive =
                 el.label === 'Профіль' && router.asPath.includes('/profile') && !router.asPath.includes('messages')
                   ? true
+                  : el.label === 'Каталог' && router.asPath.includes('/catalog')
+                  ? true
                   : router.asPath === el.link
 
               const availableTabs = ['/profile?tab=messages', '/profile?tab=profile', '/create-ad']

@@ -208,6 +208,14 @@
       @media (max-width: 820px) {
         display: block;
       }
+
+      & .catalog__bottom__filters {
+        left: 0 !important;
+
+        h3 {
+          margin: 20px 0 30px;
+        }
+      }
     }
 
     &__filters {

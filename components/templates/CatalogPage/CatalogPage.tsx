@@ -55,13 +55,13 @@ const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 // todo:
 // 1. При створенні оголошення коли користувач завантажив фото і покидає сторінку (не опублікувавши) треба попереджати і видаляти фото
 // 2. Розподіл ролей на сторінці profile
-// 3. pagination
+// 3. pagination (перевірити як працює коли велика кількість сторінок)
 // 4. повторний вибір фото (reset target.value для input type file)
 // 5. на сторінці адміністрування треба зробити фільтр та поправити відображення тексту коли нових оголошень немає
 //    також треба показувати на сторінці адміністрування оголошення які мають статус неактивно
 // 6. Catalog filter mobile
 
-export const ITEMS_PER_PAGE = 1
+export const ITEMS_PER_PAGE = 2
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -88,7 +88,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [isFilterInQuery, setIsFilterInQuery] = useState(false)
   const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
 
-  const pagesCount = Math.ceil((advertisements ? advertisements.length : 1) / ITEMS_PER_PAGE)
+  const [pagesCount, setPagesCount] = React.useState(
+    Math.ceil((advertisements ? advertisements.length : 1) / ITEMS_PER_PAGE)
+  )
 
   const isValidOffset = query.offset && !isNaN(+query.offset) && +query.offset > 0
 
@@ -120,71 +122,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       { shallow: true }
     )
 
-  // useEffect(() => {
-  //   loadBoilerParts()
-  // }, [filteredBoilerParts, isFilterInQuery])
-
-  // const loadBoilerParts = async () => {
-  //   try {
-  //     setSpinner(true)
-  //     // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-  //     const { payload } = await dispatch(getAdvertisements(''))
-  //     const data = payload as any
-
-  //     if (!isValidOffset) {
-  //       router.replace({
-  //         query: {
-  //           offset: 1,
-  //         },
-  //       })
-
-  //       resetPagination(data)
-  //       return
-  //     }
-
-  //     if (isValidOffset) {
-  //       if (+query.offset > Math.ceil(data.count / 20)) {
-  //         router.push(
-  //           {
-  //             query: {
-  //               ...query,
-  //               offset: 1,
-  //             },
-  //           },
-  //           undefined,
-  //           { shallow: true }
-  //         )
-
-  //         setCurrentPage(0)
-  //         // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
-
-  //         setBoilerParts(data)
-  //         return
-  //       }
-
-  //       const offset = +query.offset - 1
-  //       const result = await getBoilerPartsFx(`/boiler-parts?limit=20&offset=${offset}`)
-
-  //       setCurrentPage(offset)
-  //       // setBoilerParts(isFilterInQuery ? filteredBoilerParts : result)
-
-  //       setBoilerParts(data)
-  //       return
-  //     }
-
-  //     setCurrentPage(0)
-  //     // setBoilerParts(isFilterInQuery ? filteredBoilerParts : data)
-
-  //     setBoilerParts(data)
-  //   } catch (error) {
-  //     toast.error((error as Error).message)
-  //   } finally {
-  //     setTimeout(() => setSpinner(false), 1000)
-  //   }
-  // }
-
-  console.log(pagesCount)
-
   const debouncedGetResponce = React.useCallback(
     debounse((query: ParsedUrlQuery) => dispatch(getAdvertisements(query)), 1000),
     []
@@ -198,50 +135,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
       setSpinner(true)
-      // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-
-      // const _query = { ...query, limit: ITEMS_PER_PAGE, offset: selected }
-
-      // const { payload } = await dispatch(getAdvertisements(_query))
-
-      // console.log(payload)
-
-      // if (selected > pagesCount) {
-      //   resetPagination(isFilterInQuery ? filteredBoilerParts : data)
-      //   return
-      // }
-
-      // if (isValidOffset && +query.offset > Math.ceil(data.count / 2)) {
-      //   resetPagination(isFilterInQuery ? filteredBoilerParts : data)
-      //   return
-      // }
-
-      // const { isValidBoilerQuery, isValidPartsQuery, isValidPriceQuery } = checkQueryParams(router)
-
-      // const result = await getBoilerPartsFx(
-      //   `/boiler-parts?limit=20&offset=${selected}${
-      //     isFilterInQuery && isValidBoilerQuery ? `&boiler=${router.query.boiler}` : ''
-      //   }${isFilterInQuery && isValidPartsQuery ? `&parts=${router.query.parts}` : ''}${
-      //     isFilterInQuery && isValidPriceQuery
-      //       ? `&priceFrom=${router.query.priceFrom}&priceTo=${router.query.priceTo}`
-      //       : ''
-      //   }`
-      // )
-
-      router.push(
-        {
-          query: {
-            ...router.query,
-            offset: selected + 1,
-            limit: ITEMS_PER_PAGE,
-          },
-        },
-        undefined,
-        { shallow: true }
-      )
-
+      router.push({ query: { ...router.query, offset: selected, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
       setCurrentPage(selected)
-      // setBoilerParts(result)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
@@ -344,6 +239,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   // !first render
   React.useEffect(() => {
     if (isFirstRender) return
+    if (!router.query.offset) {
+      router.push({ query: { ...query, offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
+    }
     debouncedGetResponce(router.query)
   }, [router.query])
 
@@ -363,7 +261,13 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         }
       }
 
-      await dispatch(getAdvertisements(router.query))
+      if (!router.query.offset) {
+        router.push({ query: { ...query, offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
+      }
+
+      const { payload } = await dispatch(getAdvertisements(router.query))
+      const data = payload as [AdvertisementType[], number]
+      setPagesCount(data[1] / ITEMS_PER_PAGE)
 
       setIsFirstRender(false)
       setSpinner(false)
@@ -461,17 +365,17 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             <CatalogFilters
               priceRange={priceRange}
               setPriceRange={setPriceRange}
-              // closePopup={closePopup}
-              // filtersMobileOpen={open}
+              closePopup={closePopup}
+              filtersMobileOpen={open}
               // currentPage={currentPage}
-              // resetFilters={resetFilters}
+              resetFilters={resetFilters}
               mileageRange={mileageRange}
               setMileageRange={setMileageRange}
               yearOfReleaseRange={yearOfReleaseRange}
               setYearOfReleaseRange={setYearOfReleaseRange}
               // setIsFilterInQuery={setIsFilterInQuery}
               // isPriceRangeChanged={isPriceRangeChanged}
-              // resetFilterBtnDisabled={resetFilterBtnDisabled}
+              resetFilterBtnDisabled={resetFilterBtnDisabled}
               // setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
 
@@ -500,17 +404,17 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           </div>
 
           <ReactPaginate
-            containerClassName={styles.catalog__bottom__list}
-            pageClassName={styles.catalog__bottom__list__item}
-            pageLinkClassName={styles.catalog__bottom__list__item__link}
-            previousClassName={styles.catalog__bottom__list__prev}
-            nextClassName={styles.catalog__bottom__list__next}
-            breakClassName={styles.catalog__bottom__list__break}
-            breakLinkClassName={`${styles.catalog__bottom__list__break__link} ${darkModeClass}`}
             breakLabel="..."
             pageCount={pagesCount}
             forcePage={currentPage}
             onPageChange={handlePageChange}
+            containerClassName={styles.catalog__bottom__list}
+            pageClassName={styles.catalog__bottom__list__item}
+            nextClassName={styles.catalog__bottom__list__next}
+            breakClassName={styles.catalog__bottom__list__break}
+            previousClassName={styles.catalog__bottom__list__prev}
+            pageLinkClassName={styles.catalog__bottom__list__item__link}
+            breakLinkClassName={`${styles.catalog__bottom__list__break__link} ${darkModeClass}`}
           />
         </div>
       </div>

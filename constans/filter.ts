@@ -274,7 +274,7 @@ export const theCarWasDrivenFrom = [
   { checked: false, id: '14', title: 'Нідерланди', event: '' },
   { checked: false, id: '15', title: 'Бельгія', event: '' },
   { checked: false, id: '16', title: 'Латвія', event: '' },
-  { checked: false, id: '16', title: 'Інша країна', event: '' },
+  { checked: false, id: '17', title: 'Інша країна', event: '' },
 ]
 
 export const filters = [

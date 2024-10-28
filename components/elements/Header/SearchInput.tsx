@@ -21,9 +21,14 @@ import styles from '@/styles/header/index.module.scss'
 import { getAdvertisementById, searchAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 import { useAppDispatch } from '@/redux/store'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { useClickAway } from 'react-use'
 
 const SearchInput = () => {
   const dispatch = useAppDispatch()
+
+  const inputRef = React.useRef(null)
+
+  const [focused, setFocused] = React.useState(false)
 
   const mode = useStore($mode)
   const zIndex = useStore($searchInputZIndex)
@@ -38,10 +43,6 @@ const SearchInput = () => {
   const delayCallback = useDebounceCallback(1000)
   const spinner = useStore(searchPartsFx.pending)
   const router = useRouter()
-
-  // const [zIndex] = React.useState(0)
-
-  console.log(zIndex)
 
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
     if (!selectedOption) {
@@ -60,8 +61,8 @@ const SearchInput = () => {
   }
 
   const onFocusSearch = () => {
-    toggleClassNamesForOverlayAndBody('open-search')
-    setSearchInputZIndex(100)
+    // toggleClassNamesForOverlayAndBody('open-search')
+    // setSearchInputZIndex(100)
   }
 
   const handleSearchClick = async () => {
@@ -111,98 +112,123 @@ const SearchInput = () => {
   }
 
   const onSearchInputChange = (text: string) => {
-    document.querySelector('.overlay')?.classList.add('open-search')
-    document.querySelector('.body')?.classList.add('overflow-hidden')
+    // document.querySelector('.overlay')?.classList.add('open-search')
+    // document.querySelector('.body')?.classList.add('overflow-hidden')
 
     delayCallback(() => searchPart(text))
   }
 
   const onSearchMenuOpen = () => {
-    setOnMenuOpenControlStyles({
-      borderBottomLeftRadius: 0,
-      border: 'none',
-    })
-    setOnMenuOpenContainerStyles({
-      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    })
-
-    btnRef.current.style.border = 'none'
-    btnRef.current.style.borderBottomRightRadius = '0'
-    borderRef.current.style.display = 'block'
+    // setOnMenuOpenControlStyles({
+    //   borderBottomLeftRadius: 0,
+    //   border: 'none',
+    // })
+    // setOnMenuOpenContainerStyles({
+    //   boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    // })
+    // btnRef.current.style.border = 'none'
+    // btnRef.current.style.borderBottomRightRadius = '0'
+    // borderRef.current.style.display = 'block'
   }
 
   const onSearchMenuClose = () => {
-    setOnMenuOpenControlStyles({
-      borderBottomLeftRadius: 4,
-      boxShadow: 'none',
-      border: '1px solid #9e9e9e',
-    })
-    setOnMenuOpenContainerStyles({
-      boxShadow: 'none',
-    })
-
-    btnRef.current.style.border = '1px solid #9e9e9e'
-    btnRef.current.style.borderLeft = 'none'
-    btnRef.current.style.borderBottomRightRadius = '4px'
-    borderRef.current.style.display = 'none'
+    // setOnMenuOpenControlStyles({
+    //   borderBottomLeftRadius: 4,
+    //   boxShadow: 'none',
+    //   border: '1px solid #9e9e9e',
+    // })
+    // setOnMenuOpenContainerStyles({
+    //   boxShadow: 'none',
+    // })
+    // btnRef.current.style.border = '1px solid #9e9e9e'
+    // btnRef.current.style.borderLeft = 'none'
+    // btnRef.current.style.borderBottomRightRadius = '4px'
+    // borderRef.current.style.display = 'none'
   }
+
+  useClickAway(inputRef, () => {
+    setFocused(false)
+    document.querySelector('.body')?.classList.remove('overflow-hidden')
+  })
 
   return (
     <>
-      <div className={styles.header__search__inner}>
-        <Select
-          components={{
-            NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
+      {focused && (
+        <div
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            position: 'fixed',
+            height: '100%',
+            width: '100%',
+            zIndex: 10,
+            left: 0,
+            top: 0,
           }}
-          placeholder="Я шукаю..."
-          value={searchOption}
-          onChange={handleSearchOptionChange}
-          styles={{
-            ...inputStyles,
-            container: (defaultStyles) => ({
-              ...defaultStyles,
-              ...onMenuOpenContainerStyles,
-            }),
-            control: (defaultStyles) => ({
-              ...controlStyles(defaultStyles, mode),
-              backgroundColor: mode === 'dark' ? '#2d2d2d' : '#ffffff',
-              zIndex,
-              transition: 'none',
-              ...onMenuOpenControlStyles,
-            }),
-            input: (defaultStyles) => ({
-              ...defaultStyles,
-              color: mode === 'dark' ? '#f2f2f2' : '#222222',
-            }),
-            menu: (defaultStyles) => ({
-              ...menuStyles(defaultStyles, mode),
-              zIndex,
-              marginTop: '-1px',
-            }),
-            option: (defaultStyles, state) => ({
-              ...optionStyles(defaultStyles, state, mode),
-            }),
-          }}
-          isClearable={true}
-          openMenuOnClick={false}
-          onFocus={onFocusSearch}
-          onMenuOpen={onSearchMenuOpen}
-          onMenuClose={onSearchMenuClose}
-          onInputChange={onSearchInputChange}
-          options={options}
         />
-        <span ref={borderRef} className={styles.header__search__border} />
+      )}
+
+      <div style={{ zIndex: focused ? 11 : 1 }} className={styles.header__search} ref={inputRef}>
+        <div
+          className={styles.header__search__inner}
+          onClick={() => {
+            document.querySelector('.body')?.classList.add('overflow-hidden')
+            setFocused(true)
+          }}
+        >
+          <Select
+            components={{
+              NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
+            }}
+            placeholder="Я шукаю..."
+            value={searchOption}
+            onChange={handleSearchOptionChange}
+            styles={{
+              ...inputStyles,
+              container: (defaultStyles) => ({
+                ...defaultStyles,
+                ...onMenuOpenContainerStyles,
+              }),
+              control: (defaultStyles) => ({
+                ...controlStyles(defaultStyles, mode),
+                backgroundColor: mode === 'dark' ? '#2d2d2d' : '#ffffff',
+                zIndex,
+                transition: 'none',
+                ...onMenuOpenControlStyles,
+              }),
+              input: (defaultStyles) => ({
+                ...defaultStyles,
+                color: mode === 'dark' ? '#f2f2f2' : '#222222',
+              }),
+              menu: (defaultStyles) => ({
+                ...menuStyles(defaultStyles, mode),
+                zIndex,
+                marginTop: '-1px',
+              }),
+              option: (defaultStyles, state) => ({
+                ...optionStyles(defaultStyles, state, mode),
+              }),
+            }}
+            isClearable={true}
+            openMenuOnClick={false}
+            onFocus={onFocusSearch}
+            onMenuOpen={onSearchMenuOpen}
+            onMenuClose={onSearchMenuClose}
+            onInputChange={onSearchInputChange}
+            options={options}
+          />
+          <span ref={borderRef} className={styles.header__search__border} />
+        </div>
+        <button
+          className={`${styles.header__search__btn} ${darkModeClass}`}
+          ref={btnRef}
+          style={{ zIndex }}
+          onClick={handleSearchClick}
+        >
+          <span className={styles.header__search__btn__span}>
+            <SearchSvg />
+          </span>
+        </button>
       </div>
-      <button
-        className={`${styles.header__search__btn} ${darkModeClass}`}
-        ref={btnRef}
-        style={{ zIndex }}
-        onClick={handleSearchClick}
-      >
-        <span className={styles.header__search__btn__span}>
-          <SearchSvg />
-        </span>
-      </button>
     </>
   )
 }

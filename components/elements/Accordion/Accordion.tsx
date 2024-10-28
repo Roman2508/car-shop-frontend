@@ -31,9 +31,7 @@ const Accordion = ({
           <motion.button
             initial={false}
             onClick={toggleAccordion}
-            className={`${titleClass} ${
-              expanded ? (isMobileForFilters ? '' : arrowOpenClass) : ''
-            }`}
+            className={`${titleClass} ${expanded ? (isMobileForFilters ? '' : arrowOpenClass) : ''}`}
           >
             {title}
           </motion.button>

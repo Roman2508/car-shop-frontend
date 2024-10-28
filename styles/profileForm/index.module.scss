@@ -105,7 +105,6 @@
         width: 100%;
         position: relative;
         padding: 8px 32px;
-        // background-color: #1c629e;
         background-color: #1c629e;
         border: none;
         cursor: pointer;
@@ -135,6 +134,10 @@
     justify-content: space-between;
     min-height: 532px;
     gap: 20px;
+
+    @media (max-width: 768px) {
+      gap: 10px;
+    }
   }
 
   &__left_col {
@@ -177,6 +180,16 @@
 
   &__left_col {
     width: 400px;
+
+    @media (max-width: 1024px) {
+      width: 300px;
+    }
+    @media (max-width: 840px) {
+      width: 260px;
+    }
+    @media (max-width: 768px) {
+      width: 84px;
+    }
   }
 
   &__chats_list_item:not(:last-of-type) {
@@ -221,6 +234,22 @@
       margin-bottom: 8px;
     }
 
+    &_bottom {
+      @media (max-width: 768px) {
+        flex-wrap: wrap;
+
+        & h6 {
+          white-space: initial !important;
+        }
+      }
+    }
+
+    &_top {
+      @media (max-width: 840px) {
+        flex-wrap: wrap;
+      }
+    }
+
     // bage
     &_bottom p {
       border: 1px solid gray;
@@ -243,7 +272,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 210px;
+      max-width: 270px;
     }
 
     &_nickname {
@@ -411,6 +440,38 @@
 
     &.dark_mode * {
       color: #fff !important;
+    }
+  }
+}
+
+.messages__left_col {
+  & .messages__chats_bottom h6 {
+    @media (max-width: 1024px) {
+      width: 200px;
+    }
+    @media (max-width: 840px) {
+      display: none;
+    }
+  }
+
+  & .messages__chats_nickname {
+    @media (max-width: 840px) {
+      margin-bottom: 4px;
+      width: 100%;
+    }
+  }
+
+  & .messages__chats_sending_time {
+    @media (max-width: 840px) {
+      font-size: 12px;
+    }
+  }
+
+  & .messages__chats_list_item {
+    @media (max-width: 768px) {
+      & div {
+        display: none;
+      }
     }
   }
 }

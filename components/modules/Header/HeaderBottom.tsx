@@ -38,9 +38,9 @@ const HeaderBottom = () => {
             </a>
           </Link>
         </h1>
-        <div className={styles.header__search}>
+        {/* <div className={styles.header__search}> */}
           <SearchInput />
-        </div>
+        {/* </div> */}
         <div className={styles.header__shopping_cart}>
           {!isMedia950 && <ModeToggler />}
           <CartPopup />
