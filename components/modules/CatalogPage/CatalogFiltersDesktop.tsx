@@ -28,6 +28,7 @@ interface ICatalogFilterDesktopProps {
   setMileageRange: React.Dispatch<React.SetStateAction<[number, number]>>
   setYearOfReleaseRange: React.Dispatch<React.SetStateAction<[number, number]>>
   spinner: boolean
+  closePopup?: VoidFunction
   // applyFilters: VoidFunction
 }
 
@@ -38,6 +39,7 @@ const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
   setMileageRange,
   yearOfReleaseRange,
   setYearOfReleaseRange,
+  closePopup,
   spinner,
 }) => {
   const mode = useStore($mode)
@@ -48,15 +50,12 @@ const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
 
   return (
     <div className={`${styles.catalog__bottom__filters} ${darkModeClass}`}>
-      <h3 className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}>Фільтри</h3>
-      <div className={styles.filters__boiler_manufacturers}>
-        {/* <FilterManufacturerAccordion
-          manufacturersList={boilerManufacturers}
-          title="Производитель котлов"
-          updateManufacturer={updateBoilerManufacturer}
-          setManufacturer={setBoilerManufacturers}
-        /> */}
-      </div>
+      <h3
+        onClick={() => closePopup && closePopup()}
+        className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}
+      >
+        Фільтри
+      </h3>
 
       <div className={styles.filters__price}>
         <Accordion

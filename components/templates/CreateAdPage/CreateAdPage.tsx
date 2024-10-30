@@ -190,12 +190,9 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
     })
   }
 
-  const handleChangeImage = async (event: Event) => {
+  const handleChangeImage = async (event: Event, slotNumber: number) => {
     const target = event.target as HTMLInputElement
     const file = target.files && target.files[0]
-
-    // @ts-ignore
-    const slotNumber: number = event?.srcElement?.attributes['aria-slot-number']?.value
 
     if (file) {
       const formData = new FormData()
@@ -227,6 +224,72 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   const createSelectInitialData = (items: any[]) => {
     return items.map((el) => ({ value: el.title, label: el.title }))
+  }
+
+  const handleChangePhotosOrder = (type: 'prev' | 'next', index: number) => {
+    setPhotos((prev) => {
+      const newPhotos = JSON.parse(JSON.stringify(prev))
+
+      if (type === 'prev') {
+        switch (index) {
+          case 1:
+            newPhotos[0] = prev[1]
+            newPhotos[1] = prev[0]
+            break
+
+          case 2:
+            newPhotos[1] = prev[2]
+            newPhotos[2] = prev[1]
+            break
+
+          case 3:
+            newPhotos[2] = prev[3]
+            newPhotos[3] = prev[2]
+            break
+
+          case 4:
+            newPhotos[3] = prev[4]
+            newPhotos[4] = prev[3]
+            break
+
+          case 5:
+            newPhotos[4] = prev[5]
+            newPhotos[5] = prev[4]
+            break
+        }
+      }
+
+      if (type === 'next') {
+        switch (index) {
+          case 0:
+            newPhotos[1] = prev[0]
+            newPhotos[0] = prev[1]
+            break
+
+          case 1:
+            newPhotos[1] = prev[2]
+            newPhotos[2] = prev[1]
+            break
+
+          case 2:
+            newPhotos[2] = prev[3]
+            newPhotos[3] = prev[2]
+            break
+
+          case 3:
+            newPhotos[3] = prev[4]
+            newPhotos[4] = prev[3]
+            break
+
+          case 4:
+            newPhotos[4] = prev[5]
+            newPhotos[5] = prev[4]
+            break
+        }
+      }
+
+      return newPhotos
+    })
   }
 
   React.useEffect(() => {
@@ -308,22 +371,6 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
     setShowAlert(false)
   }, [shoppingCart.length])
-
-  React.useEffect(() => {
-    photosRef.current.forEach((ref) => {
-      if (!ref) return
-      // @ts-ignore
-      ref.addEventListener('change', handleChangeImage)
-    })
-
-    return () => {
-      photosRef.current.forEach((ref) => {
-        if (!ref) return
-        // @ts-ignore
-        ref.removeEventListener('change', handleChangeImage)
-      })
-    }
-  }, [])
 
   return (
     <section className={styles.dashboard}>
@@ -421,13 +468,31 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
             {photos.map((photo, index) => (
               <React.Fragment key={index}>
                 {photo.url ? (
-                  <div
-                    className={styles.create__ad__photo__wrapper}
-                    onClick={() => removeFile(photo.id, photo.filename)}
-                  >
+                  <div className={styles.create__ad__photo__wrapper}>
                     <img src={photo.url} />
-                    <span>Видалити фото</span>
-                    <span>????????????????????????</span>
+                    <div className={styles.create__ad__photo__inner}>
+                      {index !== 0 && (
+                        <span
+                          className={styles.create__ad__photo__prev}
+                          onClick={() => handleChangePhotosOrder('prev', index)}
+                        >{`<`}</span>
+                      )}
+
+                      <span
+                        className={styles.create__ad__photo__remove}
+                        onClick={() => removeFile(photo.id, photo.filename)}
+                      >
+                        Видалити <br />
+                        фото
+                      </span>
+
+                      {index !== 5 && (
+                        <span
+                          className={styles.create__ad__photo__next}
+                          onClick={() => handleChangePhotosOrder('next', index)}
+                        >{`>`}</span>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <label key={index} className={`${styles.create__ad__photo} ${darkModeClass}`}>
@@ -435,8 +500,14 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
                       type="file"
                       style={{ display: 'none' }}
                       aria-slot-number={index}
+                      ref={(e) => {
+                        if (e) {
+                          // @ts-ignore
+                          photosRef.current[index] = e
+                        }
+                      }}
                       // @ts-ignore
-                      ref={(el) => (photosRef.current[index] = el)}
+                      onInput={(e) => handleChangeImage(e, index)}
                     />
                     Додати фото
                   </label>

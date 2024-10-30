@@ -101,11 +101,6 @@
 
     &:hover::after {
       background-color: rgba(0, 0, 0, 0.35);
-      cursor: pointer;
-    }
-
-    &:hover span {
-      display: block;
     }
 
     &::after {
@@ -123,19 +118,40 @@
       object-fit: cover;
     }
 
-    & span {
-      color: #ffffff;
-      text-shadow: 2px 2px 5px black;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: 2;
-      transform: translate(-50%, -50%);
-      white-space: nowrap;
-      cursor: pointer;
-      display: none;
+    &:hover .create__ad__photo__inner {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      justify-content: space-between;
     }
   }
+
+  &__photo__inner {
+    display: none;
+
+    color: #ffffff;
+    text-shadow: 2px 2px 5px black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    display: none;
+  }
+}
+
+.create__ad__photo__remove {
+  cursor: pointer;
+  text-align: center;
+}
+.create__ad__photo__prev {
+  cursor: pointer;
+  font-size: 35px;
+}
+.create__ad__photo__next {
+  cursor: pointer;
+  font-size: 35px;
 }
 
 .checkbox {

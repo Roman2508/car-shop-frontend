@@ -5,10 +5,10 @@ import styles from '@/styles/catalog/index.module.scss'
 
 const FiltersPopupTop = ({
   title,
+  closePopup,
   resetBtnText,
   resetFilters,
   resetFilterBtnDisabled,
-  closePopup,
 }: IFiltersPopupTop) => {
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''

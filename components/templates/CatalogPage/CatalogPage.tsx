@@ -54,12 +54,11 @@ const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 
 // todo:
 // 1. При створенні оголошення коли користувач завантажив фото і покидає сторінку (не опублікувавши) треба попереджати і видаляти фото
-// 2. Розподіл ролей на сторінці profile
-// 3. pagination (перевірити як працює коли велика кількість сторінок)
 // 4. повторний вибір фото (reset target.value для input type file)
-// 5. на сторінці адміністрування треба зробити фільтр та поправити відображення тексту коли нових оголошень немає
-//    також треба показувати на сторінці адміністрування оголошення які мають статус неактивно
-// 6. Catalog filter mobile
+
+// 2. user avatar (перевірити як працює) ?????
+// 3. pagination (перевірити як працює коли велика кількість сторінок) ?????
+// 6. Catalog filter mobile ??????
 
 export const ITEMS_PER_PAGE = 2
 
@@ -77,6 +76,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 
   const [spinner, setSpinner] = useState(true)
   const [isFirstRender, setIsFirstRender] = useState(true)
+  const [openMobileFilters, setOpenMobileFilters] = React.useState(false)
 
   const [priceRange, setPriceRange] = useState<[number, number]>([MIN_PRICE, MAX_PRICE])
   const [mileageRange, setMileageRange] = useState<[number, number]>([MIN_MILEAGE, MAX_MILEAGE])
@@ -106,7 +106,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     isAnyBoilerManufacturerChecked ||
     isAnyPartsManufacturerChecked
   )
-  const { toggleOpen, open, closePopup } = usePopup()
 
   const [selectedFilters, setSelectedFilters] = React.useState<IFilter[]>([])
 
@@ -123,7 +122,13 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     )
 
   const debouncedGetResponce = React.useCallback(
-    debounse((query: ParsedUrlQuery) => dispatch(getAdvertisements(query)), 1000),
+    debounse(async (query: ParsedUrlQuery) => {
+      const { payload } = await dispatch(getAdvertisements(query))
+      const data = payload as [AdvertisementType[], number]
+      if (data[1]) {
+        setPagesCount(data[1] / ITEMS_PER_PAGE)
+      }
+    }, 1000),
     []
   )
 
@@ -150,24 +155,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     await dispatch(getAdvertisements(router.query))
     setSpinner(false)
     dispatch(clearFilters())
-
-    // try {
-    //   const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-    //   const params = router.query
-    //   delete params.boiler
-    //   delete params.parts
-    //   delete params.priceFrom
-    //   delete params.priceTo
-    //   params.first = 'cheap'
-    //   router.push({ query: { ...params } }, undefined, { shallow: true })
-    //   setBoilerManufacturers(boilerManufacturers.map((item) => ({ ...item, checked: false })))
-    //   setPartsManufacturers(partsManufacturers.map((item) => ({ ...item, checked: false })))
-    //   setBoilerParts(data)
-    //   setPriceRange([1000, 9000])
-    //   setIsPriceRangeChanged(false)
-    // } catch (error) {
-    //   toast.error((error as Error).message)
-    // }
   }
 
   // set filter on first render
@@ -350,7 +337,14 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             >
               Скинути фільтр
             </button>
-            <button className={styles.catalog__top__mobile_btn} onClick={toggleOpen}>
+
+            <button
+              className={styles.catalog__top__mobile_btn}
+              onClick={() => {
+                setOpenMobileFilters(true)
+                document.querySelector('.body')?.classList.add('overflow-hidden')
+              }}
+            >
               <span className={styles.catalog__top__mobile_btn__svg}>
                 <FilterSvg />
               </span>
@@ -365,14 +359,14 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             <CatalogFilters
               priceRange={priceRange}
               setPriceRange={setPriceRange}
-              closePopup={closePopup}
-              filtersMobileOpen={open}
               // currentPage={currentPage}
               resetFilters={resetFilters}
               mileageRange={mileageRange}
               setMileageRange={setMileageRange}
+              filtersMobileOpen={openMobileFilters}
               yearOfReleaseRange={yearOfReleaseRange}
               setYearOfReleaseRange={setYearOfReleaseRange}
+              closePopup={() => setOpenMobileFilters(false)}
               // setIsFilterInQuery={setIsFilterInQuery}
               // isPriceRangeChanged={isPriceRangeChanged}
               resetFilterBtnDisabled={resetFilterBtnDisabled}

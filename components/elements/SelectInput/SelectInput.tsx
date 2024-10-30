@@ -44,6 +44,7 @@ const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
         //   onChange={handleSortOptionChange}
         styles={{
           ...selectStyles,
+          // @ts-ignore
           container: (defaultStyles) => ({
             ...defaultStyles,
             display: 'inline-block',
@@ -52,6 +53,7 @@ const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
               maxWidth: '340px',
             },
           }),
+          // @ts-ignore
           control: (defaultStyles, state) => ({
             ...controlStyles(defaultStyles, mode),
             border: errors && errors[fieldName]?.ref?.name ? '1px solid red' : '',
@@ -59,13 +61,16 @@ const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
               border: errors && errors[fieldName]?.ref?.name ? '1px solid red' : '',
             },
           }),
+          // @ts-ignore
           input: (defaultStyles) => ({
             ...defaultStyles,
             color: mode === 'dark' ? '#f2f2f2' : '#222222',
           }),
+          // @ts-ignore
           menu: (defaultStyles) => ({
             ...menuStyles(defaultStyles, mode),
           }),
+          // @ts-ignore
           option: (defaultStyles, state) => ({
             ...optionStyles(defaultStyles, state, mode),
           }),

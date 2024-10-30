@@ -14,13 +14,11 @@ $transition: 1.25s;
   height: calc(100vh - 47px);
   padding: 25px;
   background-color: $neu-1;
-  box-shadow: 10px 10px 10px $neu-2, -10px -10px 10px $white;
   border-radius: 12px;
   overflow: hidden;
 
   &.dark_mode {
     background-color: #2d2d2d;
-    box-shadow: 10px 10px 10px #2d2d2d, -10px -10px 10px $black;
   }
 }
 

@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { $mode } from '@/context/mode'
 import FiltersPopup from './FiltersPopup'
 import FiltersPopupTop from './FiltersPopupTop'
@@ -18,6 +18,7 @@ import Accordion from '@/components/elements/Accordion/Accordion'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import PriceRange from './PriceRange'
 import CatalogFiltersDesktop from './CatalogFiltersDesktop'
+import { useClickAway } from 'react-use'
 
 export interface ICatalogFilterMobileProps {
   resetFilterBtnDisabled: boolean
@@ -51,6 +52,8 @@ const CatalogFiltersMobile = ({
   mileageRange,
   setMileageRange,
 }: ICatalogFilterMobileProps) => {
+  const drawerRef = React.useRef(null)
+
   const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const boilerManufacturers = useStore($boilerManufacturers)
@@ -77,24 +80,46 @@ const CatalogFiltersMobile = ({
     // closePopup()
   }
 
-  return (
-    <div className={`${styles.catalog__bottom__filters} ${darkModeClass} ${filtersMobileOpen ? styles.open : ''}`}>
-      <div className={styles.catalog__bottom__filters__inner}>
-        <CatalogFiltersDesktop
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          // setIsPriceRangeChanged={setIsPriceRangeChanged}
-          // resetFilterBtnDisabled={resetFilterBtnDisabled}
-          mileageRange={mileageRange}
-          setMileageRange={setMileageRange}
-          yearOfReleaseRange={yearOfReleaseRange}
-          setYearOfReleaseRange={setYearOfReleaseRange}
-          spinner={spinner}
-          // resetFilters={resetFilters}
-          // applyFilters={applyFilters}
-        />
+  useClickAway(drawerRef, () => {
+    closePopup()
+    document.querySelector('.body')?.classList.remove('overflow-hidden')
+  })
 
-        {/* <FiltersPopupTop
+  return (
+    <>
+      {filtersMobileOpen && (
+        <div
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            position: 'fixed',
+            height: '100%',
+            width: '100%',
+            zIndex: 10,
+            left: 0,
+            top: 0,
+          }}
+        />
+      )}
+
+      <div className={`${styles.catalog__bottom__filters} ${darkModeClass} `} ref={drawerRef}>
+        {/* ${filtersMobileOpen ? styles.open : ''} */}
+        <div className={`${styles.catalog__bottom__filters__inner} ${filtersMobileOpen ? styles.open : ''}`}>
+          <CatalogFiltersDesktop
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            // setIsPriceRangeChanged={setIsPriceRangeChanged}
+            // resetFilterBtnDisabled={resetFilterBtnDisabled}
+            closePopup={closePopup}
+            mileageRange={mileageRange}
+            setMileageRange={setMileageRange}
+            yearOfReleaseRange={yearOfReleaseRange}
+            setYearOfReleaseRange={setYearOfReleaseRange}
+            spinner={spinner}
+            // resetFilters={resetFilters}
+            // applyFilters={applyFilters}
+          />
+
+          {/* <FiltersPopupTop
           resetBtnText="Сбросить все"
           title="Фильтры"
           resetFilters={resetFilters}
@@ -102,7 +127,7 @@ const CatalogFiltersMobile = ({
           closePopup={closePopup}
         /> */}
 
-        {/* <div className={styles.filters__boiler_manufacturers}>
+          {/* <div className={styles.filters__boiler_manufacturers}>
           <button className={`${styles.filters__manufacturer__btn} ${darkModeClass}`} onClick={handleOpenBoilers}>
             Производитель котлов
           </button>
@@ -119,7 +144,7 @@ const CatalogFiltersMobile = ({
           />
         </div> */}
 
-        {/* <div className={styles.filters__boiler_manufacturers}>
+          {/* <div className={styles.filters__boiler_manufacturers}>
           <button className={`${styles.filters__manufacturer__btn} ${darkModeClass}`} onClick={handleOpenParts}>
             Производитель запчастей
           </button>
@@ -136,7 +161,7 @@ const CatalogFiltersMobile = ({
           />
         </div> */}
 
-        {/* <div className={styles.filters__price}>
+          {/* <div className={styles.filters__price}>
           <Accordion
             title="Цена"
             titleClass={`${styles.filters__manufacturer__btn} ${darkModeClass}`}
@@ -152,8 +177,8 @@ const CatalogFiltersMobile = ({
             </div>
           </Accordion>
         </div> */}
-      </div>
-      {/* <div className={styles.filters__actions}>
+        </div>
+        {/* <div className={styles.filters__actions}>
         <button
           className={styles.filters__actions__show}
           onClick={applyFiltersAndClosePopup}
@@ -162,7 +187,8 @@ const CatalogFiltersMobile = ({
           {spinner ? <span className={spinnerStyles.spinner} style={{ top: 6, left: '47%' }} /> : 'Показать'}
         </button>
       </div> */}
-    </div>
+      </div>
+    </>
   )
 }
 

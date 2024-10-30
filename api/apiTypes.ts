@@ -28,6 +28,11 @@ export type UpdateUserType = {
   password?: string
 }
 
+export type UpdateUserRoleType = {
+  id: number
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'USER'
+}
+
 export type CreateDialogType = { members: number[]; advertisement: number }
 
 export type CreateMessageType = {

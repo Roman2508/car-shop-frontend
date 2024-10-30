@@ -1,8 +1,8 @@
-import { FileType } from '../advertisements/advertisementsTypes'
 import { LoadingStatusTypes } from '../appTypes'
 
 export type InitialStateType = {
   auth: AuthType | null
+  users: AuthType[] | null
   loadingStatus: LoadingStatusTypes
 }
 

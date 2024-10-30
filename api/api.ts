@@ -8,6 +8,7 @@ import {
   AuthResponceType,
   CreateDialogType,
   CreateMessageType,
+  UpdateUserRoleType,
 } from './apiTypes'
 import { AuthType } from '../redux/auth/authTypes'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
@@ -37,6 +38,9 @@ export const authAPI = {
   register(payload: AuthRegisterType) {
     return instanse.post<AuthResponceType>('/auth/register', payload)
   },
+  getAllUsers() {
+    return instanse.get<AuthType[]>('/user')
+  },
   getMe() {
     const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
     if (!token) {
@@ -44,6 +48,10 @@ export const authAPI = {
     }
     return instanse.post<AuthType>('/auth/me', { token })
   },
+  updateRole(payload: UpdateUserRoleType) {
+    return instanse.patch(`/user/role`, payload)
+  },
+
   update(payload: UpdateUserType) {
     const { id, ...data } = payload
     return instanse.patch(`/user/${id}`, data)

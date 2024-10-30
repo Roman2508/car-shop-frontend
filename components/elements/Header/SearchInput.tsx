@@ -184,10 +184,12 @@ const SearchInput = () => {
             onChange={handleSearchOptionChange}
             styles={{
               ...inputStyles,
+              // @ts-ignore
               container: (defaultStyles) => ({
                 ...defaultStyles,
                 ...onMenuOpenContainerStyles,
               }),
+              // @ts-ignore
               control: (defaultStyles) => ({
                 ...controlStyles(defaultStyles, mode),
                 backgroundColor: mode === 'dark' ? '#2d2d2d' : '#ffffff',
@@ -195,15 +197,18 @@ const SearchInput = () => {
                 transition: 'none',
                 ...onMenuOpenControlStyles,
               }),
+              // @ts-ignore
               input: (defaultStyles) => ({
                 ...defaultStyles,
                 color: mode === 'dark' ? '#f2f2f2' : '#222222',
               }),
+              // @ts-ignore
               menu: (defaultStyles) => ({
                 ...menuStyles(defaultStyles, mode),
                 zIndex,
                 marginTop: '-1px',
               }),
+              // @ts-ignore
               option: (defaultStyles, state) => ({
                 ...optionStyles(defaultStyles, state, mode),
               }),

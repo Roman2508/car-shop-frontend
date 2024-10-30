@@ -6,7 +6,7 @@ import { authAPI, filesAPI } from '../../api/api'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 import { setAppAlert } from '../appStatus/appStatusSlice'
-import { AuthLoginType, AuthRegisterType, UpdateUserType } from '../../api/apiTypes'
+import { AuthLoginType, AuthRegisterType, UpdateUserRoleType, UpdateUserType } from '../../api/apiTypes'
 
 export const authLogin = createAsyncThunk('auth/authLogin', async (payload: AuthLoginType, thunkAPI) => {
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
@@ -73,12 +73,52 @@ export const authMe = createAsyncThunk('auth/authMe', async (_: undefined, thunk
   }
 })
 
+export const getAllUsers = createAsyncThunk('auth/getAllUsers', async (_: undefined, thunkAPI) => {
+  thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+  try {
+    const { data } = await authAPI.getAllUsers()
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  } catch (error: any) {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+    thunkAPI.dispatch(
+      setAppAlert({
+        message: (error as any)?.response?.data?.message || error.message,
+        status: 'error',
+      })
+    )
+    throw error
+  }
+})
+
 export const updateUser = createAsyncThunk('auth/updateUser', async (payload: UpdateUserType, thunkAPI) => {
   thunkAPI.dispatch(setAppAlert({ message: 'Завантаження...', status: 'info' }))
   thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
 
   try {
     const { data } = await authAPI.update(payload)
+    thunkAPI.dispatch(setAppAlert({ message: 'Оновлено', status: 'success' }))
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
+    return data
+  } catch (error: any) {
+    thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.ERROR))
+    thunkAPI.dispatch(
+      setAppAlert({
+        message: (error as any).response.data.message || error.message,
+        status: 'error',
+      })
+    )
+    throw error
+  }
+})
+
+export const updateRole = createAsyncThunk('auth/updateRole', async (payload: UpdateUserRoleType, thunkAPI) => {
+  thunkAPI.dispatch(setAppAlert({ message: 'Завантаження...', status: 'info' }))
+  thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.LOADING))
+
+  try {
+    const { data } = await authAPI.updateRole(payload)
     thunkAPI.dispatch(setAppAlert({ message: 'Оновлено', status: 'success' }))
     thunkAPI.dispatch(setLoadingStatus(LoadingStatusTypes.SUCCESS))
     return data

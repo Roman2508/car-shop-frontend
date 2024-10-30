@@ -1,14 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../store'
-import { InitialStateType } from './authTypes'
+import { AuthType, InitialStateType } from './authTypes'
 import { LoadingStatusTypes } from '../appTypes'
 import { LOCAL_STORAGE_TOKEN_KEY } from '@/constans'
 import { AuthResponceType } from '../../api/apiTypes'
-import { authLogin, authRegister, uploadAvatar } from './authAsyncActions'
+import { authLogin, authRegister, getAllUsers, updateRole, uploadAvatar } from './authAsyncActions'
 
 const authInitialState: InitialStateType = {
   auth: null,
+  users: null,
   loadingStatus: LoadingStatusTypes.NEVER,
 }
 
@@ -42,10 +43,31 @@ const authSlice = createSlice({
       state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
 
+    /* getAllUsers */
+    builder.addCase(getAllUsers.fulfilled, (state, action: PayloadAction<AuthType[]>) => {
+      state.users = action.payload
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
+
     /* uploadAvatar */
     builder.addCase(uploadAvatar.fulfilled, (state, action: PayloadAction<{ avatarUrl: string }>) => {
       if (!state.auth) return
       state.auth.avatarUrl = action.payload.avatarUrl
+      state.loadingStatus = LoadingStatusTypes.SUCCESS
+    })
+
+    /* updateRole */
+    builder.addCase(updateRole.fulfilled, (state, action: PayloadAction<AuthType>) => {
+      if (!state.users) return
+
+      const users = state.users.map((el) => {
+        if (el.id === action.payload.id) {
+          return { ...el, role: action.payload.role }
+        }
+        return el
+      })
+
+      state.users = users
       state.loadingStatus = LoadingStatusTypes.SUCCESS
     })
   },

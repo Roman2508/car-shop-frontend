@@ -1,23 +1,25 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 
 import { $mode } from '@/context/mode'
+import { authSelector } from '@/redux/auth/authSlice'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/profile/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
-import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
+import UsersTab from '@/components/modules/ProfilePage/UsersTab'
 import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
-import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
+import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
 import Administration from '@/components/modules/ProfilePage/Administration'
-import { useSelector } from 'react-redux'
-import { authSelector } from '@/redux/auth/authSlice'
+import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
 
 const tabs = [
   { link: 'profile', label: 'Профіль' },
   { link: 'messages', label: 'Повідомлення' },
   { link: 'advertisement', label: 'Мої оголошення' },
   { link: 'admin', label: 'Адміністрування' },
+  { link: 'users', label: 'Користувачі' },
 ]
 
 const ProfilePage = () => {
@@ -57,6 +59,9 @@ const ProfilePage = () => {
       case tabs[3].link:
         setActiveTab(tabs[3].label)
         break
+      case tabs[4].link:
+        setActiveTab(tabs[4].label)
+        break
       default:
         setActiveTab(tabs[0].label)
         break
@@ -76,13 +81,15 @@ const ProfilePage = () => {
               if (!isAdmin && el.link === 'admin') {
                 return
               }
+              if (!isAdmin && el.link === 'users') {
+                return
+              }
 
               return (
                 <li
                   className={`${styles.profile__tab} ${activeTab === el.label ? styles.active : ''} ${darkModeClass}`}
                   key={el.link}
                   onClick={() => {
-                    console.log('click')
                     updateRoteParam(el.link)
                     setActiveTab(el.label)
                   }}
@@ -111,6 +118,8 @@ const ProfilePage = () => {
               {activeTab === tabs[2].label && <MyAdvertisements />}
 
               {activeTab === tabs[3].label && <Administration />}
+
+              {activeTab === tabs[4].label && <UsersTab />}
             </>
           )}
         </div>
