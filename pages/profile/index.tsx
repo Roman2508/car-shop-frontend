@@ -4,7 +4,7 @@ import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import ProfilePage from '@/components/templates/ProfilePage/ProfilePage'
 
-function Profile() {
+const Profile = () => {
   const { shouldLoadContent } = useRedirectByUserCheck()
   const getDefaultTextGenerator = () => 'Профіль'
   const getTextGenerator = () => ''
