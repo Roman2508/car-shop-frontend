@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/redux/store'
 const FilterCheckboxItem = ({ title, checked, label }: any) => {
   const dispatch = useAppDispatch()
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   // const handleFilterChange = () => event({ checked: !checked, id } as IFilterCheckboxItem)

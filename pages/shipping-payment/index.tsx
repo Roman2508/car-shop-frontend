@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import Layout from '@/components/layout/Layout'
-import ShippingPayment from '@/components/templates/ShippingPayment/ShippingPayment'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import { useCallback } from 'react'
 
@@ -23,7 +22,7 @@ function ShippingPaymentPage() {
       <Layout>
         <main>
           <Breadcrumbs getDefaultTextGenerator={getDefaultTextGenerator} getTextGenerator={getTextGenerator} />
-          <ShippingPayment />
+
           <div className="overlay" />
         </main>
       </Layout>

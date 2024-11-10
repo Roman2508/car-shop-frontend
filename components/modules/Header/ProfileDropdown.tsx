@@ -1,24 +1,21 @@
-import { useStore } from 'effector-react'
 import { forwardRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
-import { $mode } from '@/context/mode'
-import { IWrappedComponentProps } from '../../../types/common'
-import LogoutSvg from '@/components/elements/LogoutSvg/LogoutSvg'
-import { withClickOutside } from '../../../utils/withClickOutside'
-import styles from '@/styles/profileDropDown/index.module.scss'
-import { $user } from '@/context/user'
-import { logoutFx } from '@/app/api/auth'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import { authSelector, logout } from '@/redux/auth/authSlice'
-import { TOKEN_NAME } from '@/api/api'
+import { AnimatePresence, motion } from 'framer-motion'
+
 import { useAppDispatch } from '@/redux/store'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { authSelector, logout } from '@/redux/auth/authSlice'
+import { IWrappedComponentProps } from '../../../types/common'
+import styles from '@/styles/profileDropDown/index.module.scss'
+import LogoutSvg from '@/components/elements/LogoutSvg/LogoutSvg'
+import { withClickOutside } from '../../../utils/withClickOutside'
+import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
 
 const ProfileDropDown = forwardRef<HTMLDivElement, IWrappedComponentProps>(({ open, setOpen }, ref) => {
   const dispatch = useAppDispatch()
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const router = useRouter()
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

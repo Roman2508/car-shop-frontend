@@ -1,15 +1,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 
-import { $mode } from '@/context/mode'
 import { usePopup } from '@/hooks/usePoup'
 import ProfileDropdown from './ProfileDropdown'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/header/index.module.scss'
 import { authSelector } from '@/redux/auth/authSlice'
-import CityButton from '@/components/elements/CityButton/CityButton'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 
 const nav = [
@@ -32,13 +30,12 @@ const HeaderTop = () => {
 
   const isMedia950 = useMediaQuery(950)
   const { toggleOpen, open, closePopup } = usePopup()
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
     <div className={styles.header__top}>
       <div className={`container ${styles.header__top__container}`}>
-        {!isMedia950 && <CityButton />}
         {isMedia950 && (
           <button onClick={toggleOpen} className={`${styles.burger_menu} ${open ? styles.open : ''} ${darkModeClass}`}>
             <span />
@@ -84,18 +81,13 @@ const HeaderTop = () => {
 
             {isMedia950 && (
               <li className={styles.header__nav__list__item}>
-                <CityButton />
-              </li>
-            )}
-            {isMedia950 && (
-              <li className={styles.header__nav__list__item}>
                 <ModeToggler />
               </li>
             )}
           </ul>
         </nav>
 
-        <ProfileDropdown />
+        {/* <ProfileDropdown /> */}
       </div>
     </div>
   )

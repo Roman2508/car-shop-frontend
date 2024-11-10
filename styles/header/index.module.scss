@@ -12,12 +12,9 @@
 
     &__container {
       position: relative;
-      // display: grid;
-      // grid-template-columns: repeat(12, 1fr);
-      align-items: center;
-
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: center;
     }
   }
 

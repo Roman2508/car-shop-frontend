@@ -1,27 +1,22 @@
-import { useStore } from 'effector-react'
-import React, { MutableRefObject, useRef, useState } from 'react'
 import Select from 'react-select'
-import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import { $mode } from '@/context/mode'
-import { IOption, SelectOptionType } from '../../../types/common'
-import { controlStyles, inputStyles, menuStyles, optionStyles } from '@/styles/searchInput'
-import {
-  createSelectOption,
-  removeClassNamesForOverlayAndBody,
-  toggleClassNamesForOverlayAndBody,
-} from '@/utils/common'
-import { $searchInputZIndex, setSearchInputZIndex } from '@/context/header'
-import SearchSvg from '../SearchSvg/SearchSvg'
-import { useDebounceCallback } from '@/hooks/useDebounceCallback'
-import { getPartByNameFx, searchPartsFx } from '@/app/api/boilerParts'
-import { IBoilerPart } from '@/types/boilerparts'
-import { NoOptionsMessage, NoOptionsSpinner } from '../SelectOptionsMessage/SelectOptionsMessage'
-import styles from '@/styles/header/index.module.scss'
-import { getAdvertisementById, searchAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
-import { useAppDispatch } from '@/redux/store'
-import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { useRouter } from 'next/router'
 import { useClickAway } from 'react-use'
+import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
+import React, { MutableRefObject, useRef, useState } from 'react'
+
+import { useAppDispatch } from '@/redux/store'
+import SearchSvg from '../SearchSvg/SearchSvg'
+import styles from '@/styles/header/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { useDebounceCallback } from '@/hooks/useDebounceCallback'
+import { IOption, SelectOptionType } from '../../../types/common'
+import { removeClassNamesForOverlayAndBody } from '@/utils/common'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { controlStyles, inputStyles, menuStyles, optionStyles } from '@/styles/searchInput'
+import { NoOptionsMessage, NoOptionsSpinner } from '../SelectOptionsMessage/SelectOptionsMessage'
+import { getAdvertisementById, searchAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 
 const SearchInput = () => {
   const dispatch = useAppDispatch()
@@ -30,8 +25,7 @@ const SearchInput = () => {
 
   const [focused, setFocused] = React.useState(false)
 
-  const mode = useStore($mode)
-  const zIndex = useStore($searchInputZIndex)
+  const { mode } = useSelector(themeSelector)
   const [searchOption, setSearchOption] = useState<SelectOptionType>(null)
   const [onMenuOpenControlStyles, setOnMenuOpenControlStyles] = useState({})
   const [onMenuOpenContainerStyles, setOnMenuOpenContainerStyles] = useState({})
@@ -41,7 +35,6 @@ const SearchInput = () => {
   const [options, setOptions] = useState<{ label: string; value: string }[]>([])
   const [inputValue, setInputValue] = useState('')
   const delayCallback = useDebounceCallback(1000)
-  const spinner = useStore(searchPartsFx.pending)
   const router = useRouter()
 
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
@@ -176,9 +169,9 @@ const SearchInput = () => {
           }}
         >
           <Select
-            components={{
-              NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
-            }}
+            // components={{
+            //   NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
+            // }}
             placeholder="Я шукаю..."
             value={searchOption}
             onChange={handleSearchOptionChange}
@@ -193,7 +186,6 @@ const SearchInput = () => {
               control: (defaultStyles) => ({
                 ...controlStyles(defaultStyles, mode),
                 backgroundColor: mode === 'dark' ? '#2d2d2d' : '#ffffff',
-                zIndex,
                 transition: 'none',
                 ...onMenuOpenControlStyles,
               }),
@@ -205,7 +197,6 @@ const SearchInput = () => {
               // @ts-ignore
               menu: (defaultStyles) => ({
                 ...menuStyles(defaultStyles, mode),
-                zIndex,
                 marginTop: '-1px',
               }),
               // @ts-ignore
@@ -223,12 +214,7 @@ const SearchInput = () => {
           />
           <span ref={borderRef} className={styles.header__search__border} />
         </div>
-        <button
-          className={`${styles.header__search__btn} ${darkModeClass}`}
-          ref={btnRef}
-          style={{ zIndex }}
-          onClick={handleSearchClick}
-        >
+        <button className={`${styles.header__search__btn} ${darkModeClass}`} ref={btnRef} onClick={handleSearchClick}>
           <span className={styles.header__search__btn__span}>
             <SearchSvg />
           </span>

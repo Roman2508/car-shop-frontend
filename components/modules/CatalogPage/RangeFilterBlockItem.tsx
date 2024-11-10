@@ -16,7 +16,7 @@ interface IRangeFilterBlockItemProps {
 }
 
 export const RangeFilterBlockItem: React.FC<IRangeFilterBlockItemProps> = ({ label, title, onClick }) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (

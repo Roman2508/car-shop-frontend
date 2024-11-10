@@ -1,35 +1,22 @@
-import { useStore } from 'effector-react'
-import {
-  $boilerManufacturers,
-  $partsManufacturers,
-  setBoilerManufacturers,
-  setPartsManufacturers,
-  updateBoilerManufacturer,
-  updatePartsManufacturer,
-} from '@/context/boilerParts'
-import { $mode } from '@/context/mode'
-import FilterManufacturerAccordion from './FilterAccordion'
-import Accordion from '@/components/elements/Accordion/Accordion'
-import PriceRange from './PriceRange'
-import styles from '@/styles/catalog/index.module.scss'
-import spinnerStyles from '@/styles/spinner/index.module.scss'
-import { IFilterCheckboxItem } from '@/types/catalog'
-import FilterAccordion from './FilterAccordion'
 import { useSelector } from 'react-redux'
-import { filtersSelector } from '@/redux/filter/filterSlice'
+
+import PriceRange from './PriceRange'
 import MileageRange from './MileageRange'
+import FilterAccordion from './FilterAccordion'
 import YearOfReleaseRange from './YearOfReleaseRange'
+import styles from '@/styles/catalog/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { filtersSelector } from '@/redux/filter/filterSlice'
+import Accordion from '@/components/elements/Accordion/Accordion'
 
 interface ICatalogFilterDesktopProps {
+  closePopup?: VoidFunction
   priceRange: [number, number]
   mileageRange: [number, number]
   yearOfReleaseRange: [number, number]
   setPriceRange: React.Dispatch<React.SetStateAction<[number, number]>>
   setMileageRange: React.Dispatch<React.SetStateAction<[number, number]>>
   setYearOfReleaseRange: React.Dispatch<React.SetStateAction<[number, number]>>
-  spinner: boolean
-  closePopup?: VoidFunction
-  // applyFilters: VoidFunction
 }
 
 const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
@@ -40,9 +27,8 @@ const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
   yearOfReleaseRange,
   setYearOfReleaseRange,
   closePopup,
-  spinner,
 }) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
 
   const { filters } = useSelector(filtersSelector)
 
@@ -96,33 +82,11 @@ const CatalogFiltersDesktop: React.FC<ICatalogFilterDesktopProps> = ({
         </Accordion>
       </div>
 
-      {/* <div className={styles.filters__boiler_manufacturers}>
-        <FilterManufacturerAccordion
-          manufacturersList={partsManufacturers}
-          title="Производитель запчастей"
-          updateManufacturer={updatePartsManufacturer}
-          setManufacturer={setPartsManufacturers}
-        /> 
-      </div> */}
-
       {filters.map((el) => (
         <div className={styles.filters__boiler_manufacturers} key={el.label}>
           <FilterAccordion title={el.label} filterItems={el.items} />
         </div>
       ))}
-
-      {/* <div className={styles.filters__actions}>
-        <button
-          className={styles.filters__actions__show}
-          disabled={spinner || resetFilterBtnDisabled}
-          onClick={applyFilters}
-        >
-          {spinner ? <span className={spinnerStyles.spinner} style={{ top: 6, left: '47%' }} /> : 'Показать'}
-        </button>
-        <button className={styles.filters__actions__reset} disabled={resetFilterBtnDisabled} onClick={resetFilters}>
-          Сбросить
-        </button>
-      </div> */}
     </div>
   )
 }

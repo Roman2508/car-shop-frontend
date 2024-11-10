@@ -1,48 +1,33 @@
-import { getBoilerPartsFx } from '@/app/api/boilerParts'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
 import debounse from 'lodash/debounce'
-import ManufacturersBlock from '@/components/modules/CatalogPage/SelectedFilterItems'
-import {
-  $boilerManufacturers,
-  $boilerParts,
-  $filteredBoilerParts,
-  $partsManufacturers,
-  setBoilerManufacturers,
-  setBoilerParts,
-  setPartsManufacturers,
-  updateBoilerManufacturer,
-  updatePartsManufacturer,
-} from '@/context/boilerParts'
-import { $mode } from '@/context/mode'
+
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from '@/styles/catalog/index.module.scss'
-import { useStore } from 'effector-react'
-import { AnimatePresence } from 'framer-motion'
-import skeletonStyles from '@/styles/skeleton/index.module.scss'
-import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
-import ReactPaginate from 'react-paginate'
-import { IQueryParams } from '@/types/catalog'
+
 import { useRouter } from 'next/router'
-import { IBoilerParts } from '@/types/boilerparts'
-import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
-import { usePopup } from '@/hooks/usePoup'
-import { checkQueryParams } from '@/utils/catalog'
-import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
-import { getAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
+import ReactPaginate from 'react-paginate'
+import { ParsedUrlQuery } from 'querystring'
 import { useAppDispatch } from '@/redux/store'
-import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
-import { advertisementsSelector, clearAdvertisements } from '@/redux/advertisements/advertisementsSlice'
+import { IQueryParams } from '@/types/catalog'
+import { AnimatePresence } from 'framer-motion'
+import { IBoilerParts } from '@/types/boilerparts'
 import { IFilter } from '@/redux/filter/FilterTypes'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import Empty from '@/components/elements/EmptySvg/EmptySvg'
+import { correctFilterKeys } from '@/constans/correctFilterKeys'
+import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
+import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
+import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { advertisementsSelector } from '@/redux/advertisements/advertisementsSlice'
+import { getAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 import { clearFilters, filtersSelector, setFilter } from '@/redux/filter/filterSlice'
 import SelectedFilterItems from '@/components/modules/CatalogPage/SelectedFilterItems'
-import getFilterKey, { filterKeys, FilterValuesType, getFilterKeyByValue } from '@/utils/getFilterKey'
-import EmptySvg from '@/components/elements/EmptySvg/EmptySvg'
-import Empty from '@/components/elements/EmptySvg/EmptySvg'
-import { ParsedUrlQuery } from 'querystring'
+import getFilterKey, { FilterValuesType, getFilterKeyByValue } from '@/utils/getFilterKey'
 import { RangeFilterBlockItem } from '@/components/modules/CatalogPage/RangeFilterBlockItem'
-import { correctFilterKeys } from '@/constans/correctFilterKeys'
 
 export const MIN_PRICE = 0
 export const MAX_PRICE = 10000000
@@ -71,10 +56,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const { filters } = useSelector(filtersSelector)
   const { advertisements } = useSelector(advertisementsSelector)
 
-  const mode = useStore($mode)
-  const boilerManufacturers = useStore($boilerManufacturers)
-  const partsManufacturers = useStore($partsManufacturers)
-  const filteredBoilerParts = useStore($filteredBoilerParts)
+  const { mode } = useSelector(themeSelector)
 
   const [spinner, setSpinner] = useState(true)
   const [isFirstRender, setIsFirstRender] = useState(true)
@@ -87,9 +69,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     MAX_YEAR_OF_RELEASE,
   ])
 
-  const [isFilterInQuery, setIsFilterInQuery] = useState(false)
-  const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
-
   const [pagesCount, setPagesCount] = React.useState(
     Math.ceil((advertisements ? advertisements.length : 1) / ITEMS_PER_PAGE)
   )
@@ -99,15 +78,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const [currentPage, setCurrentPage] = useState(isValidOffset ? +query.offset - 1 : 0)
 
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-
-  const isAnyBoilerManufacturerChecked = boilerManufacturers.some((item) => item.checked)
-  const isAnyPartsManufacturerChecked = partsManufacturers.some((item) => item.checked)
-
-  const resetFilterBtnDisabled = !(
-    isPriceRangeChanged ||
-    isAnyBoilerManufacturerChecked ||
-    isAnyPartsManufacturerChecked
-  )
 
   const [selectedFilters, setSelectedFilters] = React.useState<IFilter[]>([])
 
@@ -133,11 +103,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     }, 1000),
     []
   )
-
-  const resetPagination = (data: IBoilerParts) => {
-    setCurrentPage(0)
-    setBoilerParts(data)
-  }
 
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
@@ -371,7 +336,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               closePopup={() => setOpenMobileFilters(false)}
               // setIsFilterInQuery={setIsFilterInQuery}
               // isPriceRangeChanged={isPriceRangeChanged}
-              resetFilterBtnDisabled={resetFilterBtnDisabled}
+              resetFilterBtnDisabled={false}
               // setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
 

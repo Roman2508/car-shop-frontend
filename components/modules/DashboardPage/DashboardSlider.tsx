@@ -5,9 +5,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Link from 'next/link'
 import { useEffect } from 'react'
-import { $mode } from '@/context/mode'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { IDashboardSlider } from '@/types/dashboard'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { formatPrice } from '@/utils/common'
 import styles from '@/styles/dashboard/index.module.scss'
@@ -21,19 +19,20 @@ import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
 import { formatDate } from '@/utils/formatDate'
 import Empty from '@/components/elements/EmptySvg/EmptySvg'
 import { createImageUrl } from '@/utils/createImageUrl'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface IDashboardSliderProps {
   items: AdvertisementType[]
-  spinner: boolean
   goToPartPage?: boolean
 }
 
-const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goToPartPage }) => {
+const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, goToPartPage }) => {
   const isMedia768 = useMediaQuery(768)
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
   const isMedia560 = useMediaQuery(560)
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   useEffect(() => {
@@ -64,17 +63,7 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, spinner, goTo
 
   return (
     <Slider {...settings} className={styles.dashboard__slider}>
-      {spinner ? (
-        [...Array(8)].map((_, i) => (
-          <div
-            className={`${skeletonStyles.skeleton__item} ${mode === 'dark' ? `${skeletonStyles.dark_mode}` : ''}`}
-            key={i}
-            style={width}
-          >
-            <div className={skeletonStyles.skeleton__item__light} />
-          </div>
-        ))
-      ) : items && items.length ? (
+      {items && items.length ? (
         items.map((item) => (
           <div className={`${styles.dashboard__slide} ${darkModeClass}`} key={item.id} style={width}>
             <Link href={goToPartPage ? `/catalog/${item.id}` : '/catalog'}>

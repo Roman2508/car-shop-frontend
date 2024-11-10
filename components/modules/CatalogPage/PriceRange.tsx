@@ -21,7 +21,7 @@ interface IPriceRangeProps {
 const PriceRange: React.FC<IPriceRangeProps> = ({ priceRange, setPriceRange }) => {
   const router = useRouter()
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const updateRoteParam = (priceFrom: string, priceTo: string) =>

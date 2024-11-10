@@ -1,10 +1,10 @@
 import Select from 'react-select'
-import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 import React, { CSSProperties } from 'react'
 import { FieldErrors } from 'react-hook-form'
 
-import { $mode } from '@/context/mode'
 import { optionStyles } from '@/styles/searchInput'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import inputStyles from '@/styles/inputs/index.module.scss'
 import { ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 import { controlStyles, menuStyles, selectStyles } from '@/styles/catalog/select'
@@ -22,7 +22,7 @@ interface ISelectInputProps {
 const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
   const { errors, options = [], label, required = false, styles = {}, placeholder = '', ...restProps } = props
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
 
   const fieldName = restProps.name as keyof ICreateAdFields
 

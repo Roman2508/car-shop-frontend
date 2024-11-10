@@ -1,25 +1,16 @@
 import React from 'react'
-import Link from 'next/link'
 import { toast } from 'sonner'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 
-import { $mode } from '@/context/mode'
 import { useAppDispatch } from '@/redux/store'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import styles from '@/styles/profile/index.module.scss'
-import advStyles from '@/styles/dashboard/index.module.scss'
-import catalogStyles from '@/styles/catalog/index.module.scss'
-import { usePopup } from '@/hooks/usePoup'
-import FilterSelect from '../CatalogPage/FilterSelect'
-import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
-import { getNotAccepted } from '@/redux/advertisements/advertisementsAsyncActions'
-import CatalogItem from '../CatalogPage/CatalogItem'
 import { authSelector } from '@/redux/auth/authSlice'
-import SelectInput from '@/components/elements/SelectInput/SelectInput'
+import styles from '@/styles/profile/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import buttonStyles from '@/styles/create-ad/index.module.scss'
+import SelectInput from '@/components/elements/SelectInput/SelectInput'
 import { getAllUsers, updateRole } from '@/redux/auth/authAsyncActions'
 
 interface IUsersFields {
@@ -39,8 +30,6 @@ const UsersTab = () => {
   const router = useRouter()
 
   const {
-    watch,
-    control,
     register,
     setError,
     setValue,
@@ -56,7 +45,8 @@ const UsersTab = () => {
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
   const isMedia560 = useMediaQuery(560)
-  const mode = useStore($mode)
+
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const width = { width: isMedia1366 ? (isMedia800 ? (isMedia560 ? 160 : 252) : 317) : 344 }

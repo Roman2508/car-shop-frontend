@@ -6,13 +6,11 @@ import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 
 function Dashboard() {
   const { shouldLoadContent } = useRedirectByUserCheck()
-  const getDefaultTextGenerator = () => ''
-  const getTextGenerator = () => ''
 
   return (
     <>
       <Head>
-        <title>Car shop | {shouldLoadContent ? 'Главная' : ''}</title>
+        <title>Car shop | {shouldLoadContent ? 'Головна' : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,10 +22,6 @@ function Dashboard() {
       {shouldLoadContent && (
         <Layout>
           <main>
-            {/* <Breadcrumbs
-              getDefaultTextGenerator={getDefaultTextGenerator}
-              getTextGenerator={getTextGenerator}
-            /> */}
             <DashboardPage />
             <div className="overlay" />
           </main>

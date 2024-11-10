@@ -5,17 +5,16 @@ import { useAppDispatch } from '@/redux/store'
 import React, { MutableRefObject, useRef, useState } from 'react'
 import { FieldErrorsImpl, useForm, UseFormRegister } from 'react-hook-form'
 
-import { $mode } from '@/context/mode'
-import emailjs from '@emailjs/browser'
 import PasswordInput from './PasswordInput'
 import { authSelector } from '@/redux/auth/authSlice'
-import { updateUser, uploadAvatar } from '@/redux/auth/authAsyncActions'
+import { createImageUrl } from '@/utils/createImageUrl'
 import styles from '@/styles/ProfileForm/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import createAdStyles from '@/styles/create-ad/index.module.scss'
 import TextInput from '@/components/elements/TextInput/TextInput'
+import { updateUser, uploadAvatar } from '@/redux/auth/authAsyncActions'
 import { deleteFile, uploadFile } from '@/redux/advertisements/advertisementsAsyncActions'
-import { createImageUrl } from '@/utils/createImageUrl'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 export interface IProfileInputs {
   email: string
@@ -37,7 +36,7 @@ const ProfileForm = () => {
 
   const photoRef = React.useRef<HTMLInputElement | null>(null)
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const {

@@ -1,43 +1,27 @@
-import Link from 'next/link'
+import React from 'react'
 import { toast } from 'sonner'
-import { $mode } from '@/context/mode'
-import { useStore } from 'effector-react'
-import React, { LegacyRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { Controller, useForm } from 'react-hook-form'
 
-import { IBoilerParts } from '@/types/boilerparts'
-import { $shoppingCart } from '@/context/shopping-cart'
-import authStyles from '@/styles/auth/index.module.scss'
+import {
+  uploadFile,
+  deleteFile,
+  updateAdvertisement,
+  createAdvertisement,
+  getAdvertisementById,
+} from '@/redux/advertisements/advertisementsAsyncActions'
+import { useAppDispatch } from '@/redux/store'
+import { authSelector } from '@/redux/auth/authSlice'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import styles from '@/styles/create-ad/index.module.scss'
 import inputStyles from '@/styles/inputs/index.module.scss'
-import { getBestsellersOrNewPartsFx } from '@/app/api/boilerParts'
-import CartAlert from '@/components/modules/DashboardPage/CartAlert'
-import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
-import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
-import NameInput from '@/components/elements/AuthPage/NameInput'
-import TextInput from '@/components/elements/TextInput/TextInput'
-import Textarea from '@/components/elements/Textarea/Textarea'
-import SelectInput from '@/components/elements/SelectInput/SelectInput'
-import FilterCheckboxItem from '@/components/modules/CatalogPage/FilterCheckboxItem'
-import checkboxStyles from '@/styles/catalog/index.module.scss'
 import Checkbox from '@/components/elements/Checkbox/Checkbox'
+import Textarea from '@/components/elements/Textarea/Textarea'
+import TextInput from '@/components/elements/TextInput/TextInput'
+import SelectInput from '@/components/elements/SelectInput/SelectInput'
 import { adExamples, createAdFields, filters } from '@/constans/filter'
-import { Controller, useForm } from 'react-hook-form'
 import { AdvertisementType, FileType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
-import { useAppDispatch } from '@/redux/store'
-import {
-  createAdvertisement,
-  deleteFile,
-  getAdvertisementById,
-  updateAdvertisement,
-  uploadFile,
-} from '@/redux/advertisements/advertisementsAsyncActions'
-import { IFilterCheckboxItem, IQueryParams } from '@/types/catalog'
-// import { uploadFile } from '@/redux/reservedLessons/reservedLessonsAsyncActions'
-import { useRouter } from 'next/router'
-// import { FileType } from '@/redux/reservedLessons/reservedLessonsTypes'
-import { useSelector } from 'react-redux'
-import { authSelector } from '@/redux/auth/authSlice'
 
 const CreateAdPage = ({ query }: { query?: { id: string } }) => {
   const router = useRouter()
@@ -45,11 +29,9 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   const { auth } = useSelector(authSelector)
 
-  const mode = useStore($mode)
-  const shoppingCart = useStore($shoppingCart)
+  const { mode } = useSelector(themeSelector)
 
   const [spinner, setSpinner] = React.useState(false)
-  const [showAlert, setShowAlert] = React.useState(!!shoppingCart.length)
 
   const [checkboxesState, setCheckboxesState] = React.useState(createAdFields)
 
@@ -362,15 +344,6 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
     fetchAdData()
   }, [query])
-
-  React.useEffect(() => {
-    if (shoppingCart.length) {
-      setShowAlert(true)
-      return
-    }
-
-    setShowAlert(false)
-  }, [shoppingCart.length])
 
   return (
     <section className={styles.dashboard}>

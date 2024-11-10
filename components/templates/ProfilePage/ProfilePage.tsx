@@ -1,12 +1,11 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 
-import { $mode } from '@/context/mode'
 import { authSelector } from '@/redux/auth/authSlice'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/profile/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import UsersTab from '@/components/modules/ProfilePage/UsersTab'
 import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
@@ -27,7 +26,7 @@ const ProfilePage = () => {
 
   const { auth } = useSelector(authSelector)
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const isMobile560 = useMediaQuery(560)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

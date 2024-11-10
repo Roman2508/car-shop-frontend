@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 
 import authSlice from './auth/authSlice'
+import themeSlice from './theme/themeSlice'
 import filterSlice from './filter/filterSlice'
 import dialogsSlice from './dialogs/dialogsSlice'
 import appStatusSlice from './appStatus/appStatusSlice'
@@ -14,6 +15,7 @@ export const store = configureStore({
     auth: authSlice,
     advertisements: advertisementsSlice,
     filters: filterSlice,
+    theme: themeSlice,
   },
 })
 

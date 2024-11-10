@@ -1,12 +1,13 @@
-import { useStore } from 'effector-react'
 import { useEffect } from 'react'
-import { $mode } from '@/context/mode'
+import { useSelector } from 'react-redux'
+
 import { useTheme } from '../../../hooks/useTheme'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import styles from '@/styles/modeToggler/index.module.scss'
 
 const ModeToggler = () => {
   const { toggleTheme } = useTheme()
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
 
   const handleToggleMode = () => {
     toggleTheme()
@@ -19,12 +20,7 @@ const ModeToggler = () => {
 
   return (
     <div className={styles.theme}>
-      <input
-        className={styles.theme__input}
-        type="checkbox"
-        checked={mode === 'light'}
-        onChange={handleToggleMode}
-      />
+      <input className={styles.theme__input} type="checkbox" checked={mode === 'light'} onChange={handleToggleMode} />
     </div>
   )
 }

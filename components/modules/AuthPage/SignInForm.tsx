@@ -14,6 +14,8 @@ import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { useAppDispatch } from '@/redux/store'
 import { authLogin } from '@/redux/auth/authAsyncActions'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { useSelector } from 'react-redux'
 
 const SignInForm = () => {
   const dispatch = useAppDispatch()
@@ -25,7 +27,7 @@ const SignInForm = () => {
     handleSubmit,
     resetField,
   } = useForm<IInputs>()
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const route = useRouter()
 

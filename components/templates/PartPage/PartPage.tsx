@@ -2,16 +2,9 @@ import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useStore } from 'effector-react'
 
-import { $mode } from '@/context/mode'
-import { $user } from '@/context/user'
 import { formatPrice } from '@/utils/common'
-import { $boilerPart } from '@/context/boilerPart'
 import styles from '@/styles/part/index.module.scss'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { toggleCartItem } from '@/utils/shopping-cart'
-import { $shoppingCart } from '@/context/shopping-cart'
-import { getBoilerPartsFx } from '@/app/api/boilerParts'
-import { removeFromCartFx } from '@/app/api/shopping-cart'
 import PartTabs from '@/components/modules/PartPage/PartTabs'
 import catalogStyles from '@/styles/catalog/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
@@ -19,15 +12,11 @@ import PartAccordion from '@/components/modules/PartPage/PartAccordion'
 import PartImagesList from '@/components/modules/PartPage/PartImagesList'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
 import SendMessageSvg from '@/components/elements/SendMessageSvg/SendMessageSvg'
-import { $boilerParts, setBoilerParts, setBoilerPartsByPopularity } from '@/context/boilerParts'
 import FuelSvg from '@/components/elements/FuelSvg/FuelSvg'
 import EngineSvg from '@/components/elements/EngineSvg/EngineSvg'
 import GearBoxSvg from '@/components/elements/GearBoxSvg/GearBoxSvg'
 import SpeedometerSvg from '@/components/elements/SpeedometerSvg/SpeedometerSvg'
-import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
-import EditSvg from '@/components/elements/EditSvg/EditSvg'
 import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
-import MarkerSvg from '@/components/elements/MarkerSvg/MarkerSvg'
 import Edit2Svg from '@/components/elements/EditSvg/Edit2Svg'
 import ConfirmSvg from '@/components/elements/ConfirmSvg/ConfirmSvg'
 import { advertisementsSelector, clearFullAdvertisements } from '@/redux/advertisements/advertisementsSlice'
@@ -46,8 +35,7 @@ import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
 import { DialogType } from '@/redux/dialogs/dialogsTypes'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import { createImageUrl } from '@/utils/createImageUrl'
-// import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
-// import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const PartPage = () => {
   const router = useRouter()
@@ -59,16 +47,10 @@ const PartPage = () => {
   const [isDisableContactButton, setIsDisableContactButton] = React.useState(false)
   const [isDisabledControllButtons, setIsDisabledControllButtons] = React.useState(false)
 
-  const mode = useStore($mode)
-  const user = useStore($user)
+  const { mode } = useSelector(themeSelector)
+
   const isMobile = useMediaQuery(850)
-  const boilerPart = useStore($boilerPart)
-  const boilerParts = useStore($boilerParts)
-  const cartItems = useStore($shoppingCart)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-  const isInCart = cartItems.some((item) => item.partId === boilerPart.id)
-  const spinnerToggleCart = useStore(removeFromCartFx.pending)
-  const spinnerSlider = useStore(getBoilerPartsFx.pending)
 
   const [advertisements, setAdvertisements] = React.useState<AdvertisementType[]>([])
 
@@ -87,19 +69,6 @@ const PartPage = () => {
       dispatch(clearFullAdvertisements())
     }
   }, [])
-
-  // const loadBoilerPart = async () => {
-  //   try {
-  //     // const data = await getBoilerPartsFx('/boiler-parts?limit=20&offset=0')
-
-  //     const data = boilers
-
-  //     setBoilerParts(data)
-  //     setBoilerPartsByPopularity()
-  //   } catch (error) {
-  //     toast.error((error as Error).message)
-  //   }
-  // }
 
   const canDeleteAdvertisement = (auth: AuthType | null, advertisementAuthorId: number) => {
     if (!auth) return
@@ -152,8 +121,6 @@ const PartPage = () => {
       setIsDisableContactButton(false)
     }
   }
-
-  const toggleToCart = () => toggleCartItem(user.username, boilerPart.id, isInCart)
 
   if (!fullAdvertisement) return <h1 style={{ padding: '100px 0', textAlign: 'center' }}>Loading...</h1>
 
@@ -208,32 +175,28 @@ const PartPage = () => {
 
               <div style={{ marginBottom: '24px' }}>
                 <span className={catalogStyles.catalog__list__item__code}>
-                  {/* Київ, Шевченківський - 10 жовтня 2024 р. */}
                   Опубліковано: {formatDate(fullAdvertisement.createdAt)}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <SpeedometerSvg />
                   {fullAdvertisement.mileage} тис.км.
-                  {/* 2020 115 тис.км. */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <EngineSvg />
                   {fullAdvertisement.engineVolume}
-                  {/* 2.50 л. */} л.
+                  л.
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <GearBoxSvg />
                   {fullAdvertisement.gearbox}
-                  {/* Автоматична */}
                 </span>
 
                 <span className={catalogStyles.catalog__list__item__details}>
                   <FuelSvg />
                   {fullAdvertisement.fuelType}
-                  {/* Бензин */}
                 </span>
               </div>
 
@@ -253,7 +216,7 @@ const PartPage = () => {
                 <button
                   onClick={contactToSeller}
                   disabled={isDisableContactButton}
-                  className={`${styles.part__info__btn} ${isInCart ? styles.in_cart : ''}`}
+                  className={`${styles.part__info__btn}`}
                   style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
                 >
                   {isDisableContactButton ? (
@@ -294,7 +257,7 @@ const PartPage = () => {
         )}
         <div className={styles.part__bottom}>
           <h2 className={`${styles.part__title} ${darkModeClass}`}>Схожі оголошення</h2>
-          <DashboardSlider goToPartPage spinner={spinnerSlider} items={advertisements} />
+          <DashboardSlider goToPartPage items={advertisements} />
         </div>
       </div>
     </section>

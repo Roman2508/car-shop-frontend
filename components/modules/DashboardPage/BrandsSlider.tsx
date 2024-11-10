@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Slider from 'react-slick'
 import { useEffect } from 'react'
-import { $mode } from '@/context/mode'
 import 'slick-carousel/slick/slick.css'
 import { useStore } from 'effector-react'
 import 'slick-carousel/slick/slick-theme.css'
@@ -9,10 +8,12 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/dashboard/index.module.scss'
 import BrandsSliderNextArrow from '@/components/elements/BrandsSliderNextArrow/BrandsSliderNextArrow'
 import BrandsSliderPrevArrow from '@/components/elements/BrandsSliderPrevArrow/BrandsSliderPrevArrow'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { useSelector } from 'react-redux'
 
 const BrandsSlider = () => {
   const isMedia768 = useMediaQuery(768)
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const brandItems = [

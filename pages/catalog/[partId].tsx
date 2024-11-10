@@ -6,8 +6,6 @@ import { useStore } from 'effector-react'
 import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import { IQueryParams } from '@/types/catalog'
-// import { $boilerPart, setBoilerPart } from '@/context/boilerPart'
-import { getBoilerPartFx } from '@/app/api/boilerParts'
 import PartPage from '@/components/templates/PartPage/PartPage'
 import Custom404 from '../404'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
@@ -23,7 +21,6 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
   const { fullAdvertisement } = useSelector(advertisementsSelector)
 
   const { shouldLoadContent } = useRedirectByUserCheck()
-  // const boilerPart = useStore($boilerPart)
   const [error, setError] = useState(false)
   const router = useRouter()
   const getDefaultTextGenerator = useCallback((subpath: string) => subpath.replace('catalog', 'Каталог'), [])
@@ -44,8 +41,6 @@ function CatalogPartPage({ query }: { query: IQueryParams }) {
 
   const loadBoilerPart = async () => {
     try {
-      // const data = await getBoilerPartFx(`/boiler-parts/find/${query.partId}`)
-
       const { payload } = await dispatch(getAdvertisementById(Number(query.partId)))
 
       if (!payload) {

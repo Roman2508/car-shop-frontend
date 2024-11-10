@@ -1,7 +1,8 @@
-import { $mode } from '@/context/mode'
 import { IFilterCheckboxItem } from '@/types/catalog'
 import { useStore } from 'effector-react'
 import styles from '@/styles/create-ad/index.module.scss'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface ICheckboxProps {
   setCheckboxValue: (groupKey: string, key: string) => void
@@ -15,7 +16,7 @@ interface ICheckboxProps {
 
 // const Checkbox = ({ title, checked, id, event }: IFilterCheckboxItem) => {
 const Checkbox = ({ title, checked, id, event, setCheckboxValue, groupKey }: ICheckboxProps) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const handleFilterChange = () => event({ checked: !checked, id } as IFilterCheckboxItem)

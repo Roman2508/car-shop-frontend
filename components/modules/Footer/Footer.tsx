@@ -18,15 +18,11 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.footer__container}>
         <div className={styles.footer__top}>
-          {/* {!isMedia750 && <FooterLogo />} */}
           <div className={styles.footer__bottom__block__right}>
             <h3 className={styles.footer__top__item__title} style={{ width: 'auto' }}>
               Мы в соц. мережах:
             </h3>
             <ul className={styles.footer__bottom__block__social}>
-              {/* <li className={styles.footer__bottom__block__social__item}>
-                <a href="#" className={styles.footer__bottom__block__social__item_vk} />
-              </li> */}
               <li className={styles.footer__bottom__block__social__item}>
                 <a href="#" className={styles.footer__bottom__block__social__item_fb} />
               </li>

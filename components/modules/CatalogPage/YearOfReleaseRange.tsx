@@ -18,7 +18,7 @@ interface IYearOfReleaseRangeProps {
 const YearOfReleaseRange: React.FC<IYearOfReleaseRangeProps> = ({ yearOfReleaseRange, setYearOfReleaseRange }) => {
   const router = useRouter()
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const updateRoteParam = (yearOfReleaseStart: string, yearOfReleaseEnd: string) =>

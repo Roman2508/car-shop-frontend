@@ -5,12 +5,13 @@ import SignInForm from '@/components/modules/AuthPage/SignInForm'
 import styles from '@/styles/auth/index.module.scss'
 import inputsStyles from '@/styles/create-ad/index.module.scss'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
-import { useStore } from 'effector-react'
-import { $mode } from '@/context/mode'
-import { toast } from 'sonner'
 import Header from '@/components/modules/Header/Header'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const AuthPage = () => {
+  const { mode } = useSelector(themeSelector)
+
   const isMedia800 = useMediaQuery(800)
   const switchCtn = useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = useRef() as MutableRefObject<HTMLDivElement>
@@ -19,7 +20,6 @@ const AuthPage = () => {
   const switchCircle2 = useRef() as MutableRefObject<HTMLDivElement>
   const aContainer = useRef() as MutableRefObject<HTMLDivElement>
   const bContainer = useRef() as MutableRefObject<HTMLDivElement>
-  const mode = useStore($mode)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const switchForm = () => {

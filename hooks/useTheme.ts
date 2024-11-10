@@ -1,17 +1,20 @@
-import { useStore } from 'effector-react'
 import { useEffect } from 'react'
-import { setMode, $mode } from '../context/mode'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setMode, themeSelector } from '@/redux/theme/themeSlice'
 
 export const useTheme = () => {
-  const mode = useStore($mode)
+  const dispatch = useDispatch()
+
+  const { mode } = useSelector(themeSelector)
 
   const toggleTheme = () => {
     if (mode === 'dark') {
       localStorage.setItem('mode', JSON.stringify('light'))
-      setMode('light')
+      dispatch(setMode('light'))
     } else {
       localStorage.setItem('mode', JSON.stringify('dark'))
-      setMode('dark')
+      dispatch(setMode('dark'))
     }
   }
 
@@ -19,7 +22,7 @@ export const useTheme = () => {
     const localTheme = JSON.parse(localStorage.getItem('mode') as string)
 
     if (localTheme) {
-      setMode(localTheme)
+      dispatch(setMode(localTheme))
     }
   }, [])
 

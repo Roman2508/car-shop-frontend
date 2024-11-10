@@ -1,11 +1,12 @@
 import { useStore } from 'effector-react'
-import { $mode } from '@/context/mode'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { IFilterManufacturerAccordionProps } from '@/types/catalog'
 import Accordion from '@/components/elements/Accordion/Accordion'
 import FilterCheckboxItem from './FilterCheckboxItem'
 import styles from '@/styles/catalog/index.module.scss'
 import { IFilter, IFilterItem } from '@/redux/filter/FilterTypes'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface IFilterAccordionProps {
   filterItems: IFilterItem[]
@@ -15,7 +16,7 @@ interface IFilterAccordionProps {
 }
 
 const FilterAccordion: React.FC<IFilterAccordionProps> = ({ filterItems, title }) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const isMobile = useMediaQuery(820)
 

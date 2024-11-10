@@ -14,7 +14,7 @@ interface ISelectedFilterItemsProps {
 }
 
 const SelectedFilterItems: React.FC<ISelectedFilterItemsProps> = ({ label, setSelectedFilters, selectedItems }) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (

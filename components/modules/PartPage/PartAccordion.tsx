@@ -1,18 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
-import { useStore } from 'effector-react'
-import Accordion from '@/components/elements/Accordion/Accordion'
-import { $mode } from '@/context/mode'
+import { useSelector } from 'react-redux'
+
 import { IPartAccordionProps } from '@/types/part'
 import styles from '@/styles/part/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import Accordion from '@/components/elements/Accordion/Accordion'
 
 const PartAccordion = ({ children, title }: IPartAccordionProps) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const handleExpandAccordion = (expanded: boolean) => {
-    const accordionTitles = document.querySelectorAll(
-      `.${styles.part__accordion__title}`
-    )
+    const accordionTitles = document.querySelectorAll(`.${styles.part__accordion__title}`)
 
     accordionTitles.forEach((title) => {
       const item = title as HTMLElement

@@ -22,7 +22,7 @@ const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item
 
   const dispatch = useAppDispatch()
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
 
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

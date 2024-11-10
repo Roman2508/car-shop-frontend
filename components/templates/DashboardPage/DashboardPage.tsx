@@ -1,19 +1,14 @@
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { $mode } from '@/context/mode'
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 import React, { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 
 import { useAppDispatch } from '@/redux/store'
-import { IBoilerParts } from '@/types/boilerparts'
-import { $shoppingCart } from '@/context/shopping-cart'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import authStyles from '@/styles/auth/index.module.scss'
 import styles from '@/styles/dashboard/index.module.scss'
 import { MAX_PRICE, MIN_PRICE } from '../CatalogPage/CatalogPage'
-import { getBestsellersOrNewPartsFx } from '@/app/api/boilerParts'
-import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import DashboardSlider from '@/components/modules/DashboardPage/DashboardSlider'
@@ -44,14 +39,13 @@ const DashboardPage = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const mode = useStore($mode)
-  const shoppingCart = useStore($shoppingCart)
+  const { mode } = useSelector(themeSelector)
 
   const [search, setSearch] = React.useState('')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
   const [spinner, setSpinner] = useState(false)
-  const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
+  const [showAlert, setShowAlert] = useState(false)
 
   const [newParts, setNewParts] = useState<AdvertisementType[]>([])
   const [bestsellers, setBestsellers] = useState<AdvertisementType[]>([])
@@ -144,15 +138,6 @@ const DashboardPage = () => {
     loadBoilerParts()
   }, [])
 
-  useEffect(() => {
-    if (shoppingCart.length) {
-      setShowAlert(true)
-      return
-    }
-
-    setShowAlert(false)
-  }, [shoppingCart.length])
-
   const loadBoilerParts = async () => {
     try {
       setSpinner(true)
@@ -237,22 +222,6 @@ const DashboardPage = () => {
       </div>
 
       <div className={`container ${styles.dashboard__container}`}>
-        <AnimatePresence>
-          {showAlert && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={`${styles.dashboard__alert} ${darkModeClass}`}
-            >
-              <CartAlert
-                count={shoppingCart.reduce((defaultCount, item) => defaultCount + item.count, 0)}
-                closeAlert={closeAlert}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <h2 className={`${styles.dashboard__title} ${darkModeClass}`} style={{ marginTop: '100px' }}>
           Наші партнери
         </h2>
@@ -263,12 +232,12 @@ const DashboardPage = () => {
 
         <div className={styles.dashboard__parts}>
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>Популярні оголошення</h3>
-          <DashboardSlider items={bestsellers} spinner={spinner} goToPartPage />
+          <DashboardSlider items={bestsellers} goToPartPage />
         </div>
 
         <div className={styles.dashboard__parts}>
           <h3 className={`${styles.dashboard__parts__title} ${darkModeClass}`}>Нові оголошення</h3>
-          <DashboardSlider items={newParts} spinner={spinner} goToPartPage />
+          <DashboardSlider items={newParts} goToPartPage />
         </div>
 
         <div className={styles.dashboard__about}>

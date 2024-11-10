@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  removeClassNamesForOverlayAndBody,
-  toggleClassNamesForOverlayAndBody,
-} from '@/utils/common'
-import { setSearchInputZIndex } from '@/context/header'
+import { removeClassNamesForOverlayAndBody, toggleClassNamesForOverlayAndBody } from '@/utils/common'
 
 export const usePopup = () => {
   const [open, setOpen] = useState(false)
@@ -17,7 +13,6 @@ export const usePopup = () => {
   const closePopup = () => {
     removeClassNamesForOverlayAndBody()
     setOpen(false)
-    setSearchInputZIndex(1)
   }
 
   useEffect(() => {

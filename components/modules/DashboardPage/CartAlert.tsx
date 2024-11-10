@@ -7,7 +7,7 @@ import { $totalPrice } from '@/context/shopping-cart'
 import styles from '@/styles/dashboard/index.module.scss'
 
 const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const totalPrice = useStore($totalPrice)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
@@ -39,10 +39,7 @@ const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
           <a className={styles.dashboard__alert__btn_order}>Оформить заказ</a>
         </Link>
       </div>
-      <button
-        className={styles.dashboard__alert__btn_close}
-        onClick={closeAlert}
-      />
+      <button className={styles.dashboard__alert__btn_close} onClick={closeAlert} />
     </>
   )
 }

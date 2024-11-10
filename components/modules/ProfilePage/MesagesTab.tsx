@@ -1,14 +1,13 @@
 import React from 'react'
 import { io } from 'socket.io-client'
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 
-import { $mode } from '@/context/mode'
 import { useAppDispatch } from '@/redux/store'
 import { formatDate } from '@/utils/formatDate'
 import { authSelector } from '@/redux/auth/authSlice'
 import { createImageUrl } from '@/utils/createImageUrl'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import { DialogType } from '@/redux/dialogs/dialogsTypes'
 import styles from '@/styles/ProfileForm/index.module.scss'
 import GarbageSvg from '@/components/elements/GarbageSvg/GarbageSvg'
@@ -24,7 +23,7 @@ const MesagesTab = () => {
   const { auth } = useSelector(authSelector)
   const { dialogs, messages } = useSelector(dialogsSelector)
 
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const [text, setText] = React.useState('')

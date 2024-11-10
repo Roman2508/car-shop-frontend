@@ -10,15 +10,12 @@ const FiltersPopupTop = ({
   resetFilters,
   resetFilterBtnDisabled,
 }: IFiltersPopupTop) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (
     <div className={`${styles.catalog__bottom__filters__top} ${darkModeClass}`}>
-      <button
-        onClick={closePopup}
-        className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}
-      >
+      <button onClick={closePopup} className={`${styles.catalog__bottom__filters__title} ${darkModeClass}`}>
         {title}
       </button>
       <button

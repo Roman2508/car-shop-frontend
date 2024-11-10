@@ -1,12 +1,13 @@
-import { useStore } from 'effector-react'
-import { $mode } from '@/context/mode'
+import { useSelector } from 'react-redux'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import styles from '@/styles/contacts/index.module.scss'
 import MailSvg from '@/components/elements/MailSvg/MailSvg'
 import FeedbackForm from '@/components/modules/FeedbackForm/FeedbackForm'
 
 const ContactsPage = ({ isWholesaleBuyersPage = false }) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
+
   const isMobile560 = useMediaQuery(560)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 

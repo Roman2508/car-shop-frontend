@@ -2,91 +2,87 @@
 import { useStore } from 'effector-react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { $mode } from '@/context/mode'
 import { controlStyles, menuStyles, selectStyles } from '@/styles/catalog/select'
 import { optionStyles } from '@/styles/searchInput'
 import { IOption, SelectOptionType } from '@/types/common'
 import { createSelectOption } from '@/utils/common'
 import { categoriesOptions } from '@/utils/selectContents'
-import {
-  $boilerParts,
-  setBoilerPartsByPopularity,
-  setBoilerPartsCheapFirst,
-  setBoilerPartsExpensiveFirst,
-} from '@/context/boilerParts'
 import { useRouter } from 'next/router'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const FilterSelect = ({ setSpinner }: { setSpinner: (arg0: boolean) => void }) => {
-  const mode = useStore($mode)
-  const boilerParts = useStore($boilerParts)
-  const [categoryOption, setCategoryOption] = useState<SelectOptionType>(null)
   const router = useRouter()
 
-  useEffect(() => {
-    if (boilerParts.rows) {
-      switch (router.query.first) {
-        case 'cheap':
-          updateCategoryOption('Спочатку дешеві')
-          setBoilerPartsCheapFirst()
-          break
-        case 'expensive':
-          updateCategoryOption('Спочатку дорогі')
-          setBoilerPartsExpensiveFirst()
-          break
-        case 'new':
-          updateCategoryOption('Спочатку нові')
-          setBoilerPartsExpensiveFirst()
-          break
-        case 'old':
-          updateCategoryOption('Спочатку старі')
-          setBoilerPartsExpensiveFirst()
-          break
-      }
-    }
-  }, [boilerParts.rows, router.query.first])
+  const { mode } = useSelector(themeSelector)
+  const [categoryOption, setCategoryOption] = useState<SelectOptionType>(null)
 
-  const updateCategoryOption = (value: string) => setCategoryOption({ value, label: value })
+  // useEffect(() => {
+  //   if (boilerParts.rows) {
+  //     switch (router.query.first) {
+  //       case 'cheap':
+  //         updateCategoryOption('Спочатку дешеві')
+  //         setBoilerPartsCheapFirst()
+  //         break
+  //       case 'expensive':
+  //         updateCategoryOption('Спочатку дорогі')
+  //         setBoilerPartsExpensiveFirst()
+  //         break
+  //       case 'new':
+  //         updateCategoryOption('Спочатку нові')
+  //         setBoilerPartsExpensiveFirst()
+  //         break
+  //       case 'old':
+  //         updateCategoryOption('Спочатку старі')
+  //         setBoilerPartsExpensiveFirst()
+  //         break
+  //     }
+  //   }
+  // }, [boilerParts.rows, router.query.first])
 
-  const updateRoteParam = (first: string) =>
-    router.push(
-      {
-        query: {
-          ...router.query,
-          first,
-        },
-      },
-      undefined,
-      { shallow: true }
-    )
+  // const updateCategoryOption = (value: string) => setCategoryOption({ value, label: value })
 
-  const handleSortOptionChange = (selectedOption: SelectOptionType) => {
-    setSpinner(true)
-    setCategoryOption(selectedOption)
+  // const updateRoteParam = (first: string) =>
+  //   router.push(
+  //     {
+  //       query: {
+  //         ...router.query,
+  //         first,
+  //       },
+  //     },
+  //     undefined,
+  //     { shallow: true }
+  //   )
 
-    switch ((selectedOption as IOption).value) {
-      case 'Спочатку дешеві':
-        setBoilerPartsCheapFirst()
-        updateRoteParam('cheap')
-        break
-      case 'Спочатку дорогі':
-        setBoilerPartsExpensiveFirst()
-        updateRoteParam('expensive')
-        break
-      case 'Спочатку нові':
-        setBoilerPartsByPopularity()
-        updateRoteParam('new')
-        break
-      case 'Спочатку старі':
-        setBoilerPartsByPopularity()
-        updateRoteParam('old')
-        break
-    }
+  // const handleSortOptionChange = (selectedOption: SelectOptionType) => {
+  //   setSpinner(true)
+  //   setCategoryOption(selectedOption)
 
-    setTimeout(() => setSpinner(false), 1000)
-  }
+  //   switch ((selectedOption as IOption).value) {
+  //     case 'Спочатку дешеві':
+  //       setBoilerPartsCheapFirst()
+  //       updateRoteParam('cheap')
+  //       break
+  //     case 'Спочатку дорогі':
+  //       setBoilerPartsExpensiveFirst()
+  //       updateRoteParam('expensive')
+  //       break
+  //     case 'Спочатку нові':
+  //       setBoilerPartsByPopularity()
+  //       updateRoteParam('new')
+  //       break
+  //     case 'Спочатку старі':
+  //       setBoilerPartsByPopularity()
+  //       updateRoteParam('old')
+  //       break
+  //   }
+
+  //   setTimeout(() => setSpinner(false), 1000)
+  // }
 
   return (
-    <Select
+    <>
+      {/* <Select
       placeholder="Я шукаю.."
       value={categoryOption || createSelectOption('Спочатку дешеві')}
       onChange={handleSortOptionChange}
@@ -108,7 +104,8 @@ const FilterSelect = ({ setSpinner }: { setSpinner: (arg0: boolean) => void }) =
       }}
       isSearchable={false}
       options={categoriesOptions}
-    />
+    /> */}
+    </>
   )
 }
 

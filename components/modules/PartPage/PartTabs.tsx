@@ -3,11 +3,10 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from 'effector-react'
 
-import { $mode } from '@/context/mode'
-import { filters } from '@/constans/filter'
-import { $boilerPart } from '@/context/boilerPart'
 import styles from '@/styles/part/index.module.scss'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const tagKeys = {
   carType: 'Тип автомобіля',
@@ -31,8 +30,7 @@ const tagKeys = {
 } as { [key: string]: string }
 
 const PartTabs = ({ fullAdvertisement }: { fullAdvertisement: AdvertisementType }) => {
-  const mode = useStore($mode)
-  const boilerPart = useStore($boilerPart)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const [showDescription, setShowDescription] = useState(true)
   const [showCompatibility, setShowCompatibility] = useState(false)

@@ -16,7 +16,7 @@ const FiltersPopup = ({
   title,
   manufacturersList,
 }: IFiltersPopupProps) => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   return (

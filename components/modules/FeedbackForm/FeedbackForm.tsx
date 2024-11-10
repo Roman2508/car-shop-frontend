@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { MutableRefObject, useRef, useState } from 'react'
 
 import NameInput from './NameInput'
-import { $mode } from '@/context/mode'
 import PhoneInput from './PhoneInput'
 import EmailInput from './EmailInput'
 import emailjs from '@emailjs/browser'
@@ -12,9 +11,11 @@ import MessageInput from './MessageInput'
 import { FeedbackInputs } from '@/types/feedbackForm'
 import styles from '@/styles/feedbackForm/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const FeedbackForm = () => {
-  const mode = useStore($mode)
+  const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const {
     register,
