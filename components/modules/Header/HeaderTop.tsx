@@ -36,12 +36,14 @@ const HeaderTop = () => {
   return (
     <div className={styles.header__top}>
       <div className={`container ${styles.header__top__container}`}>
-        {isMedia950 && (
+        {isMedia950 ? (
           <button onClick={toggleOpen} className={`${styles.burger_menu} ${open ? styles.open : ''} ${darkModeClass}`}>
             <span />
             <span />
             <span />
           </button>
+        ) : (
+          <div />
         )}
 
         <nav className={`${styles.header__nav} ${open ? styles.open : ''}  ${darkModeClass}`}>
@@ -87,7 +89,7 @@ const HeaderTop = () => {
           </ul>
         </nav>
 
-        {/* <ProfileDropdown /> */}
+        <ProfileDropdown />
       </div>
     </div>
   )

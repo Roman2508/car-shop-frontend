@@ -1,12 +1,11 @@
 import React from 'react'
-import { checkUserAuthFx } from '@/app/api/auth'
-import { setUser } from '@/context/user'
 import { useRouter } from 'next/router'
-import { useAppDispatch } from '@/redux/store'
+
 import { authAPI } from '@/api/api'
+import { useAppDispatch } from '@/redux/store'
 import { setUserData } from '@/redux/auth/authSlice'
 
-const useRedirectByUserCheck = (isAuthPage = false) => {
+const useRedirectByUserCheck = () => {
   const dispatch = useAppDispatch()
 
   const [shouldLoadContent, setShouldLoadContent] = React.useState(false)

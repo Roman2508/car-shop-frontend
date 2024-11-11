@@ -1,8 +1,10 @@
 import Head from 'next/head'
+
 import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import ProfilePage from '@/components/templates/ProfilePage/ProfilePage'
+import { authAPI } from '@/api/api'
 
 const Profile = () => {
   const { shouldLoadContent } = useRedirectByUserCheck()
@@ -12,7 +14,7 @@ const Profile = () => {
   return (
     <>
       <Head>
-        <title>Профіль | {shouldLoadContent ? 'Главная' : ''}</title>
+        <title>Профіль | {shouldLoadContent ? 'Головна' : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

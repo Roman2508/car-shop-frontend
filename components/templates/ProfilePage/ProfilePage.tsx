@@ -1,17 +1,23 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
 
 import { authSelector } from '@/redux/auth/authSlice'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/profile/index.module.scss'
 import { themeSelector } from '@/redux/theme/themeSlice'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
-import UsersTab from '@/components/modules/ProfilePage/UsersTab'
-import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
-import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
-import Administration from '@/components/modules/ProfilePage/Administration'
-import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
+// import UsersTab from '@/components/modules/ProfilePage/UsersTab'
+// import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
+// import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
+// import Administration from '@/components/modules/ProfilePage/Administration'
+// import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
+
+const UsersTab = dynamic(() => import('@/components/modules/ProfilePage/UsersTab'), { ssr: false })
+const MesagesTab = dynamic(() => import('@/components/modules/ProfilePage/MesagesTab'), { ssr: false })
+const ProfileForm = dynamic(() => import('@/components/modules/ProfilePage/ProfileForm'), { ssr: false })
+const Administration = dynamic(() => import('@/components/modules/ProfilePage/Administration'), { ssr: false })
+const MyAdvertisements = dynamic(() => import('@/components/modules/ProfilePage/MyAdvertisements'), { ssr: false })
 
 const tabs = [
   { link: 'profile', label: 'Профіль' },
@@ -25,9 +31,8 @@ const ProfilePage = () => {
   const router = useRouter()
 
   const { auth } = useSelector(authSelector)
-
   const { mode } = useSelector(themeSelector)
-  const isMobile560 = useMediaQuery(560)
+
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const [activeTab, setActiveTab] = React.useState<string | null>(null)
