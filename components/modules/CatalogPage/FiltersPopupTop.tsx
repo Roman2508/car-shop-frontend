@@ -1,7 +1,8 @@
-import { useStore } from 'effector-react'
-import { $mode } from '@/context/mode'
+import { useSelector } from 'react-redux'
+
 import { IFiltersPopupTop } from '@/types/catalog'
 import styles from '@/styles/catalog/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const FiltersPopupTop = ({
   title,

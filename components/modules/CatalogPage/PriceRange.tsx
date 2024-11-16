@@ -2,16 +2,14 @@ import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import { Range, getTrackBackground } from 'react-range'
 
-import { $mode } from '@/context/mode'
 import styles from '@/styles/catalog/index.module.scss'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const STEP = 1000
 const MIN = 0
 const MAX = 10000000
-// const STEP = 0.1
-// const MIN = 0
-// const MAX = 10000
 
 interface IPriceRangeProps {
   priceRange: [number, number]

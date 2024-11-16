@@ -46,7 +46,7 @@ const Administration = () => {
 
   return (
     <div className={styles.administration}>
-      {advertisements ? (
+      {advertisements && advertisements.length ? (
         <div className={catalogStyles.catalog__list}>
           {advertisements.map((item) => (
             <CatalogItem item={item} key={item.id} self />
@@ -56,8 +56,8 @@ const Administration = () => {
         <h2
           style={
             darkModeClass
-              ? { color: '#fff', fontWeight: 500, width: '100%', textAlign: 'center', padding: '40px 0' }
-              : { color: '#000', fontWeight: 500, width: '100%', textAlign: 'center', padding: '40px 0' }
+              ? { color: '#fff', fontWeight: 500, width: '100%', textAlign: 'center', padding: '80px 0' }
+              : { color: '#000', fontWeight: 500, width: '100%', textAlign: 'center', padding: '80px 0' }
           }
         >
           Немає нових оголошень

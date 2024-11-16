@@ -1,13 +1,9 @@
-import { useStore } from 'effector-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { $mode } from '@/context/mode'
-import { IFilterCheckboxItem } from '@/types/catalog'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import styles from '@/styles/catalog/index.module.scss'
 import React from 'react'
-import { useAppDispatch } from '@/redux/store'
-import { setFilter } from '@/redux/filter/filterSlice'
-import { filterKeys } from '@/utils/getFilterKey'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface IRangeFilterBlockItemProps {
   label: string

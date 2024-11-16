@@ -1,15 +1,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useStore } from 'effector-react'
 
-import { $mode } from '@/context/mode'
+
 import { IInputs } from '@/types/auth'
 import { showAuthError } from '@/utils/errors'
-import { singInFx } from '../../../app/api/auth'
 import styles from '@/styles/auth/index.module.scss'
 import inputStyles from '@/styles/create-ad/index.module.scss'
-import NameInput from '@/components/elements/AuthPage/NameInput'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
 import { useAppDispatch } from '@/redux/store'

@@ -1,26 +1,20 @@
-import { useStore } from 'effector-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { IFilterManufacturerAccordionProps } from '@/types/catalog'
 import Accordion from '@/components/elements/Accordion/Accordion'
 import FilterCheckboxItem from './FilterCheckboxItem'
 import styles from '@/styles/catalog/index.module.scss'
-import { IFilter, IFilterItem } from '@/redux/filter/FilterTypes'
+import { IFilterItem } from '@/redux/filter/FilterTypes'
 import { useSelector } from 'react-redux'
 import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface IFilterAccordionProps {
   filterItems: IFilterItem[]
   title: string | false
-  // setManufacturer: Event<IFilterCheckboxItem[]>
-  // updateManufacturer: Event<IFilterCheckboxItem>
 }
 
 const FilterAccordion: React.FC<IFilterAccordionProps> = ({ filterItems, title }) => {
   const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const isMobile = useMediaQuery(820)
-
-  // const chooseAllManufacturers = () => setManufacturer(items.map((item) => ({ ...item, checked: true })))
 
   return (
     <Accordion
@@ -31,9 +25,6 @@ const FilterAccordion: React.FC<IFilterAccordionProps> = ({ filterItems, title }
       hideArrowClass={isMobile ? styles.hide_arrow : ''}
     >
       <div className={styles.filters__manufacturer__inner}>
-        <button className={styles.filters__manufacturer__select_all} onClick={() => {}}>
-          Вибрати все
-        </button>
         <ul className={styles.filters__manufacturer__list}>
           {filterItems?.map((item) => (
             <FilterCheckboxItem title={item.title} label={title} id={item.id} key={item.id} checked={item.checked} />

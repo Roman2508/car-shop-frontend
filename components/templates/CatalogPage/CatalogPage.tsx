@@ -12,7 +12,6 @@ import { ParsedUrlQuery } from 'querystring'
 import { useAppDispatch } from '@/redux/store'
 import { IQueryParams } from '@/types/catalog'
 import { AnimatePresence } from 'framer-motion'
-import { IBoilerParts } from '@/types/boilerparts'
 import { IFilter } from '@/redux/filter/FilterTypes'
 import { themeSelector } from '@/redux/theme/themeSlice'
 import Empty from '@/components/elements/EmptySvg/EmptySvg'
@@ -44,11 +43,7 @@ const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 // 8. На сторінці оголошення не авторизованим користувачам замість кнопки "Зв`язатись з продавцем" треба показувати кнопку "Увійти щоб написати продавцю"
 // 9. Сторінка адміністрування (якщо пустий список оголошень - треба показувати текст про відсутність нових оголошень)
 
-// 2. user avatar (перевірити як працює) ?????
-// 3. pagination (перевірити як працює коли велика кількість сторінок) ?????
-// 6. Catalog filter mobile ??????
-
-export const ITEMS_PER_PAGE = 2
+export const ITEMS_PER_PAGE = 4
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -98,8 +93,11 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     debounse(async (query: ParsedUrlQuery) => {
       const { payload } = await dispatch(getAdvertisements(query))
       const data = payload as [AdvertisementType[], number]
-      if (data[1]) {
+
+      if (data) {
         setPagesCount(data[1] / ITEMS_PER_PAGE)
+      } else {
+        setPagesCount(0)
       }
     }, 1000),
     []
@@ -108,7 +106,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const handlePageChange = async ({ selected }: { selected: number }) => {
     try {
       setSpinner(true)
-      router.push({ query: { ...router.query, offset: selected, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
+      const offset = selected * ITEMS_PER_PAGE
+      router.push({ query: { ...router.query, offset, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
       setCurrentPage(selected)
     } catch (error) {
       toast.error((error as Error).message)
@@ -120,7 +119,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const resetFilters = async () => {
     setSelectedFilters([])
     setSpinner(true)
+    setCurrentPage(0)
     await dispatch(getAdvertisements(router.query))
+    router.push({ query: { offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
     setSpinner(false)
     dispatch(clearFilters())
   }
@@ -195,9 +196,9 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   React.useEffect(() => {
     if (isFirstRender) return
     if (!router.query.offset) {
-      router.push({ query: { ...query, offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
+      // router.push({ query: { ...query, offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
     }
-    debouncedGetResponce(router.query)
+    debouncedGetResponce({ ...router.query, offset: String(0), limit: String(ITEMS_PER_PAGE) })
   }, [router.query])
 
   // first render
@@ -222,7 +223,12 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
 
       const { payload } = await dispatch(getAdvertisements(router.query))
       const data = payload as [AdvertisementType[], number]
-      setPagesCount(data[1] / ITEMS_PER_PAGE)
+
+      if (data) {
+        setPagesCount(data[1] / ITEMS_PER_PAGE)
+      } else {
+        setPagesCount(0)
+      }
 
       setIsFirstRender(false)
       setSpinner(false)
@@ -234,7 +240,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   return (
     <section className={styles.catalog}>
       <div className={`container ${styles.catalog__container}`}>
-        <h2 className={`${styles.catalog__title} ${darkModeClass}`}>Каталог товаров</h2>
+        <h2 className={`${styles.catalog__title} ${darkModeClass}`}>Каталог товарів</h2>
         <div className={`${styles.catalog__top} ${darkModeClass}`}>
           {(priceRange[0] !== MIN_PRICE || priceRange[1] !== MAX_PRICE) && (
             <AnimatePresence>
@@ -318,7 +324,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               </span>
               <span className={styles.catalog__top__mobile_btn__text}>Фильтр</span>
             </button>
-            <FilterSelect setSpinner={setSpinner} />
+
+            <FilterSelect setSpinner={setSpinner} setCurrentPage={setCurrentPage} />
           </div>
         </div>
 
@@ -327,7 +334,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
             <CatalogFilters
               priceRange={priceRange}
               setPriceRange={setPriceRange}
-              // currentPage={currentPage}
               resetFilters={resetFilters}
               mileageRange={mileageRange}
               setMileageRange={setMileageRange}
@@ -335,10 +341,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
               yearOfReleaseRange={yearOfReleaseRange}
               setYearOfReleaseRange={setYearOfReleaseRange}
               closePopup={() => setOpenMobileFilters(false)}
-              // setIsFilterInQuery={setIsFilterInQuery}
-              // isPriceRangeChanged={isPriceRangeChanged}
               resetFilterBtnDisabled={false}
-              // setIsPriceRangeChanged={setIsPriceRangeChanged}
             />
 
             {spinner ? (

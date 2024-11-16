@@ -1,11 +1,10 @@
-import { useStore } from 'effector-react'
-import { $mode } from '@/context/mode'
 import { AnimatePresence, motion } from 'framer-motion'
-import { IManufacturersBlockProps } from '@/types/catalog'
 import styles from '@/styles/catalog/index.module.scss'
 import { IFilter, IFilterItem } from '@/redux/filter/FilterTypes'
 import SelectedFilterBlockItem from './SelectedFilterBlockItem'
 import { filterKeys } from '@/utils/getFilterKey'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface ISelectedFilterItemsProps {
   label: keyof typeof filterKeys

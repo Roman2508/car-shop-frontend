@@ -80,9 +80,17 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, goToPartPage 
                 </a>
               </Link>
 
-              <p style={{ fontSize: '14px', marginBottom: '12px' }}>{formatDate(item.createdAt)}</p>
+              <p
+                style={
+                  darkModeClass === 'light'
+                    ? { fontSize: '14px', marginBottom: '12px' }
+                    : { fontSize: '14px', marginBottom: '12px', color: '#c9c9c9' }
+                }
+              >
+                {formatDate(item.createdAt)}
+              </p>
 
-              <div className={styles.dashboard__slide__description__wrapper}>
+              <div className={`${styles.dashboard__slide__description__wrapper} ${darkModeClass}`}>
                 <span className={styles.dashboard__slide__description}>
                   <SpeedometerSvg />
                   {item.mileage}
@@ -104,7 +112,7 @@ const DashboardSlider: React.FC<IDashboardSliderProps> = ({ items, goToPartPage 
                 </span>
               </div>
 
-              <span className={styles.dashboard__slide__price}>{formatPrice(item.price)} P</span>
+              <span className={styles.dashboard__slide__price}>{formatPrice(item.price)} грн.</span>
             </div>
           </div>
         ))

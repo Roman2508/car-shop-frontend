@@ -1,7 +1,4 @@
-import { useStore } from 'effector-react'
 import { motion } from 'framer-motion'
-import { $mode } from '@/context/mode'
-import { IFilterCheckboxItem } from '@/types/catalog'
 import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 import styles from '@/styles/catalog/index.module.scss'
 import React from 'react'
@@ -10,6 +7,8 @@ import { setFilter } from '@/redux/filter/filterSlice'
 import getFilterKey, { filterKeys } from '@/utils/getFilterKey'
 import { useRouter } from 'next/router'
 import { IFilter } from '@/redux/filter/FilterTypes'
+import { useSelector } from 'react-redux'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 interface ISelectedFilterBlockItemProps {
   setSelectedFilters: React.Dispatch<React.SetStateAction<IFilter[]>>
@@ -37,7 +36,7 @@ const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item
           if (!items.length) {
             const query = router.query
             delete query[getFilterKey(el.label)]
-            router.push({ query: { ...query } }, undefined, { shallow: true })
+            router.replace({ query: { ...query } }, undefined, { shallow: true })
             return
           }
 

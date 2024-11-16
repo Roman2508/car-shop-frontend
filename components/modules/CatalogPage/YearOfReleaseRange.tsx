@@ -1,10 +1,10 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 import { Range, getTrackBackground } from 'react-range'
 
-import { $mode } from '@/context/mode'
 import styles from '@/styles/catalog/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const STEP = 1
 const MIN = 1900

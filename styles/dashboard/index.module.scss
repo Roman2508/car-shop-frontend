@@ -540,6 +540,10 @@
       display: flex;
       flex-wrap: wrap;
       margin-bottom: 6px;
+
+      &.dark_mode {
+        color: #c9c9c9;
+      }
     }
 
     &__description {

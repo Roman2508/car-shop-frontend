@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import CatalogFiltersMobile from './CatalogFiltersMobile'
 import CatalogFiltersDesktop from './CatalogFiltersDesktop'
@@ -19,19 +18,15 @@ interface ICatalogFilterProps {
 
 const CatalogFilters: React.FC<ICatalogFilterProps> = ({
   priceRange,
-  setPriceRange,
+  closePopup,
+  resetFilters,
   mileageRange,
+  setPriceRange,
   setMileageRange,
+  filtersMobileOpen,
   yearOfReleaseRange,
   setYearOfReleaseRange,
-  // setIsPriceRangeChanged,
   resetFilterBtnDisabled,
-  resetFilters,
-  // isPriceRangeChanged,
-  // currentPage,
-  // setIsFilterInQuery,
-  closePopup,
-  filtersMobileOpen,
 }) => {
   const isMobile = useMediaQuery(820)
 
