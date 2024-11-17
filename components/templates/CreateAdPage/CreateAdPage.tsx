@@ -20,7 +20,7 @@ import Checkbox from '@/components/elements/Checkbox/Checkbox'
 import Textarea from '@/components/elements/Textarea/Textarea'
 import TextInput from '@/components/elements/TextInput/TextInput'
 import SelectInput from '@/components/elements/SelectInput/SelectInput'
-import { adExamples, createAdFields, filters } from '@/constans/filter'
+import { createAdFields, filters } from '@/constans/filter'
 import { AdvertisementType, FileType, ICreateAdFields } from '@/redux/advertisements/advertisementsTypes'
 
 const CreateAdPage = ({ query }: { query?: { id: string } }) => {
@@ -70,14 +70,6 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
         return el
       })
-    })
-  }
-
-  const add = () => {
-    const a = adExamples
-
-    a.map((el, i) => {
-      setTimeout(() => dispatch(createAdvertisement(el)), i * 500)
     })
   }
 
@@ -347,10 +339,6 @@ const CreateAdPage = ({ query }: { query?: { id: string } }) => {
 
   return (
     <section className={styles.dashboard}>
-      {/* <button onClick={add} style={{ padding: '20px 100px', fontSize: '50px', textTransform: 'uppercase' }}>
-        click
-      </button> */}
-
       <form className={`container ${styles.dashboard__container}`} onSubmit={handleSubmit(onSubmit)}>
         <h1 className={`${styles.create__ad__main__title} ${darkModeClass}`} style={{ marginTop: '50px' }}>
           {query && query.id ? 'Оновити оголошення' : 'Створити оголошення'}

@@ -36,14 +36,7 @@ const MAX_MILEAGE = 1000
 const MIN_YEAR_OF_RELEASE = 1900
 const MAX_YEAR_OF_RELEASE = new Date().getFullYear()
 
-// todo:
-// 1. При створенні оголошення коли користувач завантажив фото і покидає сторінку (не опублікувавши) треба попереджати і видаляти фото
-// 4. повторний вибір фото (reset target.value для input type file)
-// 7. Перевірити як працюють фото при редагуванні оголошення
-// 8. На сторінці оголошення не авторизованим користувачам замість кнопки "Зв`язатись з продавцем" треба показувати кнопку "Увійти щоб написати продавцю"
-// 9. Сторінка адміністрування (якщо пустий список оголошень - треба показувати текст про відсутність нових оголошень)
-
-export const ITEMS_PER_PAGE = 4
+export const ITEMS_PER_PAGE = 20
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const router = useRouter()
@@ -306,7 +299,7 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
-              disabled={!selectedFilters.length}
+              disabled={!selectedFilters.length || !Object.keys(router.query).length}
               onClick={resetFilters}
             >
               Скинути фільтр

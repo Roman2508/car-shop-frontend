@@ -2,7 +2,6 @@ import Select from 'react-select'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { useClickAway } from 'react-use'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 import React, { MutableRefObject, useRef, useState } from 'react'
 
@@ -15,10 +14,10 @@ import { IOption, SelectOptionType } from '../../../types/common'
 import { removeClassNamesForOverlayAndBody } from '@/utils/common'
 import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 import { controlStyles, inputStyles, menuStyles, optionStyles } from '@/styles/searchInput'
-import { NoOptionsMessage, NoOptionsSpinner } from '../SelectOptionsMessage/SelectOptionsMessage'
 import { getAdvertisementById, searchAdvertisements } from '@/redux/advertisements/advertisementsAsyncActions'
 
 const SearchInput = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
 
   const inputRef = React.useRef(null)
@@ -35,7 +34,6 @@ const SearchInput = () => {
   const [options, setOptions] = useState<{ label: string; value: string }[]>([])
   const [inputValue, setInputValue] = useState('')
   const delayCallback = useDebounceCallback(1000)
-  const router = useRouter()
 
   const handleSearchOptionChange = (selectedOption: SelectOptionType) => {
     if (!selectedOption) {
@@ -53,11 +51,6 @@ const SearchInput = () => {
     removeClassNamesForOverlayAndBody()
   }
 
-  const onFocusSearch = () => {
-    // toggleClassNamesForOverlayAndBody('open-search')
-    // setSearchInputZIndex(100)
-  }
-
   const handleSearchClick = async () => {
     if (!inputValue) return
     getPartAndRedirect(Number(inputValue))
@@ -68,11 +61,6 @@ const SearchInput = () => {
       if (!search) return
 
       setInputValue(search)
-
-      // const data = await searchPartsFx({
-      //   url: '/boiler-parts/search',
-      //   search,
-      // })
 
       const { payload } = await dispatch(searchAdvertisements(search))
 
@@ -87,11 +75,6 @@ const SearchInput = () => {
   }
 
   const getPartAndRedirect = async (id: number) => {
-    // const part = await getPartByNameFx({
-    //   url: '/boiler-parts/name',
-    //   name,
-    // })
-
     const { payload } = await dispatch(getAdvertisementById(id))
 
     const advertisement = payload as AdvertisementType
@@ -105,38 +88,7 @@ const SearchInput = () => {
   }
 
   const onSearchInputChange = (text: string) => {
-    // document.querySelector('.overlay')?.classList.add('open-search')
-    // document.querySelector('.body')?.classList.add('overflow-hidden')
-
     delayCallback(() => searchPart(text))
-  }
-
-  const onSearchMenuOpen = () => {
-    // setOnMenuOpenControlStyles({
-    //   borderBottomLeftRadius: 0,
-    //   border: 'none',
-    // })
-    // setOnMenuOpenContainerStyles({
-    //   boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    // })
-    // btnRef.current.style.border = 'none'
-    // btnRef.current.style.borderBottomRightRadius = '0'
-    // borderRef.current.style.display = 'block'
-  }
-
-  const onSearchMenuClose = () => {
-    // setOnMenuOpenControlStyles({
-    //   borderBottomLeftRadius: 4,
-    //   boxShadow: 'none',
-    //   border: '1px solid #9e9e9e',
-    // })
-    // setOnMenuOpenContainerStyles({
-    //   boxShadow: 'none',
-    // })
-    // btnRef.current.style.border = '1px solid #9e9e9e'
-    // btnRef.current.style.borderLeft = 'none'
-    // btnRef.current.style.borderBottomRightRadius = '4px'
-    // borderRef.current.style.display = 'none'
   }
 
   useClickAway(inputRef, () => {
@@ -169,9 +121,6 @@ const SearchInput = () => {
           }}
         >
           <Select
-            // components={{
-            //   NoOptionsMessage: spinner ? NoOptionsSpinner : NoOptionsMessage,
-            // }}
             placeholder="Я шукаю..."
             value={searchOption}
             onChange={handleSearchOptionChange}
@@ -206,9 +155,6 @@ const SearchInput = () => {
             }}
             isClearable={true}
             openMenuOnClick={false}
-            onFocus={onFocusSearch}
-            onMenuOpen={onSearchMenuOpen}
-            onMenuClose={onSearchMenuClose}
             onInputChange={onSearchInputChange}
             options={options}
           />

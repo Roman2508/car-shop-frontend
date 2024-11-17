@@ -37,11 +37,7 @@ const SelectInput: React.FC<ISelectInputProps> = React.forwardRef((props) => {
 
       <Select
         {...restProps}
-        // required={required}
         placeholder={placeholder}
-        //
-        //   value={categoryOption || createSelectOption('Спочатку дешеві')}
-        //   onChange={handleSortOptionChange}
         styles={{
           ...selectStyles,
           // @ts-ignore

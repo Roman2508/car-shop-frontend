@@ -76,7 +76,6 @@ const MesagesTab = () => {
     }
   }, [messages])
 
-  // const sendMessage = (message: any) => {
   const sendMessage = () => {
     if (!activeDalog || !auth) return
     const message = {
@@ -89,7 +88,6 @@ const MesagesTab = () => {
     setText('')
   }
 
-  // Слушаем событие recMessage, чтобы получать сообщения, отправленные пользователями
   socket.on('recMessage', (message: any) => {
     if (message.dialog.id !== activeDalog?.id) return
     // @ts-ignore
@@ -140,8 +138,6 @@ const MesagesTab = () => {
                   <div className={styles.messages__chats_bottom}>
                     <h6>{el.advertisement.title}</h6>
                   </div>
-
-                  {/* <p className={styles.messages__chats_message_body}>message message message message message message</p> */}
                 </div>
               </div>
             )

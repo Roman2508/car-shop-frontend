@@ -11,16 +11,12 @@ import { themeSelector } from '@/redux/theme/themeSlice'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 
 const nav = [
-  // { link: '/shipping-payment', label: 'Доставка та оплата' },
-  // { link: '/about', label: 'Про компанію' },
-  { link: '/dashboard', label: 'Головна' },
+  { link: '/', label: 'Головна' },
   { link: '/catalog', label: 'Каталог' },
-  // { link: '/contacts', label: 'Контакти' },
-  // { link: '/wholesale-buyers', label: 'Оптовим покупцям' },
   { link: '/profile?tab=messages', label: 'Повідомлення' },
   { link: '/profile?tab=profile', label: 'Профіль' },
   { link: '/create-ad', label: 'Створити оголошення' },
-  { link: '/', label: 'Авторизація' },
+  { link: '/auth', label: 'Авторизація' },
 ]
 
 const HeaderTop = () => {
@@ -62,7 +58,7 @@ const HeaderTop = () => {
                 return
               }
 
-              if (auth && auth.id && el.link === '/') {
+              if (auth && auth.id && el.link === '/auth') {
                 return
               }
 

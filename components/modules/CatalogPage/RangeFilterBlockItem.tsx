@@ -1,9 +1,10 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
-import styles from '@/styles/catalog/index.module.scss'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { AnimatePresence, motion } from 'framer-motion'
+
+import styles from '@/styles/catalog/index.module.scss'
 import { themeSelector } from '@/redux/theme/themeSlice'
+import DeleteSvg from '@/components/elements/DeleteSvg/DeleteSvg'
 
 interface IRangeFilterBlockItemProps {
   label: string

@@ -26,15 +26,15 @@ const useRedirectByUserCheck = () => {
       dispatch(setUserData(user))
       setShouldLoadContent(true)
 
-      if (router.route === '/') {
-        router.push('/dashboard')
+      if (router.route === '/auth') {
+        router.push('/')
       }
       return
     }
 
     if (!user) {
       if (router.asPath.includes('/profile') || router.route === '/create-ad') {
-        router.push('/')
+        router.push('/auth')
       }
 
       setShouldLoadContent(true)

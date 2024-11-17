@@ -1,10 +1,9 @@
-import { IFilterCheckboxItem } from '@/types/catalog'
-import { useStore } from 'effector-react'
-import styles from '@/styles/catalog/index.module.scss'
-import { setFilter } from '@/redux/filter/filterSlice'
-import { useAppDispatch } from '@/redux/store'
-import { themeSelector } from '@/redux/theme/themeSlice'
 import { useSelector } from 'react-redux'
+
+import { useAppDispatch } from '@/redux/store'
+import { setFilter } from '@/redux/filter/filterSlice'
+import styles from '@/styles/catalog/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
 
 const FilterCheckboxItem = ({ title, checked, label }: any) => {
   const dispatch = useAppDispatch()

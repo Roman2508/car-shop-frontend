@@ -1,5 +1,5 @@
 import { LoadingStatusTypes } from '../appTypes'
-import { FileType } from '../reservedLessons/reservedLessonsTypes'
+import { FileType } from '../advertisements/advertisementsTypes'
 
 export type InitialStateType = {
   dialogs: DialogType[] | null

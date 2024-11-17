@@ -44,9 +44,6 @@ const DashboardPage = () => {
   const [search, setSearch] = React.useState('')
   const [selectedFilters, setSelectedFilters] = useState<string[]>([])
 
-  const [spinner, setSpinner] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
-
   const [newParts, setNewParts] = useState<AdvertisementType[]>([])
   const [bestsellers, setBestsellers] = useState<AdvertisementType[]>([])
 
@@ -135,12 +132,11 @@ const DashboardPage = () => {
   }
 
   useEffect(() => {
-    loadBoilerParts()
+    loadAdvertisements()
   }, [])
 
-  const loadBoilerParts = async () => {
+  const loadAdvertisements = async () => {
     try {
-      setSpinner(true)
       const { payload: bestsellers }: { payload: any } = await dispatch(getBestsellers())
       const { payload: newAdvertisements }: { payload: any } = await dispatch(getNewAdvertisements())
 
@@ -148,12 +144,8 @@ const DashboardPage = () => {
       setNewParts(newAdvertisements[0])
     } catch (error) {
       toast.error((error as Error).message)
-    } finally {
-      setSpinner(false)
     }
   }
-
-  const closeAlert = () => setShowAlert(false)
 
   return (
     <section className={styles.dashboard}>

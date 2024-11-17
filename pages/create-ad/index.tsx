@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import { useCallback } from 'react'
+
 import Layout from '@/components/layout/Layout'
-import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
+import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import CreateAdPage from '@/components/templates/CreateAdPage/CreateAdPage'
-import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 
 function CreateAd() {
   const { shouldLoadContent } = useRedirectByUserCheck()

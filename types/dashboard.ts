@@ -1,7 +1,5 @@
-import { IBoilerPart } from './boilerparts'
-
 export interface IDashboardSlider {
-  items: IBoilerPart[]
+  items: any[]
   spinner: boolean
   goToPartPage?: boolean
 }

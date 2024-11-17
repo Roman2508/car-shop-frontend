@@ -4,7 +4,6 @@ import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import ProfilePage from '@/components/templates/ProfilePage/ProfilePage'
-import { authAPI } from '@/api/api'
 
 const Profile = () => {
   const { shouldLoadContent } = useRedirectByUserCheck()

@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { RootState } from '../store'
+import { filters } from '@/constans/filter'
 import { LoadingStatusTypes } from '../appTypes'
 import { InitialStateType } from './FilterTypes'
-import { filters } from '@/constans/filter'
-import getFilterKey, { filterKeys } from '@/utils/getFilterKey'
+import { filterKeys } from '@/utils/getFilterKey'
 
 const filtersInitialState: InitialStateType = {
   filters,
@@ -38,8 +38,6 @@ const filtersSlice = createSlice({
 
       state.filters = filters
     },
-
-    //
 
     clearFilters(state) {
       const filters = state.filters.map((el) => {

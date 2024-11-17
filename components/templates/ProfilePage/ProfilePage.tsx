@@ -7,11 +7,6 @@ import { authSelector } from '@/redux/auth/authSlice'
 import styles from '@/styles/profile/index.module.scss'
 import { themeSelector } from '@/redux/theme/themeSlice'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
-// import UsersTab from '@/components/modules/ProfilePage/UsersTab'
-// import MesagesTab from '@/components/modules/ProfilePage/MesagesTab'
-// import ProfileForm from '@/components/modules/ProfilePage/ProfileForm'
-// import Administration from '@/components/modules/ProfilePage/Administration'
-// import MyAdvertisements from '@/components/modules/ProfilePage/MyAdvertisements'
 
 const UsersTab = dynamic(() => import('@/components/modules/ProfilePage/UsersTab'), { ssr: false })
 const MesagesTab = dynamic(() => import('@/components/modules/ProfilePage/MesagesTab'), { ssr: false })

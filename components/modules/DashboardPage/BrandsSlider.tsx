@@ -2,7 +2,6 @@
 import Slider from 'react-slick'
 import { useEffect } from 'react'
 import 'slick-carousel/slick/slick.css'
-import { useStore } from 'effector-react'
 import 'slick-carousel/slick/slick-theme.css'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/dashboard/index.module.scss'
@@ -17,46 +16,17 @@ const BrandsSlider = () => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const brandItems = [
-    {
-      id: 1,
-      img: 'https://cdn.freelogovectors.net/wp-content/uploads/2023/04/bmw_motorrad_logo-freelogovectors.net_.png',
-      alt: 'brand-1',
-    },
-    {
-      id: 2,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Audi_logo_detail.svg/2560px-Audi_logo_detail.svg.png',
-      alt: 'brand-2',
-    },
-    {
-      id: 3,
-      img: 'https://blog.logomaster.ai/hs-fs/hubfs/Mercedes-Benz%20logo-1933.jpg?width=672&height=454&name=Mercedes-Benz%20logo-1933.jpg',
-      alt: 'brand-3',
-    },
-    { id: 4, img: 'https://logos-world.net/wp-content/uploads/2021/06/Porsche-Logo.png', alt: 'brand-4' },
-    {
-      id: 5,
-      img: 'https://car-logos.net/wp-content/uploads/2023/03/lamborghini-logo-1998-present-scaled.webp',
-      alt: 'brand-5',
-    },
-    {
-      id: 6,
-      img: 'https://www.svgrepo.com/show/331599/tesla.svg',
-      alt: 'brand-3',
-    },
-    { id: 7, img: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Volkswagen_-_Logo.svg', alt: 'brand-2' },
-    {
-      id: 8,
-      img: 'https://upload.wikimedia.org/wikipedia/uk/thumb/3/3a/Porsche_AG_Logo.svg/2560px-Porsche_AG_Logo.svg.png',
-      alt: 'brand-1',
-    },
-    { id: 9, img: 'https://cdn.worldvectorlogo.com/logos/toyota-7.svg', alt: 'brand-3' },
-    {
-      id: 10,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Mitsubishi_logo.svg/1200px-Mitsubishi_logo.svg.png',
-      alt: 'brand-4',
-    },
-    { id: 11, img: 'https://upload.wikimedia.org/wikipedia/commons/4/47/KIA_logo2.svg', alt: 'brand-2' },
-    { id: 12, img: 'https://cdn.worldvectorlogo.com/logos/skoda-6.svg', alt: 'brand-1' },
+    { id: 1, img: 'img/brands/bmw.png', alt: 'brand-1' },
+    { id: 2, img: 'img/brands/audi.png', alt: 'brand-2' },
+    { id: 3, img: 'img/brands/mers.webp', alt: 'brand-3' },
+    { id: 5, img: 'img/brands/lambo.webp', alt: 'brand-5' },
+    { id: 6, img: 'img/brands/tesla.svg', alt: 'brand-6' },
+    { id: 7, img: 'img/brands/vw.svg', alt: 'brand-7' },
+    { id: 8, img: 'img/brands/porsche.png', alt: 'brand-8' },
+    { id: 9, img: 'img/brands/toyota.svg', alt: 'brand-9' },
+    { id: 10, img: 'img/brands/mitsubishi.png', alt: 'brand-10' },
+    { id: 11, img: 'img/brands/kia.svg', alt: 'brand-11' },
+    { id: 12, img: 'img/brands/skoda.svg', alt: 'brand-12' },
   ]
 
   useEffect(() => {
@@ -65,7 +35,6 @@ const BrandsSlider = () => {
     const list = slider?.querySelector('.slick-list') as HTMLElement
 
     list.style.height = isMedia768 ? '60px' : '180px'
-    // list.style.height = isMedia768 ? '60px' : '80px'
   }, [isMedia768])
 
   const settings = {

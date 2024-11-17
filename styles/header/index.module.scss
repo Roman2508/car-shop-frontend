@@ -159,14 +159,6 @@
       grid-column: 1 / 5;
     }
 
-    @media (max-width: 580px) {
-      // grid-column: auto;
-      // position: absolute;
-      // top: 7px;
-      // left: 50%;
-      // transform: translateX(-50%);
-    }
-
     &__link {
       position: absolute;
       top: -17px;
@@ -175,7 +167,6 @@
       align-items: center;
 
       @media (max-width: 580px) {
-        // position: initial;
         width: 90px;
       }
 
@@ -199,7 +190,6 @@
         @media (max-width: 580px) {
           position: initial;
           width: 34px;
-          // color: #fafbfc;
         }
       }
     }
@@ -220,13 +210,11 @@
     }
 
     @media (max-width: 580px) {
-      // grid-column: 1 / 10;
       grid-column: 5 / 12;
       padding-left: 0;
     }
 
     @media (max-width: 370px) {
-      // grid-column: 1 / 9;
     }
 
     &__inner {

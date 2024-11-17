@@ -1,4 +1,3 @@
-import { IProfileInputs } from '@/components/modules/ProfilePage/ProfileForm'
 import { FieldErrorsImpl, UseFormRegister } from 'react-hook-form'
 
 export type ProfileInputs = {

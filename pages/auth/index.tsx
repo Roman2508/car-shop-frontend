@@ -1,18 +1,14 @@
 import Head from 'next/head'
-import { useCallback } from 'react'
-import Layout from '@/components/layout/Layout'
+import AuthPage from '@/components/templates/AuthPage/AuthPage'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
-import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 
-function Order() {
+function Auth() {
   const { shouldLoadContent } = useRedirectByUserCheck()
-  const getDefaultTextGenerator = useCallback(() => 'Оформление заказа', [])
-  const getTextGenerator = useCallback((param: string) => ({}[param]), [])
 
   return (
     <>
       <Head>
-        <title>Car shop | {shouldLoadContent ? 'Оформление заказа' : ''}</title>
+        <title>Car Shop | {shouldLoadContent ? 'Авторизація' : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,17 +17,9 @@ function Order() {
         <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/img/favicon/site.webmanifest"></link>
       </Head>
-      {shouldLoadContent && (
-        <Layout>
-          <main>
-            <Breadcrumbs getDefaultTextGenerator={getDefaultTextGenerator} getTextGenerator={getTextGenerator} />
-
-            <div className="overlay" />
-          </main>
-        </Layout>
-      )}
+      {shouldLoadContent && <AuthPage />}
     </>
   )
 }
 
-export default Order
+export default Auth

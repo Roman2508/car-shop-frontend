@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { useStore } from 'effector-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
@@ -50,7 +49,7 @@ const Breadcrumbs = ({
     <div className="container">
       <ul className={styles.breadcrumbs}>
         <li className={styles.breadcrumbs__item}>
-          <Link href="/dashboard" passHref legacyBehavior>
+          <Link href="/" passHref legacyBehavior>
             <a>
               <span className={`${styles.breadcrumbs__item__icon} ${darkModeClass}`} style={{ marginRight: 0 }}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

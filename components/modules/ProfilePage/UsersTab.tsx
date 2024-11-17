@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
 import { useAppDispatch } from '@/redux/store'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { authSelector } from '@/redux/auth/authSlice'
 import styles from '@/styles/profile/index.module.scss'
 import { themeSelector } from '@/redux/theme/themeSlice'
@@ -41,15 +40,8 @@ const UsersTab = () => {
 
   const [usersList, setUsersList] = React.useState<{ value: string; label: string }[]>([])
 
-  const isMedia768 = useMediaQuery(768)
-  const isMedia1366 = useMediaQuery(1366)
-  const isMedia800 = useMediaQuery(800)
-  const isMedia560 = useMediaQuery(560)
-
   const { mode } = useSelector(themeSelector)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
-
-  const width = { width: isMedia1366 ? (isMedia800 ? (isMedia560 ? 160 : 252) : 317) : 344 }
 
   const [spinner, setSpinner] = React.useState(false)
 

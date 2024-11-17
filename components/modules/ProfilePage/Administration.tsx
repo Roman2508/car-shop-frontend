@@ -3,7 +3,6 @@ import React from 'react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/ProfileForm/index.module.scss'
 import catalogStyles from '@/styles/catalog/index.module.scss'
-import { usePopup } from '@/hooks/usePoup'
 import { useAppDispatch } from '@/redux/store'
 import { getNotAccepted } from '@/redux/advertisements/advertisementsAsyncActions'
 import { advertisementsSelector, clearAdvertisements } from '@/redux/advertisements/advertisementsSlice'
@@ -21,7 +20,6 @@ const Administration = () => {
   const { auth } = useSelector(authSelector)
   const { advertisements } = useSelector(advertisementsSelector)
 
-  const isMedia768 = useMediaQuery(768)
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
   const isMedia560 = useMediaQuery(560)

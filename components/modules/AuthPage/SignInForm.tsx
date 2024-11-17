@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 
 
 import { IInputs } from '@/types/auth'
 import { showAuthError } from '@/utils/errors'
+import { useAppDispatch } from '@/redux/store'
 import styles from '@/styles/auth/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { authLogin } from '@/redux/auth/authAsyncActions'
 import inputStyles from '@/styles/create-ad/index.module.scss'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
-import { useAppDispatch } from '@/redux/store'
-import { authLogin } from '@/redux/auth/authAsyncActions'
-import { themeSelector } from '@/redux/theme/themeSlice'
-import { useSelector } from 'react-redux'
 
 const SignInForm = () => {
   const dispatch = useAppDispatch()
@@ -37,7 +37,7 @@ const SignInForm = () => {
       if (payload) {
         resetField('email')
         resetField('password')
-        route.push('/dashboard')
+        route.push('/')
       }
     } catch (error) {
       showAuthError(error)
@@ -56,7 +56,6 @@ const SignInForm = () => {
         className={`${inputStyles.button} ${darkModeClass}`}
         style={{ marginTop: '32px', width: '300px', padding: '11px 50px', height: '40px', position: 'relative' }}
       >
-        {/* <button className={`${inputStyles.button} ${styles.button} ${styles.submit} ${darkModeClass}`}> */}
         {spinner ? (
           <div className={inputStyles.spinner}>
             <div />

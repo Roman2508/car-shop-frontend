@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-import { useStore } from 'effector-react'
 import Link from 'next/link'
-import CrumbArrowSvg from '@/components/elements/CrumbArrowSvg/CrumbArrowSvg'
-import { ICrumbProps } from '@/types/common'
-import styles from '@/styles/breadcrumbs/index.module.scss'
 import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+
+import { ICrumbProps } from '@/types/common'
 import { themeSelector } from '@/redux/theme/themeSlice'
+import styles from '@/styles/breadcrumbs/index.module.scss'
+import CrumbArrowSvg from '@/components/elements/CrumbArrowSvg/CrumbArrowSvg'
 
 const Crumb = ({ text: defaultText, textGenerator, href, last = false }: ICrumbProps) => {
   const [text, setText] = useState(defaultText)

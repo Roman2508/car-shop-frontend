@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { useStore } from 'effector-react'
 
 import { formatPrice } from '@/utils/common'
 import styles from '@/styles/part/index.module.scss'
@@ -29,13 +27,13 @@ import {
   getBestsellers,
 } from '@/redux/advertisements/advertisementsAsyncActions'
 import { useRouter } from 'next/router'
-import { authSelector } from '@/redux/auth/authSlice'
 import { AuthType } from '@/redux/auth/authTypes'
-import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
-import { DialogType } from '@/redux/dialogs/dialogsTypes'
-import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
+import { authSelector } from '@/redux/auth/authSlice'
 import { createImageUrl } from '@/utils/createImageUrl'
 import { themeSelector } from '@/redux/theme/themeSlice'
+import { DialogType } from '@/redux/dialogs/dialogsTypes'
+import { createDialog } from '@/redux/dialogs/dialogsAsyncActions'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
 const PartPage = () => {
   const router = useRouter()
@@ -45,7 +43,6 @@ const PartPage = () => {
   const { fullAdvertisement } = useSelector(advertisementsSelector)
 
   const [isDisableContactButton, setIsDisableContactButton] = React.useState(false)
-  const [isDisabledControllButtons, setIsDisabledControllButtons] = React.useState(false)
 
   const { mode } = useSelector(themeSelector)
 
@@ -55,8 +52,6 @@ const PartPage = () => {
   const [advertisements, setAdvertisements] = React.useState<AdvertisementType[]>([])
 
   useEffect(() => {
-    // loadBoilerPart()
-
     const fetchData = async () => {
       const { payload }: { payload: any } = await dispatch(getBestsellers())
       setAdvertisements(payload[0])
@@ -96,13 +91,7 @@ const PartPage = () => {
 
   const changeAdStatus = async (id: number) => {
     if (!window.confirm('Змінити статус оголошення?')) return
-
-    try {
-      setIsDisabledControllButtons(true)
-      dispatch(acceptAdvertisement(id))
-    } finally {
-      setIsDisabledControllButtons(false)
-    }
+    dispatch(acceptAdvertisement(id))
   }
 
   const contactToSeller = async () => {
@@ -112,7 +101,7 @@ const PartPage = () => {
       const data = { members: [auth.id, fullAdvertisement.user.id], advertisement: fullAdvertisement.id }
 
       const { payload } = await dispatch(createDialog(data))
-      console.log(payload)
+
       const dialog = payload as DialogType
       if (dialog) {
         router.push(`/profile?tab=messages&id=${dialog.id}`)
@@ -250,7 +239,7 @@ const PartPage = () => {
 
             <PartAccordion title="Деталі">
               <div className={`${styles.part__accordion__content} ${darkModeClass}`}>
-                <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>1121221</p>
+                {/* <p className={`${styles.part__tabs__content__text} ${darkModeClass}`}>1121221</p> */}
               </div>
             </PartAccordion>
           </div>

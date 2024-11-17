@@ -1,12 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useStore } from 'effector-react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import styles from '@/styles/part/index.module.scss'
-import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
-import { useSelector } from 'react-redux'
 import { themeSelector } from '@/redux/theme/themeSlice'
+import { AdvertisementType } from '@/redux/advertisements/advertisementsTypes'
 
 const tagKeys = {
   carType: 'Тип автомобіля',

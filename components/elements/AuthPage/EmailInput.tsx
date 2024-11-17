@@ -1,5 +1,4 @@
 import { IAuthPageInput } from '@/types/auth'
-// import styles from '@/styles/auth/index.module.scss'
 import styles from '@/styles/inputs/index.module.scss'
 
 const EmailInput = ({ register, errors }: IAuthPageInput) => (

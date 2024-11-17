@@ -95,6 +95,7 @@ export const inputStyles: StylesConfig<IOption, boolean, GroupBase<IOption>> = {
   dropdownIndicator: () => ({
     display: 'none',
   }),
+  // @ts-ignore
   menuList: (defaultStyles) => ({
     ...defaultStyles,
     paddingTop: 0,
@@ -114,6 +115,7 @@ export const inputStyles: StylesConfig<IOption, boolean, GroupBase<IOption>> = {
       background: 'grey',
     },
   }),
+  // @ts-ignore
   placeholder: (defaultStyles) => ({
     ...defaultStyles,
     color: '#b9babb',

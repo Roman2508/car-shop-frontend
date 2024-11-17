@@ -18,7 +18,6 @@ const Empty = ({ darkModeClass, text = 'Пусто...' }: { darkModeClass: strin
         height="100pt"
         viewBox="0 0 256.000000 256.000000"
         preserveAspectRatio="xMidYMid meet"
-        //   fill={darkModeClass ? '#fff' : '#000'}
       >
         <g
           transform="translate(0.000000,256.000000) scale(0.100000,-0.100000)"

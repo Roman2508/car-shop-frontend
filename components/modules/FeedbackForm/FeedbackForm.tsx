@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify'
-import { useStore } from 'effector-react'
 import { useForm } from 'react-hook-form'
 import { MutableRefObject, useRef, useState } from 'react'
 

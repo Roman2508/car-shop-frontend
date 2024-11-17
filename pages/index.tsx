@@ -1,14 +1,15 @@
 import Head from 'next/head'
-import AuthPage from '@/components/templates/AuthPage/AuthPage'
+import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
+import DashboardPage from '@/components/templates/DashboardPage/DashboardPage'
 
-function Auth() {
-  const { shouldLoadContent } = useRedirectByUserCheck(true)
+function Dashboard() {
+  const { shouldLoadContent } = useRedirectByUserCheck()
 
   return (
     <>
       <Head>
-        <title>Car Shop | {shouldLoadContent ? 'Авторизация' : ''}</title>
+        <title>Car shop | {shouldLoadContent ? 'Головна' : ''}</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,9 +18,16 @@ function Auth() {
         <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png" />
         <link rel="manifest" href="/img/favicon/site.webmanifest"></link>
       </Head>
-      {shouldLoadContent && <AuthPage />}
+      {shouldLoadContent && (
+        <Layout>
+          <main>
+            <DashboardPage />
+            <div className="overlay" />
+          </main>
+        </Layout>
+      )}
     </>
   )
 }
 
-export default Auth
+export default Dashboard

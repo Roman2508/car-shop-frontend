@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import React, { useCallback } from 'react'
+
 import Layout from '@/components/layout/Layout'
-import ContactsPage from '@/components/templates/ContactsPage/ContactsPage'
+import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import Breadcrumbs from '@/components/modules/Breadcrumbs/Breadcrumbs'
 import CreateAdPage from '@/components/templates/CreateAdPage/CreateAdPage'
-import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 
 interface IQueryParams {
   id: string
@@ -12,7 +12,7 @@ interface IQueryParams {
 
 function CreateAd({ query }: { query: IQueryParams }) {
   const { shouldLoadContent } = useRedirectByUserCheck()
-  const getDefaultTextGenerator = useCallback(() => 'Контакты', [])
+  const getDefaultTextGenerator = useCallback(() => 'Оголошення', [])
   const getTextGenerator = useCallback((param: string) => ({}[param]), [])
 
   return (

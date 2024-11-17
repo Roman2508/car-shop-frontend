@@ -15,9 +15,9 @@ const Custom404 = () => (
         </span>
       </h1>
       <h3 className="fadeIn">PAGE NOT FOUND</h3>
-      <Link href="/dashboard" passHref legacyBehavior>
+      <Link href="/" passHref legacyBehavior>
         <button type="button" name="button">
-          Return To Home
+          Повернутись на головну
         </button>
       </Link>
     </div>

@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useStore } from 'effector-react'
+import { useSelector } from 'react-redux'
 
 import { IInputs } from '@/types/auth'
 import { showAuthError } from '@/utils/errors'
+import { useAppDispatch } from '@/redux/store'
 import styles from '@/styles/auth/index.module.scss'
+import { themeSelector } from '@/redux/theme/themeSlice'
+import { authRegister } from '@/redux/auth/authAsyncActions'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import inputsStyles from '@/styles/create-ad/index.module.scss'
 import NameInput from '@/components/elements/AuthPage/NameInput'
 import EmailInput from '@/components/elements/AuthPage/EmailInput'
 import PasswordInput from '@/components/elements/AuthPage/PasswordInput'
-import { authRegister } from '@/redux/auth/authAsyncActions'
-import { useAppDispatch } from '@/redux/store'
-import { useSelector } from 'react-redux'
-import { themeSelector } from '@/redux/theme/themeSlice'
 
 const SignUpForm = ({ switchForm }: { switchForm: () => void }) => {
   const dispatch = useAppDispatch()

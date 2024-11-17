@@ -1,5 +1,4 @@
 import { toast } from 'sonner'
-import { useStore } from 'effector-react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '@/redux/store'
 import React, { MutableRefObject, useRef, useState } from 'react'
@@ -8,13 +7,13 @@ import { FieldErrorsImpl, useForm, UseFormRegister } from 'react-hook-form'
 import PasswordInput from './PasswordInput'
 import { authSelector } from '@/redux/auth/authSlice'
 import { createImageUrl } from '@/utils/createImageUrl'
+import { themeSelector } from '@/redux/theme/themeSlice'
 import styles from '@/styles/ProfileForm/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 import createAdStyles from '@/styles/create-ad/index.module.scss'
 import TextInput from '@/components/elements/TextInput/TextInput'
 import { updateUser, uploadAvatar } from '@/redux/auth/authAsyncActions'
-import { deleteFile, uploadFile } from '@/redux/advertisements/advertisementsAsyncActions'
-import { themeSelector } from '@/redux/theme/themeSlice'
+import { deleteFile } from '@/redux/advertisements/advertisementsAsyncActions'
 
 export interface IProfileInputs {
   email: string
