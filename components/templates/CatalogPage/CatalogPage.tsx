@@ -114,9 +114,18 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
     setSpinner(true)
     setCurrentPage(0)
     await dispatch(getAdvertisements(router.query))
-    router.push({ query: { offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
+    setPriceRange([MIN_PRICE, MAX_PRICE])
+    setMileageRange([MIN_MILEAGE, MAX_MILEAGE])
+    setYearOfReleaseRange([MIN_YEAR_OF_RELEASE, MAX_YEAR_OF_RELEASE])
+    router.replace({ query: { offset: 0, limit: ITEMS_PER_PAGE } }, undefined, { shallow: true })
     setSpinner(false)
     dispatch(clearFilters())
+  }
+
+  const isDisabledClearFilterButton = () => {
+    const queryCopy = Object.keys(JSON.parse(JSON.stringify(router.query)))
+    const activeFilters = queryCopy.filter((el) => el !== 'offset' && el !== 'limit')
+    return !activeFilters.length
   }
 
   // set filter on first render
@@ -275,8 +284,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
                 onClick={() => {
                   setYearOfReleaseRange([MIN_YEAR_OF_RELEASE, MAX_YEAR_OF_RELEASE])
                   const query = router.query
-                  delete query.priceFrom
-                  delete query.priceTo
+                  delete query.yearOfReleaseStart
+                  delete query.yearOfReleaseEnd
                   router.push({ query: { ...query } }, undefined, { shallow: true })
                 }}
               />
@@ -299,7 +308,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
           <div className={styles.catalog__top__inner}>
             <button
               className={`${styles.catalog__top__reset} ${darkModeClass}`}
-              disabled={!selectedFilters.length || !Object.keys(router.query).length}
+              disabled={isDisabledClearFilterButton()}
+              // disabled={!selectedFilters.length || !Object.keys(router.query).length}
               onClick={resetFilters}
             >
               Скинути фільтр

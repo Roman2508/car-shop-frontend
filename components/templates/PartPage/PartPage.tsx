@@ -201,23 +201,24 @@ const PartPage = () => {
                 </div>
               </div>
 
-              {auth?.id !== fullAdvertisement.user.id && (
-                <button
-                  onClick={contactToSeller}
-                  disabled={isDisableContactButton}
-                  className={`${styles.part__info__btn}`}
-                  style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
-                >
-                  {isDisableContactButton ? (
-                    <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />
-                  ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ color: '#fff', marginRight: '8px' }}>Зв'язатись з продавцем</span>
-                      <SendMessageSvg />
-                    </div>
-                  )}
-                </button>
-              )}
+              {!auth?.id ||
+                (auth?.id !== fullAdvertisement.user.id && (
+                  <button
+                    onClick={contactToSeller}
+                    disabled={isDisableContactButton}
+                    className={`${styles.part__info__btn}`}
+                    style={{ backgroundColor: '#1c629e', boxShadow: '0px 0px 30px rgba(28, 98, 158, 0.3)' }}
+                  >
+                    {isDisableContactButton ? (
+                      <span className={spinnerStyles.spinner} style={{ top: 10, left: '45%' }} />
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ color: '#fff', marginRight: '8px' }}>Зв'язатись з продавцем</span>
+                        <SendMessageSvg />
+                      </div>
+                    )}
+                  </button>
+                ))}
 
               {!isMobile && <PartTabs fullAdvertisement={fullAdvertisement} />}
             </div>
