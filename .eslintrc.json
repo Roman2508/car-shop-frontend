@@ -1,6 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint/eslint-plugin"],
+  "ignorePatterns": ["*.css", "**/vendor/*.css", "*.scss", "**/vendor/*.scss"],
   "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
   "rules": {
     "indent": "off",
