@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import { useStore } from 'effector-react'
 import { Range, getTrackBackground } from 'react-range'
 
 import styles from '@/styles/catalog/index.module.scss'
