@@ -3,6 +3,7 @@
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
   "rules": {
+    "indent": "off",
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
     "@typescript-eslint/no-unused-vars": "error",
@@ -28,7 +29,7 @@
     "padded-blocks": ["error", "never"],
     "semi": ["error", "never"],
     "max-len": ["error", { "code": 120 }],
-    "indent": ["error", 2],
+    // "indent": ["error", 2],
     "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }]
   }
 }
