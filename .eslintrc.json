@@ -1,17 +1,5 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import"],
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "project": "./tsconfig.json"
-      }
-    }
-  }
-}
-
-{
-  "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
   "rules": {
