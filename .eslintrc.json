@@ -35,13 +35,6 @@
     "semi": ["error", "never"],
     "max-len": ["error", { "code": 120 }],
     "indent": ["error", 2],
-    "react/self-closing-comp": [
-      "error",
-      {
-        "component": true,
-        "html": true
-      }
-    ],
     "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }]
   }
 }

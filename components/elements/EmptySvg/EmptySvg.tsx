@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react'
 
 const Empty = ({ darkModeClass, text = 'Пусто...' }: { darkModeClass: string; text?: string }) => {
