@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import styles from '@/styles/ProfileForm/index.module.scss'
+import styles from '@/styles/profileForm/index.module.scss'
 import catalogStyles from '@/styles/catalog/index.module.scss'
 import { useAppDispatch } from '@/redux/store'
 import { getNotAccepted } from '@/redux/advertisements/advertisementsAsyncActions'

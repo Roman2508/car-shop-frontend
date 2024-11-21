@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '@/styles/ProfileForm/index.module.scss'
+import styles from '@/styles/profileForm/index.module.scss'
 import catalogStyles from '@/styles/catalog/index.module.scss'
 
 import { useSelector } from 'react-redux'
