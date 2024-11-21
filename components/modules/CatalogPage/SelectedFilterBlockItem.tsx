@@ -28,10 +28,10 @@ const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item
   const removeFilter = () => {
     dispatch(setFilter({ label, title: item.title }))
 
-    setSelectedFilters((prev) => {
-      const newFilters = prev.map((el) => {
+    setSelectedFilters((prev: any) => {
+      const newFilters = prev.map((el: any) => {
         if (el.label === label) {
-          const items = el.items.filter((i) => i.title !== item.title)
+          const items = el.items.filter((i: any) => i.title !== item.title)
 
           if (!items.length) {
             const query = router.query
@@ -45,7 +45,7 @@ const SelectedFilterBlockItem: React.FC<ISelectedFilterBlockItemProps> = ({ item
         return el
       })
 
-      return newFilters.filter((el) => !!el)
+      return newFilters.filter((el: any) => !!el)
     })
   }
 
