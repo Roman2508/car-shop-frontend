@@ -7,6 +7,10 @@
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "react/jsx-key": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+
     // "@typescript-eslint/no-unused-vars": "error",
     // "@typescript-eslint/no-explicit-any": "error",
     // "@typescript-eslint/quotes": [
