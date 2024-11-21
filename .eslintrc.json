@@ -12,6 +12,7 @@
     "@typescript-eslint/no-inferrable-types": "off",
     "prettier/prettier": "off",
     "react/display-name": "off",
+    "prefer-const": "off",
 
     // "@typescript-eslint/no-unused-vars": "error",
     // "@typescript-eslint/no-explicit-any": "error",
