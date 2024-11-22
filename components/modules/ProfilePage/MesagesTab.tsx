@@ -27,6 +27,7 @@ const MesagesTab = () => {
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
 
   const [text, setText] = React.useState('')
+  const [me, setMe] = React.useState<null | { id: number; username: string; avatarUrl: string }>(null)
 
   const socket = io(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:7777')
 
@@ -58,6 +59,8 @@ const MesagesTab = () => {
   React.useEffect(() => {
     if (!activeDalog) return
 
+    console.log(activeDalog)
+
     socket.on('connect', () => {
       dispatch(getMessages(activeDalog.id))
     })
@@ -66,6 +69,12 @@ const MesagesTab = () => {
       socket.off()
     }
   }, [activeDalog])
+
+  React.useEffect(() => {
+    if (!activeDalog || !auth) return
+    const me = activeDalog.members.find((el) => el.id !== auth.id)
+    if (me) setMe(me)
+  }, [activeDalog, auth])
 
   React.useEffect(() => {
     if (messages && messages.length) {
@@ -106,12 +115,16 @@ const MesagesTab = () => {
     setActiveDialog(activeDialog)
   }, [router.query.id, dialogs])
 
+  if (!auth) return <h1>Loading...</h1>
+
   return (
     <div className={styles.messages__wrapper}>
       <div className={`${styles.messages__left_col} ${darkModeClass}`}>
         {/*  */}
         {dialogs ? (
           dialogs.map((el) => {
+            const filename = el.advertisement?.photos ? el.advertisement?.photos[0]?.filename : ''
+
             return (
               <div
                 className={`${styles.messages__chats_list_item} ${
@@ -122,7 +135,7 @@ const MesagesTab = () => {
                   setActiveDialog(el)
                 }}
               >
-                <img src={createImageUrl(el.advertisement?.photos[0]?.filename)} alt="advertisement image" />
+                <img src={createImageUrl(filename)} alt="advertisement image" />
 
                 <div>
                   <div className={styles.messages__chats_top}>
@@ -153,17 +166,14 @@ const MesagesTab = () => {
         <div className={`${styles.messages__right_col} ${darkModeClass}`}>
           <div className={`${styles.messages__right_col_top} ${darkModeClass}`}>
             <div className={styles.messages__right_col_top_user_data}>
-              {activeDalog.members.find((el) => el.id !== auth?.id)?.avatarUrl ? (
-                <img
-                  alt="user avatar"
-                  src={createImageUrl(activeDalog.members.find((el) => el.id !== auth?.id)?.avatarUrl || '')}
-                />
+              {me ? (
+                <img alt="user avatar" src={createImageUrl(me.avatarUrl || '')} />
               ) : (
                 <div className={styles.messages__right_col_top_user_data_img}>
-                  <p>{activeDalog.members.find((el) => el.id !== auth?.id)?.username[0]}</p>
+                  <p>{activeDalog.members.find((el) => el.id !== auth.id)?.username}</p>
                 </div>
               )}
-              <p>{activeDalog.members.find((el) => el.id !== auth?.id)?.username}</p>
+              <p>{me?.username}</p>
             </div>
 
             <div onClick={onDeleteDialog}>
@@ -173,13 +183,16 @@ const MesagesTab = () => {
 
           <div className={`${styles.messages__right_col_advertisement} ${darkModeClass}`}>
             <div className={`${styles.messages__chats_list_item} ${darkModeClass}`}>
-              <img src={createImageUrl(activeDalog.advertisement?.photos[0]?.filename)} alt="advertisement" />
+              <img
+                src={createImageUrl(
+                  activeDalog.advertisement?.photos ? activeDalog.advertisement?.photos[0]?.filename : ''
+                )}
+                alt="advertisement"
+              />
 
               <div>
                 <div className={styles.messages__chats_top}>
-                  <p className={styles.messages__chats_nickname}>
-                    {activeDalog.members.find((el) => el.id !== auth?.id)?.username}
-                  </p>
+                  <p className={styles.messages__chats_nickname}>{me?.username}</p>
 
                   <p className={styles.messages__chats_sending_time}>
                     {formatDate(activeDalog.advertisement.createdAt)}
